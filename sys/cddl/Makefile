@@ -1,10 +1,10 @@
 # $FreeBSD$
 
-SYSDIR?=${.CURDIR}/../..
+SYSDIR?=${.CURDIR}/..
 
 KMOD=	zfs
 
-SRCS=	bus_if.h device_if.h vnode_if.h
+SRCS=	bus_if.h device_if.h #vnode_if.h
 
 SUNW=	${SYSDIR}/cddl/contrib/opensolaris
 
@@ -21,7 +21,7 @@ SRCS+=	u8_textprep.c
 
 .PATH:	${SYSDIR}/cddl/compat/opensolaris/kern
 SRCS+=	opensolaris_acl.c
-SRCS+=	opensolaris_dtrace.c
+#SRCS+=	opensolaris_dtrace.c
 SRCS+=	opensolaris_kobj.c
 SRCS+=	opensolaris_kstat.c
 SRCS+=	opensolaris_lookup.c
@@ -89,10 +89,6 @@ CFLAGS+=-I${SYSDIR}
 CFLAGS+=-I${SUNW}/common/zfs
 CFLAGS+=-I${SUNW}/common
 CFLAGS+=-DBUILDING_ZFS
-
-.if ${MACHINE_ARCH} == "powerpc64"
-CFLAGS+=-mminimal-toc
-.endif
 
 #CFLAGS+=-DDEBUG=1
 #DEBUG_FLAGS=-g
