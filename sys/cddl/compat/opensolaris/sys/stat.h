@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2007 John Birrell <jb@freebsd.org>
  * All rights reserved.
+ * Copyright (C) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+ * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,6 +26,7 @@
  * SUCH DAMAGE.
  *
  * $FreeBSD$
+ * $DragonflyBSD$
  *
  */
 
@@ -47,7 +50,7 @@ fstat64(int fd, struct stat *sb)
 	ret = fstat(fd, sb);
 	if (ret == 0) {
 		if (S_ISCHR(sb->st_mode))
-			(void)ioctl(fd, DIOCGMEDIASIZE, &sb->st_size);
+			(void)ioctl(fd, DIOCGPART, &sb->st_size);
 	}
 	return (ret);
 }
