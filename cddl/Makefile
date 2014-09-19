@@ -4,7 +4,7 @@
 
 SUBDIR=	lib sbin usr.bin usr.sbin
 
-#.if ${MK_TESTS} != "no"
+#.if ${NO_TESTS} != "no"
 #SUBDIR+=tests
 #.endif
 

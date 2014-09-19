@@ -5,12 +5,12 @@
 SUBDIR=	${_zdb} \
 	${_zhack}
 
-#.if ${MK_TESTS} != "no"
+#.if ${NO_TESTS} != "no"
 #_tests=	tests
 #.endif
 
-.if ${MK_ZFS} != "no"
-.if ${MK_LIBTHR} != "no"
+.if ${NO_ZFS} != "no"
+.if ${NO_LIBTHR} != "no"
 _zdb=	zdb
 _zhack=	zhack
 .endif

@@ -12,14 +12,14 @@ SUBDIR= \
 	${_zstreamdump} \
 	${_ztest}
 
-#.if ${MK_TESTS} != "no"
+#.if ${NO_TESTS} != "no"
 #_tests=	tests
 #.endif
 
-.if ${MK_ZFS} != "no"
+.if ${NO_ZFS} != "no"
 _zinject= zinject
 #_zlook= zlook
-.if ${MK_LIBTHR} != "no"
+.if ${NO_LIBTHR} != "no"
 _ztest=	ztest
 _zstreamdump = zstreamdump
 .endif

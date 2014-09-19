@@ -5,11 +5,11 @@
 #SUBDIR=	${_tests} ${_zfs} ${_zpool}
 SUBDIR=	${_zfs} ${_zpool}
 
-#.if ${MK_TESTS} != "no"
+#.if ${NO_TESTS} != "no"
 #_tests=	tests
 #.endif
 
-.if ${MK_ZFS} != "no"
+.if ${NO_ZFS} != "no"
 _zfs=	zfs
 _zpool=	zpool
 .endif

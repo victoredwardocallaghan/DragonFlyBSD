@@ -11,10 +11,10 @@ SUBDIR=	libavl \
 	${_libzfs} \
 	${_libzpool}
 
-.if ${MK_ZFS} != "no"
+.if ${NO_ZFS} != "no"
 _libzfs_core=	libzfs_core
 _libzfs=	libzfs
-.if ${MK_LIBTHR} != "no"
+.if ${NO_LIBTHR} != "no"
 _libzpool=	libzpool
 .endif
 .endif
