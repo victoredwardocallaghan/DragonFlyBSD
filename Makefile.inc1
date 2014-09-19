@@ -57,6 +57,10 @@ SUBDIR+= lib
 SUBDIR+= nrelease
 .endif
 
+.if exists(${.CURDIR}/cddl)
+SUBDIR+= cddl
+.endif
+
 .if exists(${.CURDIR}/bin)
 SUBDIR+= bin
 .endif
@@ -985,9 +989,24 @@ _generic_libs=	gnu/lib
 _prebuild_libs+= lib/libcom_err lib/libcrypt lib/libmd \
 		lib/libncurses/libncurses lib/libopie
 
+_prebuild_libs+= ${_cddl_lib_libumem} ${_cddl_lib_libnvpair} \
+		 ${_cddl_lib_libavl} \
+		 ${_cddl_lib_libzfs_core}
+
 lib/libopie__L lib/libradius__L lib/libtacplus__L: lib/libmd__L
 
 _generic_libs+=	lib
+
+_generic_libs+=	${_cddl_lib}
+
+.if !defined(NO_CDDL)
+_cddl_lib_libumem= cddl/lib/libumem
+_cddl_lib_libnvpair= cddl/lib/libnvpair
+_cddl_lib_libavl= cddl/lib/libavl
+_cddl_lib_libzfs_core= cddl/lib/libzfs_core
+_cddl_lib= cddl/lib
+cddl/lib/libzfs_core__L: cddl/lib/libnvpair__L
+.endif
 
 .if !defined(NO_CRYPT)
 .if !defined(NO_OPENSSL)
