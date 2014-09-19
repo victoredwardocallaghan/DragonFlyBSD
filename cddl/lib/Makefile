@@ -2,8 +2,8 @@
 
 #.include <src.opts.mk>
 
+#	libctf
 SUBDIR=	libavl \
-	libctf \
 	libnvpair \
 	libumem \
 	libuutil \
