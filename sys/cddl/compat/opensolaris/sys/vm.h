@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2013 EMC Corp.
  * All rights reserved.
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +33,7 @@
 
 #ifdef _KERNEL
 
-#include <sys/sf_buf.h>
+#include <sys/sfbuf.h>
 
 extern const int zfs_vm_pagerret_bad;
 extern const int zfs_vm_pagerret_error;
@@ -46,7 +48,7 @@ void	zfs_vmobject_wunlock(vm_object_t object);
 static inline caddr_t
 zfs_map_page(vm_page_t pp, struct sf_buf **sfp)
 {
-	*sfp = sf_buf_alloc(pp, 0);
+	*sfp = sf_buf_alloc(pp);
 	return ((caddr_t)sf_buf_kva(*sfp));
 }
 

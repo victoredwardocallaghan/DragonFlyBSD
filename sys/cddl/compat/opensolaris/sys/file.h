@@ -36,14 +36,12 @@
 #ifdef _KERNEL
 typedef	struct file	file_t;
 
-#include <sys/capsicum.h>
-
 static __inline file_t *
-getf(int fd, cap_rights_t *rightsp)
+getf(int fd)
 {
 	struct file *fp;
 
-	if (fget(curthread, fd, rightsp, &fp) == 0)
+	if (fget(curthread, fd, &fp) == 0)
 		return (fp);
 	return (NULL);
 }
@@ -53,8 +51,7 @@ releasef(int fd)
 {
 	struct file *fp;
 
-	/* No CAP_ rights required, as we're only releasing. */
-	if (fget(curthread, fd, NULL, &fp) == 0) {
+	if (fget(curthread, fd, &fp) == 0) {
 		fdrop(fp, curthread);
 		fdrop(fp, curthread);
 	}
