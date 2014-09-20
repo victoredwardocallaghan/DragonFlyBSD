@@ -58,7 +58,8 @@
 #include <sys/types.h>
 #include <time.h>
 #include <err.h>
-#include <jail.h>
+//#include <jail.h>
+#include <sys/jail.h>
 
 #include <libzfs.h>
 #include <libzfs_core.h>
