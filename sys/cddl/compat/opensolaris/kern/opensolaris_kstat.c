@@ -67,7 +67,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	    SYSCTL_STATIC_CHILDREN(_kstat), OID_AUTO, module, CTLFLAG_RW, 0,
 	    "");
 	if (root == NULL) {
-		printf("%s: Cannot create kstat.%s tree!\n", __func__, module);
+		kprintf("%s: Cannot create kstat.%s tree!\n", __func__, module);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
 		free(ksp, M_KSTAT);
 		return (NULL);
@@ -75,7 +75,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	root = SYSCTL_ADD_NODE(&ksp->ks_sysctl_ctx, SYSCTL_CHILDREN(root),
 	    OID_AUTO, class, CTLFLAG_RW, 0, "");
 	if (root == NULL) {
-		printf("%s: Cannot create kstat.%s.%s tree!\n", __func__,
+		kprintf("%s: Cannot create kstat.%s.%s tree!\n", __func__,
 		    module, class);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
 		free(ksp, M_KSTAT);
@@ -84,7 +84,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	root = SYSCTL_ADD_NODE(&ksp->ks_sysctl_ctx, SYSCTL_CHILDREN(root),
 	    OID_AUTO, name, CTLFLAG_RW, 0, "");
 	if (root == NULL) {
-		printf("%s: Cannot create kstat.%s.%s.%s tree!\n", __func__,
+		kprintf("%s: Cannot create kstat.%s.%s.%s tree!\n", __func__,
 		    module, class, name);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
 		free(ksp, M_KSTAT);

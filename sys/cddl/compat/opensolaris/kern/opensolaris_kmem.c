@@ -96,7 +96,7 @@ zfs_kmem_free(void *buf, size_t size __unused)
 {
 #ifdef KMEM_DEBUG
 	if (buf == NULL) {
-		printf("%s: attempt to free NULL\n", __func__);
+		kprintf("%s: attempt to free NULL\n", __func__);
 		return;
 	}
 	struct kmem_item *i;
@@ -301,13 +301,13 @@ kmem_show(void *dummy __unused)
 
 	mtx_lock(&kmem_items_mtx);
 	if (LIST_EMPTY(&kmem_items))
-		printf("KMEM_DEBUG: No leaked elements.\n");
+		kprintf("KMEM_DEBUG: No leaked elements.\n");
 	else {
-		printf("KMEM_DEBUG: Leaked elements:\n\n");
+		kprintf("KMEM_DEBUG: Leaked elements:\n\n");
 		LIST_FOREACH(i, &kmem_items, next) {
-			printf("address=%p\n", i);
+			kprintf("address=%p\n", i);
 			stack_print_ddb(&i->stack);
-			printf("\n");
+			kprintf("\n");
 		}
 	}
 	mtx_unlock(&kmem_items_mtx);

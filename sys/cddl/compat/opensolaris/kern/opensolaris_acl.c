@@ -106,7 +106,7 @@ acl_from_aces(struct acl *aclp, const ace_t *aces, int nentries)
 	const ace_t *ace;
 
 	if (nentries < 1) {
-		printf("acl_from_aces: empty ZFS ACL; returning EINVAL.\n");
+		kprintf("acl_from_aces: empty ZFS ACL; returning EINVAL.\n");
 		return (EINVAL);
 	}
 
@@ -115,7 +115,7 @@ acl_from_aces(struct acl *aclp, const ace_t *aces, int nentries)
 		 * I believe it may happen only when moving a pool
 		 * from SunOS to FreeBSD.
 		 */
-		printf("acl_from_aces: ZFS ACL too big to fit "
+		kprintf("acl_from_aces: ZFS ACL too big to fit "
 		    "into 'struct acl'; returning EINVAL.\n");
 		return (EINVAL);
 	}

@@ -58,9 +58,9 @@ vcmn_err(int ce, const char *fmt, va_list adx)
 		panic("%s%s", prefix, buf);
 	}
 	if (ce != CE_IGNORE) {
-		printf("%s", prefix);
+		kprintf("%s", prefix);
 		vprintf(fmt, adx);
-		printf("\n");
+		kprintf("\n");
 	}
 }
 

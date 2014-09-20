@@ -114,7 +114,7 @@ sysevent_add_attr(sysevent_attr_list_t **ev_attr_list, char *name,
 		break;
 	default:
 #if 0
-		printf("%s: type %d is not implemented\n", __func__,
+		kprintf("%s: type %d is not implemented\n", __func__,
 		    se_value->value_type);
 #endif
 		break;
@@ -289,7 +289,7 @@ log_sysevent(sysevent_t *evp, int flag, sysevent_id_t *eid)
 		    }
 		default:
 #if 0
-			printf("%s: type %d is not implemented\n", __func__,
+			kprintf("%s: type %d is not implemented\n", __func__,
 			    nvpair_type(elem));
 #endif
 			break;
