@@ -3,9 +3,9 @@
 #.include <src.opts.mk>
 
 SUBDIR= \
-	ctfconvert \
-	ctfdump \
-	ctfmerge \
+#	ctfconvert \
+#	ctfdump \
+#	ctfmerge \
 	sgsmsg \
 	${_zinject} \
 	${_zlook} \
