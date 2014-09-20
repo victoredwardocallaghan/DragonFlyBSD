@@ -37,7 +37,7 @@
  * Compatibility thread stuff needed for Solaris -> Linux port
  */
 
-typedef pthread_t thread_t;
+typedef pthread_t __thread_t;
 typedef pthread_mutex_t mutex_t;
 typedef pthread_cond_t cond_t;
 typedef pthread_rwlock_t rwlock_t;
@@ -74,7 +74,7 @@ typedef pthread_rwlock_t rwlock_t;
 
 static __inline int
 thr_create(void *stack_base, size_t stack_size, void *(*start_func) (void*),
-    void *arg, long flags, thread_t *new_thread_ID)
+    void *arg, long flags, __thread_t *new_thread_ID)
 {
 	pthread_t dummy;
 	int ret;
