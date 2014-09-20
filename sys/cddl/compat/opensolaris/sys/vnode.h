@@ -48,7 +48,8 @@ enum symfollow { NO_FOLLOW = NOFOLLOW };
 #include <sys/fcntl.h>
 #include <sys/file.h>
 #include <sys/filedesc.h>
-#include <sys/syscallsubr.h>
+//#include <sys/syscallsubr.h>
+#include <sys/kern_syscall.h>
 
 typedef	struct vop_vector	vnodeops_t;
 #define	VOP_FID		VOP_VPTOFH
