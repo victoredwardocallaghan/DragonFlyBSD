@@ -371,7 +371,7 @@ page_busy(vnode_t *vp, int64_t start, int64_t off, int64_t nbytes)
 				 * likely to reclaim it.
 				 */
 				vm_page_reference(pp);
-				vm_page_lock(pp);
+//				vm_page_lock(pp);
 				zfs_vmobject_wunlock(obj);
 				vm_page_busy_sleep(pp, "zfsmwb");
 				zfs_vmobject_wlock(obj);
@@ -426,7 +426,7 @@ page_hold(vnode_t *vp, int64_t start)
 				 * likely to reclaim it.
 				 */
 				vm_page_reference(pp);
-				vm_page_lock(pp);
+//				vm_page_lock(pp);
 				zfs_vmobject_wunlock(obj);
 				vm_page_busy_sleep(pp, "zfsmwb");
 				zfs_vmobject_wlock(obj);
@@ -434,9 +434,9 @@ page_hold(vnode_t *vp, int64_t start)
 			}
 
 			ASSERT3U(pp->valid, ==, VM_PAGE_BITS_ALL);
-			vm_page_lock(pp);
+//			vm_page_lock(pp);
 			vm_page_hold(pp);
-			vm_page_unlock(pp);
+//			vm_page_unlock(pp);
 
 		} else
 			pp = NULL;
@@ -449,9 +449,9 @@ static void
 page_unhold(vm_page_t pp)
 {
 
-	vm_page_lock(pp);
+//	vm_page_lock(pp);
 	vm_page_unhold(pp);
-	vm_page_unlock(pp);
+//	vm_page_unlock(pp);
 }
 
 /*
@@ -544,7 +544,7 @@ mappedread_sf(vnode_t *vp, int nbytes, uio_t *uio)
 			zfs_unmap_page(sf);
 			zfs_vmobject_wlock(obj);
 			vm_page_sunbusy(pp);
-			vm_page_lock(pp);
+//			vm_page_lock(pp);
 			if (error) {
 				if (pp->wire_count == 0 && pp->valid == 0 &&
 				    !vm_page_busied(pp))
@@ -553,7 +553,7 @@ mappedread_sf(vnode_t *vp, int nbytes, uio_t *uio)
 				pp->valid = VM_PAGE_BITS_ALL;
 				vm_page_activate(pp);
 			}
-			vm_page_unlock(pp);
+//			vm_page_unlock(pp);
 		} else {
 			ASSERT3U(pp->valid, ==, VM_PAGE_BITS_ALL);
 			vm_page_sunbusy(pp);
@@ -5754,14 +5754,14 @@ zfs_getpages(struct vnode *vp, vm_page_t *m, int count, int reqpage)
 	zfs_vmobject_wlock(object);
 
 	for (i = 0; i < reqstart; i++) {
-		vm_page_lock(m[i]);
+//		vm_page_lock(m[i]);
 		vm_page_free(m[i]);
-		vm_page_unlock(m[i]);
+//		vm_page_unlock(m[i]);
 	}
 	for (i = reqstart + reqsize; i < pcount; i++) {
-		vm_page_lock(m[i]);
+//		vm_page_lock(m[i]);
 		vm_page_free(m[i]);
-		vm_page_unlock(m[i]);
+//		vm_page_unlock(m[i]);
 	}
 
 	if (mreq->valid && reqsize == 1) {
@@ -5778,9 +5778,9 @@ zfs_getpages(struct vnode *vp, vm_page_t *m, int count, int reqpage)
 	if (IDX_TO_OFF(mreq->pindex) >= object->un_pager.vnp.vnp_size) {
 		for (i = reqstart; i < reqstart + reqsize; i++) {
 			if (i != reqpage) {
-				vm_page_lock(m[i]);
+//				vm_page_lock(m[i]);
 				vm_page_free(m[i]);
-				vm_page_unlock(m[i]);
+//				vm_page_unlock(m[i]);
 			}
 		}
 		zfs_vmobject_wunlock(object);
