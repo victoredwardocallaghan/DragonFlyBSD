@@ -636,6 +636,8 @@ ATOMIC_STORE_LOAD(long, "cmpxchgq %0,%1",  "xchgq %1,%0");
 #define	atomic_fetchadd_32	atomic_fetchadd_int
 
 /* Operations on 64-bit quad words. */
+#define	atomic_add_64		atomic_add_long
+#define	atomic_subtract_64	atomic_subtract_long
 #define	atomic_load_acq_64	atomic_load_acq_long
 #define	atomic_store_rel_64	atomic_store_rel_long
 #define	atomic_swap_64		atomic_swap_long
