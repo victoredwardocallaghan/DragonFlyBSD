@@ -52,19 +52,19 @@ zfs_vmobject_assert_wlocked(vm_object_t object)
 	 * be too helpful, but it must be an hard function for
 	 * compatibility reasons.
 	 */
-	VM_OBJECT_ASSERT_WLOCKED(object);
+//	VM_OBJECT_ASSERT_WLOCKED(object);
 }
 
 void
 zfs_vmobject_wlock(vm_object_t object)
 {
 
-	VM_OBJECT_WLOCK(object);
+	VM_OBJECT_LOCK(object);
 }
 
 void
 zfs_vmobject_wunlock(vm_object_t object)
 {
 
-	VM_OBJECT_WUNLOCK(object);
+	VM_OBJECT_UNLOCK(object);
 }
