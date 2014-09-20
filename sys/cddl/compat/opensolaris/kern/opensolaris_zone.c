@@ -33,11 +33,11 @@ __FBSDID("$FreeBSD$");
 #include <sys/proc.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
-#include <sys/sx.h>
+//#include <sys/sx.h>
 #include <sys/malloc.h>
 #include <sys/queue.h>
 #include <sys/jail.h>
-#include <sys/osd.h>
+//#include <sys/osd.h>
 #include <sys/priv.h>
 #include <sys/zone.h>
 
@@ -58,6 +58,8 @@ static int zone_slot;
 int
 zone_dataset_attach(struct ucred *cred, const char *dataset, int jailid)
 {
+// XXX ZFS
+#if 0
 	struct zone_dataset_head *head;
 	zone_dataset_t *zd, *zd2;
 	struct prison *pr;
@@ -105,11 +107,14 @@ end:
 	else
 		mtx_unlock(&pr->pr_mtx);
 	return (error);
+#endif
+	KASSERT(0, ("no implmentation in %s", __func__));
 }
 
 int
 zone_dataset_detach(struct ucred *cred, const char *dataset, int jailid)
 {
+#if 0
 	struct zone_dataset_head *head;
 	zone_dataset_t *zd;
 	struct prison *pr;
@@ -144,6 +149,8 @@ zone_dataset_detach(struct ucred *cred, const char *dataset, int jailid)
 end:
 	mtx_unlock(&pr->pr_mtx);
 	return (error);
+#endif
+	KASSERT(0, ("no implmentation in %s", __func__));
 }
 
 /*
@@ -153,6 +160,7 @@ end:
 int
 zone_dataset_visible(const char *dataset, int *write)
 {
+#if 0
 	struct zone_dataset_head *head;
 	zone_dataset_t *zd;
 	struct prison *pr;
@@ -213,6 +221,8 @@ zone_dataset_visible(const char *dataset, int *write)
 end:
 	mtx_unlock(&pr->pr_mtx);
 	return (ret);
+#endif
+	KASSERT(0, ("no implmentation in %s", __func__));
 }
 
 static void
@@ -235,21 +245,28 @@ zone_get_hostid(void *ptr)
 
 	KASSERT(ptr == NULL, ("only NULL pointer supported in %s", __func__));
 
+#if 0
 	return ((uint32_t)curthread->td_ucred->cr_prison->pr_hostid);
+#endif
+  return 0; // REMOVE
 }
 
 static void
 zone_sysinit(void *arg __unused)
 {
+#if 0
 
 	zone_slot = osd_jail_register(zone_destroy, NULL);
+#endif
 }
 
 static void
 zone_sysuninit(void *arg __unused)
 {
+#if 0
 
 	osd_jail_deregister(zone_slot);
+#endif
 }
 
 SYSINIT(zone_sysinit, SI_SUB_DRIVERS, SI_ORDER_ANY, zone_sysinit, NULL);

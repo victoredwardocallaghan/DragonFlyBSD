@@ -324,13 +324,17 @@ spa_all_configs(uint64_t *generation)
 
 	mutex_enter(&spa_namespace_lock);
 	while ((spa = spa_next(spa)) != NULL) {
+#if 0
 		if (INGLOBALZONE(curthread) ||
 		    zone_dataset_visible(spa_name(spa), NULL)) {
+#endif
 			mutex_enter(&spa->spa_props_lock);
 			VERIFY(nvlist_add_nvlist(pools, spa_name(spa),
 			    spa->spa_config) == 0);
 			mutex_exit(&spa->spa_props_lock);
+#if 0
 		}
+#endif
 	}
 	*generation = spa_config_generation;
 	mutex_exit(&spa_namespace_lock);

@@ -46,6 +46,8 @@ int
 lookupnameat(char *dirname, enum uio_seg seg, enum symfollow follow,
     vnode_t **dirvpp, vnode_t **compvpp, vnode_t *startvp)
 {
+// XXX ZFS
+#if 0
 	struct nameidata nd;
 	int error, ltype;
 
@@ -61,11 +63,14 @@ lookupnameat(char *dirname, enum uio_seg seg, enum symfollow follow,
 	NDFREE(&nd, NDF_ONLY_PNBUF);
 	vn_lock(startvp, ltype | LK_RETRY);
 	return (error);
+#endif
 }
 
 int
 traverse(vnode_t **cvpp, int lktype)
 {
+// XXX ZFS
+#if 0
 	vnode_t *cvp;
 	vnode_t *tvp;
 	vfs_t *vfsp;
@@ -112,4 +117,5 @@ traverse(vnode_t **cvpp, int lktype)
 
 	*cvpp = cvp;
 	return (0);
+#endif
 }

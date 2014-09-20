@@ -43,6 +43,8 @@ void
 vfs_setmntopt(vfs_t *vfsp, const char *name, const char *arg,
     int flags __unused)
 {
+// XXX ZFS
+#if 0
 	struct vfsopt *opt;
 	size_t namesize;
 	int locked;
@@ -85,11 +87,13 @@ vfs_setmntopt(vfs_t *vfsp, const char *name, const char *arg,
 	TAILQ_INSERT_TAIL(vfsp->mnt_opt, opt, link);
 	if (!locked)
 		MNT_IUNLOCK(vfsp);
+#endif
 }
 
 void
 vfs_clearmntopt(vfs_t *vfsp, const char *name)
 {
+#if 0
 	int locked;
 
 	if (!(locked = mtx_owned(MNT_MTX(vfsp))))
@@ -97,11 +101,13 @@ vfs_clearmntopt(vfs_t *vfsp, const char *name)
 	vfs_deleteopt(vfsp->mnt_opt, name);
 	if (!locked)
 		MNT_IUNLOCK(vfsp);
+#endif
 }
 
 int
 vfs_optionisset(const vfs_t *vfsp, const char *opt, char **argp)
 {
+#if 0
 	struct vfsoptlist *opts = vfsp->mnt_optnew;
 	int error;
 
@@ -109,12 +115,15 @@ vfs_optionisset(const vfs_t *vfsp, const char *opt, char **argp)
 		return (0);
 	error = vfs_getopt(opts, opt, (void **)argp, NULL);
 	return (error != 0 ? 0 : 1);
+#endif
+  return 0; // REMOVE
 }
 
 int
 mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
     char *fspec, int fsflags)
 {
+#if 0
 	struct vfsconf *vfsp;
 	struct mount *mp;
 	vnode_t *vp, *mvp;
@@ -231,5 +240,6 @@ mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
 	vput(vp);
 	vfs_unbusy(mp);
 	*vpp = mvp;
+#endif
 	return (0);
 }

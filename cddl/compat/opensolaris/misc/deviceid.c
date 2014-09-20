@@ -33,7 +33,7 @@ __FBSDID("$FreeBSD$");
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <libgeom.h>
+//#include <libgeom.h>
 #include <devid.h>
 
 int
@@ -54,6 +54,7 @@ int
 devid_deviceid_to_nmlist(char *search_path, ddi_devid_t devid, char *minor_name,
     devid_nmlist_t **retlist)
 {
+#if 0
 	char path[MAXPATHLEN];
 	char *dst;
 
@@ -67,6 +68,7 @@ devid_deviceid_to_nmlist(char *search_path, ddi_devid_t devid, char *minor_name,
 		free(*retlist);
 		return (ENAMETOOLONG);
 	}
+#endif
 	return (0);
 }
 

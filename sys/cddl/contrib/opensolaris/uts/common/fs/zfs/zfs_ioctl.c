@@ -415,16 +415,20 @@ zfs_secpolicy_none(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 static int
 zfs_secpolicy_read(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 {
+#if 0
 	if (INGLOBALZONE(curthread) ||
 	    zone_dataset_visible(zc->zc_name, NULL))
 		return (0);
 
 	return (SET_ERROR(ENOENT));
+#endif
+	return (0);
 }
 
 static int
 zfs_dozonecheck_impl(const char *dataset, uint64_t zoned, cred_t *cr)
 {
+#if 0
 	int writable = 1;
 
 	/*
@@ -453,6 +457,7 @@ zfs_dozonecheck_impl(const char *dataset, uint64_t zoned, cred_t *cr)
 		if (!writable)
 			return (SET_ERROR(EPERM));
 	}
+#endif
 	return (0);
 }
 
@@ -546,6 +551,7 @@ zfs_set_slabel_policy(const char *name, char *strval, cred_t *cr)
 	if (!new_default && (hexstr_to_label(strval, &new_sl) != 0))
 		return (SET_ERROR(EINVAL));
 
+#if 0
 	/*
 	 * In a non-global zone, disallow attempts to set a label that
 	 * doesn't match that of the zone; otherwise no other checks
@@ -556,6 +562,7 @@ zfs_set_slabel_policy(const char *name, char *strval, cred_t *cr)
 			return (SET_ERROR(EPERM));
 		return (0);
 	}
+#endif
 
 	/*
 	 * For global-zone datasets (i.e., those whose zoned property is
@@ -627,16 +634,19 @@ zfs_secpolicy_setprop(const char *dsname, zfs_prop_t prop, nvpair_t *propval,
 	 */
 	switch (prop) {
 	case ZFS_PROP_ZONED:
+#if 0
 		/*
 		 * Disallow setting of 'zoned' from within a local zone.
 		 */
 		if (!INGLOBALZONE(curthread))
 			return (SET_ERROR(EPERM));
+#endif
 		break;
 
 	case ZFS_PROP_QUOTA:
 	case ZFS_PROP_FILESYSTEM_LIMIT:
 	case ZFS_PROP_SNAPSHOT_LIMIT:
+#if 0
 		if (!INGLOBALZONE(curthread)) {
 			uint64_t zoned;
 			char setpoint[MAXNAMELEN];
@@ -651,6 +661,7 @@ zfs_secpolicy_setprop(const char *dsname, zfs_prop_t prop, nvpair_t *propval,
 			if (!zoned || strlen(dsname) <= strlen(setpoint))
 				return (SET_ERROR(EPERM));
 		}
+#endif
 		break;
 
 	case ZFS_PROP_MLSLABEL:
@@ -771,8 +782,10 @@ zfs_secpolicy_deleg_share(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 int
 zfs_secpolicy_share(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 {
+#if 0
 	if (!INGLOBALZONE(curthread))
 		return (SET_ERROR(EPERM));
+#endif
 
 	if (secpolicy_nfs(cr) == 0) {
 		return (0);
@@ -784,8 +797,10 @@ zfs_secpolicy_share(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 int
 zfs_secpolicy_smb_acl(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 {
+#if 0
 	if (!INGLOBALZONE(curthread))
 		return (SET_ERROR(EPERM));
+#endif
 
 	if (secpolicy_smb(cr) == 0) {
 		return (0);
@@ -2249,8 +2264,10 @@ dataset_name_hidden(const char *name)
 		return (B_TRUE);
 	if (strchr(name, '%') != NULL)
 		return (B_TRUE);
+#if 0
 	if (!INGLOBALZONE(curthread) && !zone_dataset_visible(name, NULL))
 		return (B_TRUE);
+#endif
 	return (B_FALSE);
 }
 
@@ -5320,17 +5337,21 @@ zfs_ioc_space_snaps(const char *lastsnap, nvlist_t *innvl, nvlist_t *outnvl)
 static int
 zfs_ioc_jail(zfs_cmd_t *zc)
 {
-
+#if 0
 	return (zone_dataset_attach(curthread->td_ucred, zc->zc_name,
 	    (int)zc->zc_jailid));
+#endif
+  return 0;
 }
 
 static int
 zfs_ioc_unjail(zfs_cmd_t *zc)
 {
-
+#if 0
 	return (zone_dataset_detach(curthread->td_ucred, zc->zc_name,
 	    (int)zc->zc_jailid));
+#endif
+  return 0;
 }
 
 /*

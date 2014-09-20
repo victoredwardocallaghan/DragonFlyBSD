@@ -266,6 +266,7 @@ cacl_free(void *ptr, size_t size)
 acl_t *
 acl_alloc(enum acl_type type)
 {
+#if 0
 	acl_t *aclp;
 
 	if (cacl_malloc((void **)&aclp, sizeof (acl_t)) != 0)
@@ -288,6 +289,8 @@ acl_alloc(enum acl_type type)
 		aclp = NULL;
 	}
 	return (aclp);
+#endif
+  return NULL; // REMOVE
 }
 
 /*
@@ -296,6 +299,7 @@ acl_alloc(enum acl_type type)
 void
 acl_free(acl_t *aclp)
 {
+#if 0
 	int acl_size;
 
 	if (aclp == NULL)
@@ -307,12 +311,14 @@ acl_free(acl_t *aclp)
 	}
 
 	cacl_free(aclp, sizeof (acl_t));
+#endif
 }
 
 static uint32_t
 access_mask_set(int haswriteperm, int hasreadperm, int isowner, int isallow)
 {
 	uint32_t access_mask = 0;
+#if 0
 	int acl_produce;
 	int synchronize_set = 0, write_owner_set = 0;
 	int delete_set = 0, write_attrs_set = 0;
@@ -369,6 +375,7 @@ access_mask_set(int haswriteperm, int hasreadperm, int isowner, int isallow)
 	if (acl_produce & write_named_set)
 		access_mask |= ACE_WRITE_NAMED_ATTRS;
 
+#endif
 	return (access_mask);
 }
 
@@ -380,6 +387,7 @@ static uint32_t
 mode_to_ace_access(mode_t mode, boolean_t isdir, int isowner, int isallow)
 {
 	uint32_t access = 0;
+#if 0
 	int haswriteperm = 0;
 	int hasreadperm = 0;
 
@@ -424,6 +432,7 @@ mode_to_ace_access(mode_t mode, boolean_t isdir, int isowner, int isallow)
 		access |= ACE_EXECUTE;
 	}
 
+#endif
 	return (access);
 }
 
@@ -434,6 +443,7 @@ mode_to_ace_access(mode_t mode, boolean_t isdir, int isowner, int isallow)
 static void
 ace_make_deny(ace_t *allow, ace_t *deny, int isdir, int isowner)
 {
+#if 0
 	(void) memcpy(deny, allow, sizeof (ace_t));
 
 	deny->a_who = allow->a_who;
@@ -449,6 +459,7 @@ ace_make_deny(ace_t *allow, ace_t *deny, int isdir, int isowner)
 	deny->a_access_mask |= access_mask_set((allow->a_access_mask &
 	    ACE_WRITE_DATA), (allow->a_access_mask & ACE_READ_DATA), isowner,
 	    B_FALSE);
+#endif
 }
 /*
  * Make an initial pass over an array of aclent_t's.  Gather
@@ -460,6 +471,7 @@ ln_aent_preprocess(aclent_t *aclent, int n,
     int *hasmask, mode_t *mask,
     int *numuser, int *numgroup, int *needsort)
 {
+#if 0
 	int error = 0;
 	int i;
 	int curtype = 0;
@@ -497,6 +509,8 @@ ln_aent_preprocess(aclent_t *aclent, int n,
 
 out:
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 /*
@@ -507,6 +521,7 @@ out:
 static int
 ln_aent_to_ace(aclent_t *aclent, int n, ace_t **acepp, int *rescount, int isdir)
 {
+#if 0
 	int error = 0;
 	mode_t mask;
 	int numuser, numgroup, needsort;
@@ -668,12 +683,15 @@ out:
 	}
 
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 static int
 convert_aent_to_ace(aclent_t *aclentp, int aclcnt, boolean_t isdir,
     ace_t **retacep, int *retacecnt)
 {
+#if 0
 	ace_t *acep;
 	ace_t *dfacep;
 	int acecnt = 0;
@@ -731,12 +749,14 @@ convert_aent_to_ace(aclent_t *aclentp, int aclcnt, boolean_t isdir,
 
 	*retacecnt = acecnt + dfacecnt;
 	*retacep = acep;
+#endif
 	return (0);
 }
 
 static int
 ace_mask_to_mode(uint32_t  mask, o_mode_t *modep, boolean_t isdir)
 {
+#if 0
 	int error = 0;
 	o_mode_t mode = 0;
 	uint32_t bits, wantbits;
@@ -767,21 +787,26 @@ ace_mask_to_mode(uint32_t  mask, o_mode_t *modep, boolean_t isdir)
 
 out:
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 static void
 acevals_init(acevals_t *vals, uid_t key)
 {
+#if 0
 	bzero(vals, sizeof (*vals));
 	vals->allowed = ACE_MASK_UNDEFINED;
 	vals->denied = ACE_MASK_UNDEFINED;
 	vals->mask = ACE_MASK_UNDEFINED;
 	vals->key = key;
+#endif
 }
 
 static void
 ace_list_init(ace_list_t *al, int dfacl_flag)
 {
+#if 0
 	acevals_init(&al->user_obj, 0);
 	acevals_init(&al->group_obj, 0);
 	acevals_init(&al->other_obj, 0);
@@ -792,6 +817,7 @@ ace_list_init(ace_list_t *al, int dfacl_flag)
 	al->state = ace_unused;
 	al->seen = 0;
 	al->dfacl_flag = dfacl_flag;
+#endif
 }
 
 /*
@@ -803,6 +829,7 @@ ace_list_init(ace_list_t *al, int dfacl_flag)
 static acevals_t *
 acevals_find(ace_t *ace, avl_tree_t *avl, int *num)
 {
+#if 0
 	acevals_t key, *rc;
 	avl_index_t where;
 
@@ -820,11 +847,14 @@ acevals_find(ace_t *ace, avl_tree_t *avl, int *num)
 	(*num)++;
 
 	return (rc);
+#endif
+  return NULL; //REMOVE
 }
 
 static int
 access_mask_check(ace_t *acep, int mask_bit, int isowner)
 {
+#if 0
 	int set_deny, err_deny;
 	int set_allow, err_allow;
 	int acl_consume;
@@ -924,12 +954,14 @@ access_mask_check(ace_t *acep, int mask_bit, int isowner)
 			}
 		}
 	}
+#endif
 	return (0);
 }
 
 static int
 ace_to_aent_legal(ace_t *acep)
 {
+#if 0
 	int error = 0;
 	int isowner;
 
@@ -1029,6 +1061,8 @@ ace_to_aent_legal(ace_t *acep)
 
 out:
 	return (error);
+#endif
+  return 0; //REMOVE
 }
 
 static int
@@ -1047,6 +1081,7 @@ static int
 acevals_to_aent(acevals_t *vals, aclent_t *dest, ace_list_t *list,
     uid_t owner, gid_t group, boolean_t isdir)
 {
+#if 0
 	int error;
 	uint32_t  flips = ACE_POSIX_SUPPORTED_BITS;
 
@@ -1080,6 +1115,8 @@ acevals_to_aent(acevals_t *vals, aclent_t *dest, ace_list_t *list,
 
 out:
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 
@@ -1087,6 +1124,7 @@ static int
 ace_list_to_aent(ace_list_t *list, aclent_t **aclentp, int *aclcnt,
     uid_t owner, gid_t group, boolean_t isdir)
 {
+#if 0
 	int error = 0;
 	aclent_t *aent, *result = NULL;
 	acevals_t *vals;
@@ -1214,6 +1252,8 @@ out:
 	}
 
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 
@@ -1223,6 +1263,7 @@ out:
 static void
 ace_list_free(ace_list_t *al)
 {
+#if 0
 	acevals_t *node;
 	void *cookie;
 
@@ -1241,11 +1282,13 @@ ace_list_free(ace_list_t *al)
 
 	/* free the container itself */
 	cacl_free(al, sizeof (ace_list_t));
+#endif
 }
 
 static int
 acevals_compare(const void *va, const void *vb)
 {
+#if 0
 	const acevals_t *a = va, *b = vb;
 
 	if (a->key == b->key)
@@ -1255,6 +1298,7 @@ acevals_compare(const void *va, const void *vb)
 		return (1);
 
 	else
+#endif
 		return (-1);
 }
 
@@ -1267,6 +1311,7 @@ ln_ace_to_aent(ace_t *ace, int n, uid_t owner, gid_t group,
     aclent_t **aclentp, int *aclcnt, aclent_t **dfaclentp, int *dfaclcnt,
     boolean_t isdir)
 {
+#if 0
 	int error = 0;
 	ace_t *acep;
 	uint32_t bits;
@@ -1457,6 +1502,8 @@ out:
 		ace_list_free(dfacl);
 
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 static int
@@ -1464,6 +1511,7 @@ convert_ace_to_aent(ace_t *acebufp, int acecnt, boolean_t isdir,
     uid_t owner, gid_t group, aclent_t **retaclentp, int *retaclcnt)
 {
 	int error = 0;
+#if 0
 	aclent_t *aclentp, *dfaclentp;
 	int aclcnt, dfaclcnt;
 	int aclsz, dfaclsz;
@@ -1497,6 +1545,7 @@ convert_ace_to_aent(ace_t *acebufp, int acecnt, boolean_t isdir,
 	if (dfaclentp)
 		cacl_free(dfaclentp, dfaclsz);
 
+#endif
 	return (error);
 }
 
@@ -1505,6 +1554,7 @@ int
 acl_translate(acl_t *aclp, int target_flavor, boolean_t isdir, uid_t owner,
     gid_t group)
 {
+#if 0
 	int aclcnt;
 	void *acldata;
 	int error;
@@ -1563,6 +1613,9 @@ out:
 #else
 	return (error);
 #endif
+
+#endif
+  return 0; // REMOVE
 }
 #endif /* !_KERNEL */
 
@@ -1576,6 +1629,7 @@ out:
 void
 acl_trivial_access_masks(mode_t mode, boolean_t isdir, trivial_acl_t *masks)
 {
+#if 0
 	uint32_t read_mask = ACE_READ_DATA;
 	uint32_t write_mask = ACE_WRITE_DATA|ACE_APPEND_DATA;
 	uint32_t execute_mask = ACE_EXECUTE;
@@ -1633,11 +1687,13 @@ acl_trivial_access_masks(mode_t mode, boolean_t isdir, trivial_acl_t *masks)
 		masks->everyone |= write_mask;
 	if (mode & S_IXOTH)
 		masks->everyone |= execute_mask;
+#endif
 }
 
 int
 acl_trivial_create(mode_t mode, boolean_t isdir, ace_t **acl, int *count)
 {
+#if 0
 	int		index = 0;
 	int		error;
 	trivial_acl_t	masks;
@@ -1675,6 +1731,7 @@ acl_trivial_create(mode_t mode, boolean_t isdir, ace_t **acl, int *count)
 	SET_ACE(acl, index, -1, masks.everyone, ACE_ACCESS_ALLOWED_ACE_TYPE,
 	    ACE_EVERYONE);
 
+#endif
 	return (0);
 }
 
@@ -1692,6 +1749,7 @@ ace_trivial_common(void *acep, int aclcnt,
     uint64_t (*walk)(void *, uint64_t, int aclcnt,
     uint16_t *, uint16_t *, uint32_t *))
 {
+#if 0
 	uint16_t flags;
 	uint32_t mask;
 	uint16_t type;
@@ -1739,6 +1797,7 @@ ace_trivial_common(void *acep, int aclcnt,
 			return (1);
 
 	}
+#endif
 	return (0);
 }
 
@@ -1746,6 +1805,7 @@ uint64_t
 ace_walk(void *datap, uint64_t cookie, int aclcnt, uint16_t *flags,
     uint16_t *type, uint32_t *mask)
 {
+#if 0
 	ace_t *acep = datap;
 
 	if (cookie >= aclcnt)
@@ -1756,10 +1816,15 @@ ace_walk(void *datap, uint64_t cookie, int aclcnt, uint16_t *flags,
 	*mask = acep[cookie++].a_access_mask;
 
 	return (cookie);
+#endif
+  return 0; // REMOVE
 }
 
 int
 ace_trivial(ace_t *acep, int aclcnt)
 {
+#if 0
 	return (ace_trivial_common(acep, aclcnt, ace_walk));
+#endif
+  return 0; // REMOVE
 }

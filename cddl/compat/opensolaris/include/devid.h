@@ -33,6 +33,9 @@
 #include <sys/disk.h>
 #include <stdlib.h>
 
+// comes from sys/disk.h in FreeBSD
+#define  DISK_IDENT_SIZE 256
+
 typedef struct ddi_devid {
 	char devid[DISK_IDENT_SIZE];
 } ddi_devid_t;

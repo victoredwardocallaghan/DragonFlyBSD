@@ -3266,7 +3266,6 @@ nvs_xdr_nvpair(nvstream_t *nvs, nvpair_t *nvp, size_t *size)
 	default:
 		return (EINVAL);
 	}
-	return (0);
 }
 
 static const struct nvs_ops nvs_xdr_ops = {

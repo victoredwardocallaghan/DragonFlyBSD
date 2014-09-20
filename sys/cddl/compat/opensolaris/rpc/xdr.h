@@ -45,6 +45,7 @@
 static __inline bool_t
 xdrmem_control(XDR *xdrs, int request, void *info)
 {
+#if 0
 	xdr_bytesrec *xptr;
 
 	switch (request) {
@@ -56,6 +57,7 @@ xdrmem_control(XDR *xdrs, int request, void *info)
 	default:
 		assert(!"unexpected request");
 	}
+#endif
 	return (FALSE);
 }
 

@@ -44,6 +44,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 {
 	struct sysctl_oid *root;
 	kstat_t *ksp;
+#if 0
 
 	KASSERT(instance == 0, ("instance=%d", instance));
 	KASSERT(type == KSTAT_TYPE_NAMED, ("type=%hhu", type));
@@ -92,22 +93,27 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	}
 	ksp->ks_sysctl_root = root;
 
+#endif
 	return (ksp);
 }
 
 static int
 kstat_sysctl(SYSCTL_HANDLER_ARGS)
 {
+#if 0
 	kstat_named_t *ksent = arg1;
 	uint64_t val;
 
 	val = ksent->value.ui64;
 	return sysctl_handle_64(oidp, &val, 0, req);
+#endif
+  return 0; // REMOVE
 }
 
 void
 kstat_install(kstat_t *ksp)
 {
+#if 0
 	kstat_named_t *ksent;
 	u_int i;
 
@@ -120,12 +126,15 @@ kstat_install(kstat_t *ksp)
 		    CTLTYPE_U64 | CTLFLAG_RD, ksent, sizeof(*ksent),
 		    kstat_sysctl, "QU", ksent->desc);
 	}
+#endif
 }
 
 void
 kstat_delete(kstat_t *ksp)
 {
+#if 0
 
 	sysctl_ctx_free(&ksp->ks_sysctl_ctx);
 	kfree(ksp, M_KSTAT);
+#endif
 }

@@ -31,6 +31,7 @@
 #include_next <sys/refcount.h>
 #include <sys/list.h>
 #include <sys/zfs_context.h>
+#include <sys/mutex.h> // XXX ZFS
 
 #ifdef	__cplusplus
 extern "C" {

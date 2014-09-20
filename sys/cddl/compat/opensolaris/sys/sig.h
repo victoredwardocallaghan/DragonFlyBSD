@@ -47,6 +47,8 @@
 static __inline int
 issig(int why)
 {
+// XXX ZFS - SIGPENDNING found in fbsd at sys/sys/signalvar.h
+#if 0
 	struct thread *td = curthread;
 	struct proc *p;
 	struct lwp *lp;
@@ -63,6 +65,7 @@ issig(int why)
 		if (sig != 0)
 			return (1);
 	}
+#endif
 	return (0);
 }
 

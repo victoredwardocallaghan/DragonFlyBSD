@@ -33,7 +33,7 @@
 #include <sys/kthread.h>
 #include_next <sys/proc.h>
 #include <sys/stdint.h>
-#include <sys/smp.h>
+//#include <sys/smp.h>
 #include <sys/sched.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
@@ -68,6 +68,7 @@ thread_create(caddr_t stk, size_t stksize, void (*proc)(void *), void *arg,
 {
 	kthread_t *td = NULL;
 	int error;
+#if 0 // XXX ZFS
 
 	/*
 	 * Be sure there are no surprises.
@@ -85,6 +86,7 @@ thread_create(caddr_t stk, size_t stksize, void (*proc)(void *), void *arg,
 		sched_add(td, SRQ_BORING);
 		thread_unlock(td);
 	}
+#endif
 	return (td);
 }
 

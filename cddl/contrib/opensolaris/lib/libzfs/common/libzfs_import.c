@@ -52,7 +52,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <thread_pool.h>
-#include <libgeom.h>
+//#include <libgeom.h>
 
 #include <sys/vdev_impl.h>
 
@@ -1136,6 +1136,7 @@ zpool_clear_label(int fd)
 static nvlist_t *
 zpool_find_import_impl(libzfs_handle_t *hdl, importargs_t *iarg)
 {
+#if 0
 	int i, dirs = iarg->paths;
 	DIR *dirp = NULL;
 	struct dirent64 *dp;
@@ -1339,6 +1340,8 @@ error:
 		(void) closedir(dirp);
 
 	return (ret);
+#endif
+  return NULL; // REMOVE
 }
 
 nvlist_t *

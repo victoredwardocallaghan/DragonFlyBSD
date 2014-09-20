@@ -1680,6 +1680,7 @@ zfs_mount(vfs_t *vfsp)
 		secpolicy_fs_mount_clearopts(cr, vfsp);
 	}
 
+#if 0
 	/*
 	 * Refuse to mount a filesystem if we are in a local zone and the
 	 * dataset is not visible.
@@ -1689,6 +1690,7 @@ zfs_mount(vfs_t *vfsp)
 		error = SET_ERROR(EPERM);
 		goto out;
 	}
+#endif
 
 #ifdef SECLABEL
 	error = zfs_mount_label_policy(vfsp, osname);

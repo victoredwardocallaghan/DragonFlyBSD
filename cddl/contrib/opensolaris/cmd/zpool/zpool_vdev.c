@@ -74,7 +74,7 @@
 #include <sys/stat.h>
 #include <sys/disk.h>
 #include <sys/mntent.h>
-#include <libgeom.h>
+//#include <libgeom.h>
 
 #include "zpool_util.h"
 
@@ -133,6 +133,7 @@ libdiskmgt_error(int error)
 static int
 check_slice(const char *path, int force, boolean_t wholedisk, boolean_t isspare)
 {
+#if 0
 	char *msg;
 	int error = 0;
 	dm_who_type_t who;
@@ -173,6 +174,7 @@ check_slice(const char *path, int force, boolean_t wholedisk, boolean_t isspare)
 			return (0);
 		}
 	}
+#endif
 
 	return (0);
 }
@@ -185,6 +187,7 @@ check_slice(const char *path, int force, boolean_t wholedisk, boolean_t isspare)
 static int
 check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 {
+#if 0
 	dm_descriptor_t *drive, *media, *slice;
 	int err = 0;
 	int i;
@@ -248,6 +251,8 @@ check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 
 	dm_free_descriptors(slice);
 	return (ret);
+#endif
+  return 0; // REMOVE
 }
 
 /*
@@ -283,6 +288,7 @@ check_device(const char *path, boolean_t force, boolean_t isspare)
 static int
 check_file(const char *file, boolean_t force, boolean_t isspare)
 {
+#if 0
 	char  *name;
 	int fd;
 	int ret = 0;
@@ -351,6 +357,8 @@ check_file(const char *file, boolean_t force, boolean_t isspare)
 
 	(void) close(fd);
 	return (ret);
+#endif
+  return 0; // REMOVE
 }
 
 static int
@@ -377,6 +385,7 @@ check_device(const char *name, boolean_t force, boolean_t isspare)
 static boolean_t
 is_whole_disk(const char *arg)
 {
+#if 0
 #ifdef sun
 	struct dk_gpt *label;
 	int	fd;
@@ -403,6 +412,9 @@ is_whole_disk(const char *arg)
 	}
 	return (B_FALSE);
 #endif
+
+#endif
+  return B_FALSE; // REMOVE
 }
 
 /*

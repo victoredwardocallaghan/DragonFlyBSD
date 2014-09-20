@@ -119,6 +119,9 @@
  *	- ARC header release, as it removes from L2ARC buflists
  */
 
+
+#define	CACHE_LINE_SIZE 64 // XXX ZFS - ???
+
 #include <sys/kmem.h> // XXX ZFS
 #include <sys/sysctl.h> // XXX ZFS
 #include <sys/spa.h>

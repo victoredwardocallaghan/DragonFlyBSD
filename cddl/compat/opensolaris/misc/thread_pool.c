@@ -29,6 +29,9 @@ __FBSDID("$FreeBSD$");
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
+// needed for bzero() -- write zeroes to a byte string
+#include <strings.h>
+
 #include <stdlib.h>
 #include <signal.h>
 #include <errno.h>

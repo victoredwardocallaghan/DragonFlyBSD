@@ -74,9 +74,9 @@ extern "C" {
 #include <sys/sysctl.h>
 #include <sys/sbuf.h>
 #include <sys/priv.h>
-#include <sys/kdb.h>
+//#include <sys/kdb.h>
 #include <sys/ktr.h>
-#include <sys/stack.h>
+//#include <sys/stack.h>
 #include <sys/lockf.h>
 #include <sys/pathname.h>
 #include <sys/policy.h>
@@ -86,7 +86,7 @@ extern "C" {
 #include <sys/extattr.h>
 #include <sys/misc.h>
 #include <sys/sig.h>
-#include <sys/osd.h>
+//#include <sys/osd.h>
 #include <sys/sysevent/dev.h>
 #include <sys/sysevent/eventdefs.h>
 #include <sys/u8_textprep.h>

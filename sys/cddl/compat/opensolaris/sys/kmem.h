@@ -32,9 +32,9 @@
 #include <sys/param.h>
 #include <sys/proc.h>
 #include <sys/malloc.h>
-#include <sys/vmem.h>
+//#include <sys/vmem.h>
 
-#include <vm/uma.h>
+//#include <vm/uma.h>
 #include <vm/vm.h>
 #include <vm/vm_extern.h>
 
@@ -77,9 +77,11 @@ u_int kmem_free_count(void);
 u_int kmem_free_target(void);
 u_int kmem_free_min(void);
 
+#if 0
 kmem_cache_t *kmem_cache_create(char *name, size_t bufsize, size_t align,
     int (*constructor)(void *, void *, int), void (*destructor)(void *, void *),
     void (*reclaim)(void *) __unused, void *private, vmem_t *vmp, int cflags);
+#endif
 void kmem_cache_destroy(kmem_cache_t *cache);
 void *kmem_cache_alloc(kmem_cache_t *cache, int flags);
 void kmem_cache_free(kmem_cache_t *cache, void *buf);

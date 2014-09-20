@@ -45,7 +45,6 @@ taskq_t *system_taskq = NULL;
 static void
 system_taskq_init(void *arg)
 {
-
 	taskq_zone = uma_zcreate("taskq_zone", sizeof(taskq_ent_t),
 	    NULL, NULL, NULL, NULL, 0, 0);
 	system_taskq = taskq_create("system_taskq", mp_ncpus, 0, 0, 0, 0);

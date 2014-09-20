@@ -102,7 +102,10 @@ zmount(const char *spec, const char *dir, int mflag, char *fstype,
 		if (*p != '\0')
 			build_iovec(&iov, &iovlen, p, NULL, (size_t)-1);
 	}
+#if 0 // XXX ZFS - Missing sys_nmount() syscall in DFly
 	rv = nmount(iov, iovlen, 0);
+#endif
 	free(optstr);
 	return (rv);
+  return 0; // REMOVE
 }

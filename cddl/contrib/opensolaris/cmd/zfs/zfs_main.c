@@ -6501,7 +6501,8 @@ do_jail(int argc, char **argv, int attach)
 		usage(B_FALSE);
 	}
 
-	jailid = jail_getid(argv[1]);
+  // XXX ZFS missing jail_getid()
+	jailid = 1; // jail_getid(argv[1]);
 	if (jailid < 0) {
 		(void) fprintf(stderr, gettext("invalid jail id or name\n"));
 		usage(B_FALSE);
@@ -6761,7 +6762,8 @@ zfs_do_diff(int argc, char **argv)
 	 * Ignore SIGPIPE so that the library can give us
 	 * information on any failure
 	 */
-	(void) sigignore(SIGPIPE);
+// XXX ZFS - comment out for now??? Found in 'lib/libc/compat-43/sigcompat.c' on FBSD
+//	(void) sigignore(SIGPIPE);
 
 	err = zfs_show_diffs(zhp, STDOUT_FILENO, fromsnap, tosnap, flags);
 

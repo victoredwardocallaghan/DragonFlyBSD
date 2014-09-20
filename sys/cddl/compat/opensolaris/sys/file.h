@@ -39,22 +39,26 @@ typedef	struct file	file_t;
 static __inline file_t *
 getf(int fd)
 {
+#if 0
 	struct file *fp;
 
 	if (fget(curthread, fd, &fp) == 0)
 		return (fp);
+#endif
 	return (NULL);
 }
 
 static __inline void
 releasef(int fd)
 {
+#if 0
 	struct file *fp;
 
 	if (fget(curthread, fd, &fp) == 0) {
 		fdrop(fp, curthread);
 		fdrop(fp, curthread);
 	}
+#endif
 }
 #endif	/* _KERNEL */
 

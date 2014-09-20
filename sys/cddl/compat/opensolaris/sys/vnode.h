@@ -68,7 +68,10 @@ typedef	struct vop_vector	vnodeops_t;
 static __inline int
 vn_is_readonly(vnode_t *vp)
 {
+#if 0
 	return (vp->v_mount->mnt_flag & MNT_RDONLY);
+#endif
+  return 0; //REMOVE
 }
 #define	vn_vfswlock(vp)		(0)
 #define	vn_vfsunlock(vp)	do { } while (0)
@@ -162,6 +165,7 @@ vn_openat(char *pnamep, enum uio_seg seg, int filemode, int createmode,
     vnode_t **vpp, enum create crwhy, mode_t umask, struct vnode *startvp,
     int fd)
 {
+#if 0
 	struct thread *td = curthread;
 	struct filedesc *fdc;
 	struct nameidata nd;
@@ -204,6 +208,8 @@ vn_openat(char *pnamep, enum uio_seg seg, int filemode, int createmode,
 		*vpp = nd.ni_vp;
 	}
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 
 static __inline int
@@ -223,6 +229,7 @@ zfs_vn_rdwr(enum uio_rw rw, vnode_t *vp, caddr_t base, ssize_t len,
     offset_t offset, enum uio_seg seg, int ioflag, int ulimit, cred_t *cr,
     ssize_t *residp)
 {
+#if 0
 	struct thread *td = curthread;
 	int error;
 	ssize_t resid;
@@ -240,6 +247,8 @@ zfs_vn_rdwr(enum uio_rw rw, vnode_t *vp, caddr_t base, ssize_t len,
 	if (residp != NULL)
 		*residp = (ssize_t)resid;
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 #define	vn_rdwr(rw, vp, base, len, offset, seg, ioflag, ulimit, cr, residp) \
 	zfs_vn_rdwr((rw), (vp), (base), (len), (offset), (seg), (ioflag), (ulimit), (cr), (residp))
@@ -247,6 +256,7 @@ zfs_vn_rdwr(enum uio_rw rw, vnode_t *vp, caddr_t base, ssize_t len,
 static __inline int
 zfs_vop_fsync(vnode_t *vp, int flag, cred_t *cr)
 {
+#if 0
 	struct mount *mp;
 	int error;
 
@@ -260,12 +270,15 @@ zfs_vop_fsync(vnode_t *vp, int flag, cred_t *cr)
 	vn_finished_write(mp);
 drop:
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 #define	VOP_FSYNC(vp, flag, cr, ct)	zfs_vop_fsync((vp), (flag), (cr))
 
 static __inline int
 zfs_vop_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr)
 {
+#if 0
 	int error;
 
 	ASSERT(count == 1);
@@ -273,6 +286,8 @@ zfs_vop_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr)
 
 	error = vn_close(vp, flag, cr, curthread);
 	return (error);
+#endif
+  return 0; // REMOVE
 }
 #define	VOP_CLOSE(vp, oflags, count, offset, cr, ct)			\
 	zfs_vop_close((vp), (oflags), (count), (offset), (cr))
@@ -280,6 +295,7 @@ zfs_vop_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr)
 static __inline int
 vn_rename(char *from, char *to, enum uio_seg seg)
 {
+#if 0
 	struct lock vn_lock;
 	struct nlookupdata fromnd, tond;
 	int error;
@@ -304,11 +320,14 @@ vn_rename(char *from, char *to, enum uio_seg seg)
 	lockuninit(&vn_lock);
 
 	return error;
+#endif
+  return 0; // REMOVE
 }
 
 static __inline int
 vn_remove(char *fnamep, enum uio_seg seg, enum rm dirflag)
 {
+#if 0
 	struct lock vn_lock;
 	struct nlookupdata nd;
 	int error;
@@ -328,6 +347,8 @@ vn_remove(char *fnamep, enum uio_seg seg, enum rm dirflag)
 	lockuninit(&vn_lock);
 
 	return error;
+#endif
+  return 0; // REMOVE
 }
 
 #endif	/* _KERNEL */
