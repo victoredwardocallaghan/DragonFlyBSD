@@ -54,21 +54,21 @@ vfs_setmntopt(vfs_t *vfsp, const char *name, const char *arg,
 		void *opts;
 
 		MNT_IUNLOCK(vfsp);
-		opts = malloc(sizeof(*vfsp->mnt_opt), M_MOUNT, M_WAITOK);
+		opts = kmalloc(sizeof(*vfsp->mnt_opt), M_MOUNT, M_WAITOK);
 		MNT_ILOCK(vfsp);
 		if (vfsp->mnt_opt == NULL) {
 			vfsp->mnt_opt = opts;
 			TAILQ_INIT(vfsp->mnt_opt);
 		} else {
-			free(opts, M_MOUNT);
+			kfree(opts, M_MOUNT);
 		}
 	}
 
 	MNT_IUNLOCK(vfsp);
 
-	opt = malloc(sizeof(*opt), M_MOUNT, M_WAITOK);
+	opt = kmalloc(sizeof(*opt), M_MOUNT, M_WAITOK);
 	namesize = strlen(name) + 1;
-	opt->name = malloc(namesize, M_MOUNT, M_WAITOK);
+	opt->name = kmalloc(namesize, M_MOUNT, M_WAITOK);
 	strlcpy(opt->name, name, namesize);
 	opt->pos = -1;
 	opt->seen = 1;
@@ -77,7 +77,7 @@ vfs_setmntopt(vfs_t *vfsp, const char *name, const char *arg,
 		opt->len = 0;
 	} else {
 		opt->len = strlen(arg) + 1;
-		opt->value = malloc(opt->len, M_MOUNT, M_WAITOK);
+		opt->value = kmalloc(opt->len, M_MOUNT, M_WAITOK);
 		bcopy(arg, opt->value, opt->len);
 	}
 

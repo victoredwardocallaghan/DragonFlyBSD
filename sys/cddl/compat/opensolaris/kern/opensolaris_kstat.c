@@ -54,7 +54,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	 * stuff in here, because it is only used for sysctl node creation
 	 * done in this function.
 	 */
-	ksp = malloc(sizeof(*ksp), M_KSTAT, M_WAITOK);
+	ksp = kmalloc(sizeof(*ksp), M_KSTAT, M_WAITOK);
 	ksp->ks_ndata = ndata;
 
 	/*
@@ -69,7 +69,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 	if (root == NULL) {
 		kprintf("%s: Cannot create kstat.%s tree!\n", __func__, module);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
-		free(ksp, M_KSTAT);
+		kfree(ksp, M_KSTAT);
 		return (NULL);
 	}
 	root = SYSCTL_ADD_NODE(&ksp->ks_sysctl_ctx, SYSCTL_CHILDREN(root),
@@ -78,7 +78,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 		kprintf("%s: Cannot create kstat.%s.%s tree!\n", __func__,
 		    module, class);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
-		free(ksp, M_KSTAT);
+		kfree(ksp, M_KSTAT);
 		return (NULL);
 	}
 	root = SYSCTL_ADD_NODE(&ksp->ks_sysctl_ctx, SYSCTL_CHILDREN(root),
@@ -87,7 +87,7 @@ kstat_create(char *module, int instance, char *name, char *class, uchar_t type,
 		kprintf("%s: Cannot create kstat.%s.%s.%s tree!\n", __func__,
 		    module, class, name);
 		sysctl_ctx_free(&ksp->ks_sysctl_ctx);
-		free(ksp, M_KSTAT);
+		kfree(ksp, M_KSTAT);
 		return (NULL);
 	}
 	ksp->ks_sysctl_root = root;
@@ -127,5 +127,5 @@ kstat_delete(kstat_t *ksp)
 {
 
 	sysctl_ctx_free(&ksp->ks_sysctl_ctx);
-	free(ksp, M_KSTAT);
+	kfree(ksp, M_KSTAT);
 }

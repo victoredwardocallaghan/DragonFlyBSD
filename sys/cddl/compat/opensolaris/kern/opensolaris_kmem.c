@@ -48,8 +48,8 @@ __FBSDID("$FreeBSD$");
 #ifdef _KERNEL
 MALLOC_DEFINE(M_SOLARIS, "solaris", "Solaris");
 #else
-#define	malloc(size, type, flags)	malloc(size)
-#define	free(addr, type)		free(addr)
+#define	kmalloc(size, type, flags)	malloc(size)
+#define	kfree(addr, type)		free(addr)
 #endif
 
 #ifdef KMEM_DEBUG
@@ -73,7 +73,7 @@ zfs_kmem_alloc(size_t size, int kmflags)
 
 	size += sizeof(struct kmem_item);
 #endif
-	p = malloc(size, M_SOLARIS, kmflags);
+	p = kmalloc(size, M_SOLARIS, kmflags);
 #ifndef _KERNEL
 	if (kmflags & KM_SLEEP)
 		assert(p != NULL);
@@ -111,7 +111,7 @@ zfs_kmem_free(void *buf, size_t size __unused)
 	LIST_REMOVE(i, next);
 	mtx_unlock(&kmem_items_mtx);
 #endif
-	free(buf, M_SOLARIS);
+	kfree(buf, M_SOLARIS);
 }
 
 static uint64_t kmem_size_val;
