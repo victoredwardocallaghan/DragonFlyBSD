@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2008 Pawel Jakub Dawidek <pjd@FreeBSD.org>
  * All rights reserved.
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,6 +26,7 @@
  * SUCH DAMAGE.
  *
  * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SYS_SIG_H_
@@ -33,7 +36,7 @@
 
 #include <sys/param.h>
 #include <sys/lock.h>
-#include <sys/mutex.h>
+#include <sys/thread.h>
 #include <sys/proc.h>
 #include <sys/signalvar.h>
 #include <sys/debug.h>
@@ -46,6 +49,7 @@ issig(int why)
 {
 	struct thread *td = curthread;
 	struct proc *p;
+	struct lwp *lp;
 	int sig;
 
 	ASSERT(why == FORREAL || why == JUSTLOOKING);
@@ -53,11 +57,9 @@ issig(int why)
 		if (why == JUSTLOOKING)
 			return (1);
 		p = td->td_proc;
-		PROC_LOCK(p);
-		mtx_lock(&p->p_sigacts->ps_mtx);
+		lwkt_gettoken(&p->p_token);
 		sig = cursig(td);
-		mtx_unlock(&p->p_sigacts->ps_mtx);
-		PROC_UNLOCK(p);
+		lwkt_reltoken(&p->p_token);
 		if (sig != 0)
 			return (1);
 	}
