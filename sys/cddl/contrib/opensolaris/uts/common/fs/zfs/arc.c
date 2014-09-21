@@ -119,6 +119,8 @@
  *	- ARC header release, as it removes from L2ARC buflists
  */
 
+#include <sys/kmem.h> // XXX ZFS
+#include <sys/sysctl.h> // XXX ZFS
 #include <sys/spa.h>
 #include <sys/zio.h>
 #include <sys/zio_compress.h>
