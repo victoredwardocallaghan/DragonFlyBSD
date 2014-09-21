@@ -280,20 +280,54 @@ zfs_vop_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr)
 static __inline int
 vn_rename(char *from, char *to, enum uio_seg seg)
 {
+	struct lock vn_lock;
+	struct nlookupdata fromnd, tond;
+	int error;
 
 	ASSERT(seg == UIO_SYSSPACE);
 
-	return (kern_rename(curthread, from, to, seg));
+	lockinit(&vn_lock, "vnlock", 0, LK_CANRECURSE);
+
+	lockmgr(&vn_lock, LK_EXCLUSIVE);
+	do {
+		error = nlookup_init(&fromnd, from, seg, 0);
+		if (error == 0) {
+			error = nlookup_init(&tond, to, seg, 0);
+			if (error == 0)
+				error = kern_rename(&fromnd, &tond);
+			nlookup_done(&tond);
+		}
+		nlookup_done(&fromnd);
+	} while (error == EAGAIN);
+	lockmgr(&vn_lock, LK_RELEASE);
+
+	lockuninit(&vn_lock);
+
+	return error;
 }
 
 static __inline int
 vn_remove(char *fnamep, enum uio_seg seg, enum rm dirflag)
 {
+	struct lock vn_lock;
+	struct nlookupdata nd;
+	int error;
 
 	ASSERT(seg == UIO_SYSSPACE);
 	ASSERT(dirflag == RMFILE);
 
-	return (kern_unlink(curthread, fnamep, seg));
+	lockinit(&vn_lock, "vnlock", 0, LK_CANRECURSE);
+
+	lockmgr(&vn_lock, LK_EXCLUSIVE);
+	error = nlookup_init(&nd, fnamep, seg, 0);
+	if (error == 0)
+		error = kern_unlink(&nd);
+	nlookup_done(&nd);
+	lockmgr(&vn_lock, LK_RELEASE);
+
+	lockuninit(&vn_lock);
+
+	return error;
 }
 
 #endif	/* _KERNEL */
