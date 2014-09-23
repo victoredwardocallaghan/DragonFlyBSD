@@ -562,7 +562,7 @@ state_utilities_menu(struct i_fn_args *a)
 	    "a", "diagnostics", _("System Diagnostics"),
 	    _("Probe and display detailed information about this system"), "",
 	    "a", "diskutil", _("Disk Utilities"),
-	    _("Format and check hard drives and floppy disks"), "",
+	    _("Format and check hard drives"), "",
 	    "a", "livecd", _("Exit to Live CD"),
 	    _("Exit this program to a login prompt with access to the LiveCD"), "",
 	    "a", "reboot",
@@ -758,17 +758,8 @@ state_diskutil_menu(struct i_fn_args *a)
 		    _("Wipe out the start of a primary partition"), "", "",
 		    "a", "install_bootblocks",
 		    _("Install bootblocks on disks"), "", "",
-		    "a", "format_msdos_floppy",
-		    _("Format an MSDOS floppy"), "", "",
 		    NULL
 		);
-
-		if (is_file("%sboot/cdboot.flp.bz2", a->os_root)) {
-			dfui_form_action_add(f, "create_cdboot_floppy",
-			    dfui_info_new(_("Create a CDBoot floppy"),
-			    "",
-			    ""));
-		}
 
 		k = dfui_form_action_add(f, "cancel",
 		    dfui_info_new(_("Return to Utilities Menu"), "", ""));
@@ -791,10 +782,6 @@ state_diskutil_menu(struct i_fn_args *a)
 			    "you wish to install bootblocks.");
 			a->cancel_desc = _("Return to Utilities Menu");
 			fn_install_bootblocks(a, NULL);
-		} else if (strcmp(dfui_response_get_action_id(r), "format_msdos_floppy") == 0) {
-			fn_format_msdos_floppy(a);
-		} else if (strcmp(dfui_response_get_action_id(r), "create_cdboot_floppy") == 0) {
-			fn_create_cdboot_floppy(a);
 		} else if (strcmp(dfui_response_get_action_id(r), "cancel") == 0) {
 			state = state_utilities_menu;
 			done = 1;
