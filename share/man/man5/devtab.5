@@ -46,7 +46,7 @@ and other commands which expect device paths.
 It is typically used to translate longer serial numbers (which
 .Xr devfs 5
 automatically creates as
-.Pa /dev/serno/<serial>[.suffix] )
+.Pa /dev/disk/by-serno/<serial>[.suffix] )
 into short form names.
 .Pp
 .Nm
@@ -63,7 +63,7 @@ Valid types are
 .Bl -tag -width ".Sy serno" -offset indent
 .It Sy serno
 Translates to
-.Pa /dev/serno
+.Pa /dev/disk/by-serno
 .It Sy path
 Translates to the path as specified
 .El
@@ -82,7 +82,7 @@ This will translate references like
 .Sy fubar ,
 .Sy fubar.s1a
 etc.\& to their
-.Pa /dev/serno/L123456
+.Pa /dev/disk/by-serno/L123456
 counterparts:
 .Pp
 .Dl "fubar        serno        L123456"
