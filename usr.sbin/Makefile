@@ -33,9 +33,6 @@ SUBDIR= 802_11 \
 	dntpd \
 	edquota \
 	faithd \
-	fdcontrol \
-	fdformat \
-	fdwrite \
 	ftp-proxy \
 	fwcontrol \
 	gifconfig \
