@@ -253,8 +253,6 @@ dev/serial/digi/digi.c			optional	digi
 dev/serial/digi/digi_bios.c		optional	digi
 dev/serial/digi/digi_pci.c		optional	digi pci
 dev/netif/elink_layer/elink.c		optional	ep
-dev/disk/fd/fd.c			optional	fd
-dev/disk/fd/fd_pccard.c			optional	fd pccard
 platform/pc32/isa/isa_intr.c		optional	isa
 bus/isa/i386/isa.c			optional	isa
 bus/isa/i386/isa_dma.c			optional	isa

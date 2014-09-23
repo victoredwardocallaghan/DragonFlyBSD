@@ -95,7 +95,6 @@ MAN=	aac.4 \
 	faith.4 \
 	fast_ipsec.4 \
 	fd.4 \
-	fdc.4 \
 	firewire.4 \
 	fwe.4 \
 	fwohci.4 \
