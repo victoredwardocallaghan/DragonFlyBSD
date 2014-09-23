@@ -214,7 +214,7 @@ disk_probe_slice(struct disk *dp, cdev_t dev, int slice, int reprobe)
 					/*
 					 * Destroy old UUID alias
 					 */
-					destroy_dev_alias(ndev, "part-by-uuid/*");
+					destroy_dev_alias(ndev, "disk/by-uuid/*");
 
 					/* Create UUID alias */
 					if (!kuuid_is_nil(&part.storage_uuid)) {
@@ -222,7 +222,7 @@ disk_probe_slice(struct disk *dp, cdev_t dev, int slice, int reprobe)
 						    sizeof(uuid_buf),
 						    &part.storage_uuid);
 						make_dev_alias(ndev,
-						    "part-by-uuid/%s",
+						    "disk/by-uuid/%s",
 						    uuid_buf);
 						udev_dict_set_cstr(ndev, "uuid", uuid_buf);
 					}
@@ -245,7 +245,7 @@ disk_probe_slice(struct disk *dp, cdev_t dev, int slice, int reprobe)
 					/* Create serno alias */
 					if (dp->d_info.d_serialno) {
 						make_dev_alias(ndev,
-						    "serno/%s.s%d%c",
+						    "disk/by-serno/%s.s%d%c",
 						    dp->d_info.d_serialno,
 						    sno, 'a' + i);
 					}
@@ -256,7 +256,7 @@ disk_probe_slice(struct disk *dp, cdev_t dev, int slice, int reprobe)
 						    sizeof(uuid_buf),
 						    &part.storage_uuid);
 						make_dev_alias(ndev,
-						    "part-by-uuid/%s",
+						    "disk/by-uuid/%s",
 						    uuid_buf);
 						udev_dict_set_cstr(ndev, "uuid", uuid_buf);
 					}
@@ -378,13 +378,13 @@ disk_probe(struct disk *dp, int reprobe)
 			/*
 			 * Destroy old UUID alias
 			 */
-			destroy_dev_alias(ndev, "slice-by-uuid/*");
+			destroy_dev_alias(ndev, "disk/by-slice-uuid/*");
 
 			/* Create UUID alias */
 			if (!kuuid_is_nil(&sp->ds_stor_uuid)) {
 				snprintf_uuid(uuid_buf, sizeof(uuid_buf),
 				    &sp->ds_stor_uuid);
-				make_dev_alias(ndev, "slice-by-uuid/%s",
+				make_dev_alias(ndev, "disk/by-slice-uuid/%s",
 				    uuid_buf);
 			}
 		} else {
@@ -407,7 +407,7 @@ disk_probe(struct disk *dp, int reprobe)
 
 			/* Create serno alias */
 			if (dp->d_info.d_serialno) {
-				make_dev_alias(ndev, "serno/%s.s%d",
+				make_dev_alias(ndev, "disk/by-serno/%s.s%d",
 					       dp->d_info.d_serialno, sno);
 			}
 
@@ -415,7 +415,7 @@ disk_probe(struct disk *dp, int reprobe)
 			if (!kuuid_is_nil(&sp->ds_stor_uuid)) {
 				snprintf_uuid(uuid_buf, sizeof(uuid_buf),
 				    &sp->ds_stor_uuid);
-				make_dev_alias(ndev, "slice-by-uuid/%s",
+				make_dev_alias(ndev, "disk/by-slice-uuid/%s",
 				    uuid_buf);
 			}
 
@@ -750,7 +750,7 @@ _setdiskinfo(struct disk *disk, struct disk_info *info)
 		info->d_serialno = kstrdup(info->d_serialno, M_TEMP);
 		disk_cleanserial(info->d_serialno);
 		if (disk->d_cdev) {
-			make_dev_alias(disk->d_cdev, "serno/%s",
+			make_dev_alias(disk->d_cdev, "disk/by-serno/%s",
 				       info->d_serialno);
 		}
 	} else {
@@ -790,7 +790,7 @@ _setdiskinfo(struct disk *disk, struct disk_info *info)
 
 	/* Add the serial number to the udev_dictionary */
 	if (info->d_serialno)
-		udev_dict_set_cstr(disk->d_cdev, "serno", info->d_serialno);
+		udev_dict_set_cstr(disk->d_cdev, "disk/by-serno", info->d_serialno);
 }
 
 /*
