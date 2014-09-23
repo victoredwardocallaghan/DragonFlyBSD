@@ -750,7 +750,7 @@ subpartition_get_device_name(const struct subpartition *sp)
 	static char tmp_dev_name[256];
 
 	if (sp->parent->parent->serno != NULL)
-		snprintf(tmp_dev_name, 256, "serno/%s.s%d%c",
+		snprintf(tmp_dev_name, 256, "disk/by-serno/%s.s%d%c",
 		    sp->parent->parent->serno, sp->parent->number, sp->letter);
 	else
 		snprintf(tmp_dev_name, 256, "%ss%d%c",

@@ -229,7 +229,7 @@ survey_storage(struct i_fn_args *a)
 		cmd = command_add(cmds, "%s%s '@SERNO' >>%ssurvey.txt",
 		    a->os_root, cmd_name(a, "ECHO"), a->tmp);
 		command_set_log_mode(cmd, COMMAND_LOG_SILENT);
-		cmd = command_add(cmds, "if %s%s -d /dev/serno; then %s%s -l /dev/serno | %s%s \"`%s%s -l /dev/%s | %s%s '{print $5, $6;}'`\" | %s%s '{print $10;}' >>%ssurvey.txt; fi",
+		cmd = command_add(cmds, "if %s%s -d /dev/disk/by-serno; then %s%s -l /dev/disk/by-serno | %s%s \"`%s%s -l /dev/%s | %s%s '{print $5, $6;}'`\" | %s%s '{print $10;}' >>%ssurvey.txt; fi",
 		    a->os_root, cmd_name(a, "TEST"),
 		    a->os_root, cmd_name(a, "LS"),
 		    a->os_root, cmd_name(a, "GREP"),
