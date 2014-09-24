@@ -590,10 +590,14 @@
 422	UNIMPL	nosys
 423	UNIMPL	nosys
 424	UNIMPL	nosys
-425	UNIMPL	nosys
-426	UNIMPL	nosys
-427	UNIMPL	nosys
-428	UNIMPL	nosys
+425	STD	{ int __acl_get_link(const char *path, \
+			acl_type_t type, struct acl *aclp); }
+426	STD	{ int __acl_set_link(const char *path, \
+			acl_type_t type, struct acl *aclp); }
+427	STD	{ int __acl_delete_link(const char *path, \
+			acl_type_t type); }
+428	STD	{ int __acl_aclcheck_link(const char *path, \
+			acl_type_t type, struct acl *aclp); }
 429	UNIMPL	nosys
 430	UNIMPL	nosys
 431	UNIMPL	nosys
