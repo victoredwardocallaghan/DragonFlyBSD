@@ -1,6 +1,8 @@
 .\"-
-.\" Copyright (c) 2000 Robert N. M. Watson
+.\" Copyright (c) 2000, 2002 Robert N. M. Watson
 .\" All rights reserved.
+.\"
+.\" This software was developed by Robert Watson for the TrustedBSD Project.
 .\"
 .\" Redistribution and use in source and binary forms, with or without
 .\" modification, are permitted provided that the following conditions
@@ -23,51 +25,70 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\" $FreeBSD: src/lib/libposix1e/acl_to_text.3,v 1.2.2.5 2001/12/20 16:27:06 ru Exp $
-.\" $DragonFly: src/lib/libposix1e/acl_to_text.3,v 1.3 2004/03/11 12:28:52 hmp Exp $
+.\" $FreeBSD$
 .\"
-.Dd January 28, 2000
+.Dd June 25, 2009
 .Dt ACL_TO_TEXT 3
 .Os
 .Sh NAME
-.Nm acl_to_text
+.Nm acl_to_text ,
+.Nm acl_to_text_np
 .Nd convert an ACL to text
 .Sh LIBRARY
-.Lb libposix1e
+.Lb libc
 .Sh SYNOPSIS
 .In sys/types.h
 .In sys/acl.h
 .Ft char *
 .Fn acl_to_text "acl_t acl" "ssize_t *len_p"
+.Ft char *
+.Fn acl_to_text_np "acl_t acl" "ssize_t *len_p" "int flags"
 .Sh DESCRIPTION
 The
 .Fn acl_to_text
-function translates the ACL pointed to by argument
+and
+.Fn acl_to_text_np
+functions translate the ACL pointed to by argument
 .Va acl
-into a NULL terminated character string.  If the pointer
+into a NULL terminated character string.
+If the pointer
 .Va len_p
 is not NULL, then the function shall return the length of the string (not
 including the NULL terminator) in the location pointed to by
 .Va len_p .
-The format of the text string returned by
+If the ACL is POSIX.1e, the format of the text string returned by
 .Fn acl_to_text
-shall be the POSIX.1e long ACL form.
+shall be the POSIX.1e long ACL form.  If the ACL is NFSv4, the format
+of the text string shall be the compact form, unless the
+.Va ACL_TEXT_VERBOSE
+flag is given.
+.Pp
+The flags specified are formed by
+.Em or Ns 'ing
+the following values
+.Bl -column -offset 3n "ACL_TEXT_NUMERIC_IDS"
+.It ACL_TEXT_VERBOSE Ta "Format ACL using verbose form"
+.It ACL_TEXT_NUMERIC_IDS Ta "Do not resolve IDs into user or group names"
+.It ACL_TEXT_APPEND_ID Ta "In addition to user and group names, append numeric IDs"
+.El
 .Pp
 This function allocates any memory necessary to contain the string and
-returns a pointer to the string.  The caller should free any releasable
+returns a pointer to the string.
+The caller should free any releasable
 memory, when the new string is no longer required, by calling
 .Xr acl_free 3
 with the
 .Va (void*)char
 as an argument.
 .Sh IMPLEMENTATION NOTES
-.Dx Ns 's
+.Fx Ns 's
 support for POSIX.1e interfaces and features is still under
 development at this time.
 .Sh RETURN VALUES
 Upon successful completion, the function shall return a pointer to the
-long text form of an ACL.  Otherwise, a value of
-.Va NULL
+long text form of an ACL.
+Otherwise, a value of
+.Va (char*)NULL
 shall be returned and
 .Va errno
 shall be set to indicate the error.
@@ -99,9 +120,11 @@ by the hardware or software-imposed memory management constraints.
 .Xr acl_from_text 3 ,
 .Xr posix1e 3
 .Sh STANDARDS
-POSIX.1e is described in IEEE POSIX.1e draft 17.  Discussion
+POSIX.1e is described in IEEE POSIX.1e draft 17.
+Discussion
 of the draft continues on the cross-platform POSIX.1e implementation
-mailing list.  To join this list, see the
+mailing list.
+To join this list, see the
 .Fx
 POSIX.1e implementation
 page for more information.
@@ -112,18 +135,17 @@ and development continues.
 .Sh AUTHORS
 .An Robert N M Watson
 .Sh BUGS
-These features are not yet fully implemented.  In particular, the shipped
-version of UFS/FFS does not support storage of additional security labels,
-and so is unable to (easily) provide support for most of these features.
-.Pp
+The
 .Fn acl_from_text
 and
 .Fn acl_to_text
+functions
 rely on the
 .Xr getpwent 3
 library calls to manage username and uid mapping, as well as the
 .Xr getgrent 3
-library calls to manage groupname and gid mapping.  These calls are not
+library calls to manage groupname and gid mapping.
+These calls are not
 thread safe, and so transitively, neither are
 .Fn acl_from_text
 and

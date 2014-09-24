@@ -1,6 +1,8 @@
 /*-
- * Copyright (c) 1999 Robert N. M. Watson
+ * Copyright (c) 1999, 2000, 2001, 2002 Robert N. M. Watson
  * All rights reserved.
+ *
+ * This software was developed by Robert Watson for the TrustedBSD Project.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -22,17 +24,21 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *$FreeBSD: src/lib/libposix1e/acl_delete.c,v 1.4 2000/01/26 04:19:36 rwatson Exp $
- *$DragonFly: src/lib/libposix1e/acl_delete.c,v 1.3 2005/08/04 17:27:09 drhodus Exp $
  */
 /*
  * acl_delete_def_file -- remove a default acl from a file
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
+#include "namespace.h"
 #include <sys/acl.h>
+#include "un-namespace.h"
 #include <sys/errno.h>
+
+#include "acl_support.h"
 
 int
 acl_delete_def_file(const char *path_p)
@@ -41,18 +47,33 @@ acl_delete_def_file(const char *path_p)
 	return (__acl_delete_file(path_p, ACL_TYPE_DEFAULT));
 }
 
+int
+acl_delete_def_link_np(const char *path_p)
+{
+
+	return (__acl_delete_link(path_p, ACL_TYPE_DEFAULT));
+}
 
 int
 acl_delete_file_np(const char *path_p, acl_type_t type)
 {
 
+	type = _acl_type_unold(type);
 	return (__acl_delete_file(path_p, type));
 }
 
+int
+acl_delete_link_np(const char *path_p, acl_type_t type)
+{
+
+	type = _acl_type_unold(type);
+	return (__acl_delete_link(path_p, type));
+}
 
 int
 acl_delete_fd_np(int filedes, acl_type_t type)
 {
 
-	return (__acl_delete_fd(filedes, type));
+	type = _acl_type_unold(type);
+	return (___acl_delete_fd(filedes, type));
 }

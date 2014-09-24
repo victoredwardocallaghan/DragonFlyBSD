@@ -1,6 +1,8 @@
 /*-
- * Copyright (c) 1999 Robert N. M. Watson
+ * Copyright (c) 1999, 2000, 2001, 2002 Robert N. M. Watson
  * All rights reserved.
+ *
+ * This software was developed by Robert Watson for the TrustedBSD Project.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -22,17 +24,20 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *$FreeBSD: src/lib/libposix1e/acl_valid.c,v 1.4 2000/01/28 20:07:00 rwatson Exp $
- *$DragonFly: src/lib/libposix1e/acl_valid.c,v 1.3 2005/08/04 17:27:09 drhodus Exp $
  */
 /*
  * acl_valid -- POSIX.1e ACL check routine
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
+#include "namespace.h"
 #include <sys/acl.h>
+#include "un-namespace.h"
 #include <sys/errno.h>
+#include <stdlib.h>
 
 #include "acl_support.h"
 
@@ -41,7 +46,7 @@
  * and errno set to EINVAL.
  *
  * Implemented by calling the acl_check routine in acl_support, which
- * requires ordering.  We call acl_support's acl_sort to make this
+ * requires ordering.  We call acl_support's _posix1e_acl_sort to make this
  * true.  POSIX.1e allows acl_valid() to reorder the ACL as it sees fit.
  *
  * This call is deprecated, as it doesn't ask whether the ACL is valid
@@ -53,8 +58,16 @@ acl_valid(acl_t acl)
 {
 	int	error;
 
-	acl_sort(acl);
-	error = acl_check(acl);
+	if (acl == NULL) {
+		errno = EINVAL;
+		return (-1);
+	}
+	if (!_acl_brand_may_be(acl, ACL_BRAND_POSIX)) {
+		errno = EINVAL;
+		return (-1);
+	}
+	_posix1e_acl_sort(acl);
+	error = _posix1e_acl_check(acl);
 	if (error) {
 		errno = error;
 		return (-1);
@@ -63,36 +76,49 @@ acl_valid(acl_t acl)
 	}
 }
 
-
 int
 acl_valid_file_np(const char *pathp, acl_type_t type, acl_t acl)
 {
-	int	error;
 
-	if (acl_posix1e(acl, type)) {
-		error = acl_sort(acl);
-		if (error) {
-			errno = error;
-			return (-1);
-		}
+	if (pathp == NULL || acl == NULL) {
+		errno = EINVAL;
+		return (-1);
 	}
+	type = _acl_type_unold(type);
+	if (_posix1e_acl(acl, type))
+		_posix1e_acl_sort(acl);
 
-	return (__acl_aclcheck_file(pathp, type, acl));
+	return (__acl_aclcheck_file(pathp, type, &acl->ats_acl));
 }
 
+int
+acl_valid_link_np(const char *pathp, acl_type_t type, acl_t acl)
+{
+
+	if (pathp == NULL || acl == NULL) {
+		errno = EINVAL;
+		return (-1);
+	}
+	type = _acl_type_unold(type);
+	if (_posix1e_acl(acl, type))
+		_posix1e_acl_sort(acl);
+
+	return (__acl_aclcheck_link(pathp, type, &acl->ats_acl));
+}
 
 int
 acl_valid_fd_np(int fd, acl_type_t type, acl_t acl)
 {
-	int	error;
 
-	if (acl_posix1e(acl, type)) {
-		error = acl_sort(acl);
-		if (error) {
-			errno = error;
-			return (-1);
-		}
+	if (acl == NULL) {
+		errno = EINVAL;
+		return (-1);
 	}
+	type = _acl_type_unold(type);
+	if (_posix1e_acl(acl, type))
+		_posix1e_acl_sort(acl);
 
-	return (__acl_aclcheck_fd(fd, type, acl));
+	acl->ats_cur_entry = 0;
+
+	return (___acl_aclcheck_fd(fd, type, &acl->ats_acl));
 }

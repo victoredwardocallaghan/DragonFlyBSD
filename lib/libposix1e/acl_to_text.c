@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 1999 Robert N. M. Watson
+ * Copyright (c) 1999-2002 Robert N. M. Watson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,22 +22,23 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *$FreeBSD: src/lib/libposix1e/acl_to_text.c,v 1.2 2000/01/26 04:19:38 rwatson Exp $
- *$DragonFly: src/lib/libposix1e/acl_to_text.c,v 1.3 2005/08/04 17:27:09 drhodus Exp $
  */
 /*
  * acl_to_text - return a text string with a text representation of the acl
  * in it.
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
+#include "namespace.h"
 #include <sys/acl.h>
+#include "un-namespace.h"
 #include <sys/errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <utmp.h>
 
 #include "acl_support.h"
 
@@ -48,61 +49,68 @@
  * This function will not produce nice results if it is called with
  * a non-POSIX.1e semantics ACL.
  */
-char *
-acl_to_text(acl_t acl, ssize_t *len_p)
+
+char *_nfs4_acl_to_text_np(const acl_t acl, ssize_t *len_p, int flags);
+
+static char *
+_posix1e_acl_to_text(acl_t acl, ssize_t *len_p, int flags)
 {
-	char	*buf, *tmpbuf;
-	char	name_buf[UT_NAMESIZE+1];
-	char	perm_buf[ACL_STRING_PERM_MAXSIZE+1],
-		effective_perm_buf[ACL_STRING_PERM_MAXSIZE+1];
-	int	i, error, len;
-	uid_t	ae_id;
-	acl_tag_t	ae_tag;
-	acl_perm_t	ae_perm, effective_perm, mask_perm;
+	struct acl	*acl_int;
+	char		*buf, *tmpbuf;
+	char		 name_buf[MAXLOGNAME];
+	char		 perm_buf[_POSIX1E_ACL_STRING_PERM_MAXSIZE+1],
+			 effective_perm_buf[_POSIX1E_ACL_STRING_PERM_MAXSIZE+1];
+	int		 i, error, len;
+	uid_t		 ae_id;
+	acl_tag_t	 ae_tag;
+	acl_perm_t	 ae_perm, effective_perm, mask_perm;
 
 	buf = strdup("");
+	if (buf == NULL)
+		return(NULL);
+
+	acl_int = &acl->ats_acl;
 
 	mask_perm = ACL_PERM_BITS;	/* effective is regular if no mask */
-	for (i = 0; i < acl->acl_cnt; i++)
-		if (acl->acl_entry[i].ae_tag == ACL_MASK) 
-			mask_perm = acl->acl_entry[i].ae_perm;
+	for (i = 0; i < acl_int->acl_cnt; i++)
+		if (acl_int->acl_entry[i].ae_tag == ACL_MASK) 
+			mask_perm = acl_int->acl_entry[i].ae_perm;
 
-	for (i = 0; i < acl->acl_cnt; i++) {
-		ae_tag = acl->acl_entry[i].ae_tag;
-		ae_id = acl->acl_entry[i].ae_id;
-		ae_perm = acl->acl_entry[i].ae_perm;
+	for (i = 0; i < acl_int->acl_cnt; i++) {
+		ae_tag = acl_int->acl_entry[i].ae_tag;
+		ae_id = acl_int->acl_entry[i].ae_id;
+		ae_perm = acl_int->acl_entry[i].ae_perm;
 
 		switch(ae_tag) {
 		case ACL_USER_OBJ:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 			len = asprintf(&tmpbuf, "%suser::%s\n", buf,
 			    perm_buf);
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		case ACL_USER:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 
-			error = acl_id_to_name(ae_tag, ae_id, UT_NAMESIZE+1,
-			    name_buf);
+			error = _posix1e_acl_id_to_name(ae_tag, ae_id,
+			    MAXLOGNAME, name_buf, flags);
 			if (error)
 				goto error_label;
 
 			effective_perm = ae_perm & mask_perm;
 			if (effective_perm != ae_perm) {
-				error = acl_perm_to_string(effective_perm,
-				    ACL_STRING_PERM_MAXSIZE+1,
+				error = _posix1e_acl_perm_to_string(
+				    effective_perm,
+				    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1,
 				    effective_perm_buf);
 				if (error)
 					goto error_label;
@@ -114,24 +122,23 @@ acl_to_text(acl_t acl, ssize_t *len_p)
 				len = asprintf(&tmpbuf, "%suser:%s:%s\n", buf,
 				    name_buf, perm_buf);
 			}
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		case ACL_GROUP_OBJ:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 
 			effective_perm = ae_perm & mask_perm;
 			if (effective_perm != ae_perm) {
-				error = acl_perm_to_string(effective_perm,
-				    ACL_STRING_PERM_MAXSIZE+1,
+				error = _posix1e_acl_perm_to_string(
+				    effective_perm,
+				    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1,
 				    effective_perm_buf);
 				if (error)
 					goto error_label;
@@ -142,83 +149,76 @@ acl_to_text(acl_t acl, ssize_t *len_p)
 				len = asprintf(&tmpbuf, "%sgroup::%s\n", buf,
 				    perm_buf);
 			}
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		case ACL_GROUP:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 
-			error = acl_id_to_name(ae_tag, ae_id, UT_NAMESIZE+1,
-			    name_buf);
+			error = _posix1e_acl_id_to_name(ae_tag, ae_id,
+			    MAXLOGNAME, name_buf, flags);
 			if (error)
 				goto error_label;
 
 			effective_perm = ae_perm & mask_perm;
 			if (effective_perm != ae_perm) {
-				error = acl_perm_to_string(effective_perm,
-				    ACL_STRING_PERM_MAXSIZE+1,
+				error = _posix1e_acl_perm_to_string(
+				    effective_perm,
+				    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1,
 				    effective_perm_buf);
 				if (error)
 					goto error_label;
-				len = asprintf(&tmpbuf, "%sgroup::%s\t\t# "
+				len = asprintf(&tmpbuf, "%sgroup:%s:%s\t\t# "
 				    "effective: %s\n",
-				    buf, perm_buf, effective_perm_buf);
+				    buf, name_buf, perm_buf,
+				    effective_perm_buf);
 			} else {
 				len = asprintf(&tmpbuf, "%sgroup:%s:%s\n", buf,
 				    name_buf, perm_buf);
 			}
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		case ACL_MASK:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 
 			len = asprintf(&tmpbuf, "%smask::%s\n", buf,
 			    perm_buf);
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		case ACL_OTHER:
-			error = acl_perm_to_string(ae_perm,
-			    ACL_STRING_PERM_MAXSIZE+1, perm_buf);
+			error = _posix1e_acl_perm_to_string(ae_perm,
+			    _POSIX1E_ACL_STRING_PERM_MAXSIZE+1, perm_buf);
 			if (error)
 				goto error_label;
 
 			len = asprintf(&tmpbuf, "%sother::%s\n", buf,
 			    perm_buf);
-			if (len == -1) {
-				errno = ENOMEM;
+			if (len == -1)
 				goto error_label;
-			}
 			free(buf);
 			buf = tmpbuf;
 			break;
 
 		default:
-			free(buf);
 			errno = EINVAL;
-			return (0);
+			goto error_label;
 		}
 	}
 
@@ -230,5 +230,32 @@ acl_to_text(acl_t acl, ssize_t *len_p)
 error_label:
 	/* jump to here sets errno already, we just clean up */
 	if (buf) free(buf);
-	return (0);
+	return (NULL);
+}
+
+char *
+acl_to_text_np(acl_t acl, ssize_t *len_p, int flags)
+{
+
+	if (acl == NULL) {
+		errno = EINVAL;
+		return(NULL);
+	}
+
+	switch (_acl_brand(acl)) {
+	case ACL_BRAND_POSIX:
+		return (_posix1e_acl_to_text(acl, len_p, flags));
+	case ACL_BRAND_NFS4:
+		return (_nfs4_acl_to_text_np(acl, len_p, flags));
+	default:
+		errno = EINVAL;
+		return (NULL);
+	}
+}
+
+char *
+acl_to_text(acl_t acl, ssize_t *len_p)
+{
+
+	return (acl_to_text_np(acl, len_p, 0));
 }

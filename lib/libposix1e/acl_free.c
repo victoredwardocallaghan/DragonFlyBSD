@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 1999 Robert N. M. Watson
+ * Copyright (c) 1999, 2000, 2001 Robert N. M. Watson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,23 +22,33 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *$FreeBSD: src/lib/libposix1e/acl_free.c,v 1.1 2000/01/15 19:44:23 rwatson Exp $
- *$DragonFly: src/lib/libposix1e/acl_free.c,v 1.3 2005/08/04 17:27:09 drhodus Exp $
  */
 /*
  * acl_free -- free ACL objects from user memory
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
+#include "namespace.h"
 #include <sys/acl.h>
+#include "un-namespace.h"
 #include <sys/errno.h>
 #include <stdlib.h>
 
+/*
+ * acl_free() (23.4.12): free any releasable memory allocated to the
+ * ACL data object identified by obj_p.
+ */
 int
 acl_free(void *obj_p)
 {
 
-	free(obj_p);
+	if (obj_p) {
+		free(obj_p);
+		obj_p = NULL;
+	}
+
 	return (0);
 }

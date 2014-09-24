@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 1999 Robert N. M. Watson
+ * Copyright (c) 1999, 2000, 2001 Robert N. M. Watson
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,33 +22,57 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *$FreeBSD: src/lib/libposix1e/acl_init.c,v 1.3 2000/01/26 04:19:37 rwatson Exp $
- *$DragonFly: src/lib/libposix1e/acl_init.c,v 1.3 2005/08/04 17:27:09 drhodus Exp $
  */
 /*
  * acl_init -- return a fresh acl structure
  * acl_dup -- duplicate an acl and return the new copy
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
 #include <sys/types.h>
+#include "namespace.h"
 #include <sys/acl.h>
+#include "un-namespace.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
+
+#include "acl_support.h"
+
+#ifndef CTASSERT
+#define CTASSERT(x)		_CTASSERT(x, __LINE__)
+#define _CTASSERT(x, y)		__CTASSERT(x, y)
+#define __CTASSERT(x, y)	typedef char __assert_ ## y [(x) ? 1 : -1]
+#endif
+
+CTASSERT(1 << _ACL_T_ALIGNMENT_BITS > sizeof(struct acl_t_struct));
 
 acl_t
 acl_init(int count)
 {
-	struct acl	*acl;
+	int error;
+	acl_t acl;
 
 	if (count > ACL_MAX_ENTRIES) {
 		errno = ENOMEM;
-		return (0);
+		return (NULL);
+	}
+	if (count < 0) {
+		errno = EINVAL;
+		return (NULL);
 	}
 
-	acl = (struct acl *) malloc(sizeof(struct acl));
-	bzero(acl, sizeof(struct acl));
+	error = posix_memalign((void *)&acl, 1 << _ACL_T_ALIGNMENT_BITS,
+	    sizeof(struct acl_t_struct));
+	if (error)
+		return (NULL);
+
+	bzero(acl, sizeof(struct acl_t_struct));
+	acl->ats_brand = ACL_BRAND_UNKNOWN;
+	acl->ats_acl.acl_maxcnt = ACL_MAX_ENTRIES;
 
 	return (acl);
 }
@@ -56,13 +80,14 @@ acl_init(int count)
 acl_t
 acl_dup(acl_t acl)
 {
-	struct acl	*acl_new;
+	acl_t	acl_new;
 
 	acl_new = acl_init(ACL_MAX_ENTRIES);
-	if (!acl_new)
-		return(NULL);
+	if (acl_new != NULL) {
+		*acl_new = *acl;
+		acl->ats_cur_entry = 0;
+		acl_new->ats_cur_entry = 0;
+	}
 
-	*acl_new = *acl;
-
-	return(acl_new);
+	return (acl_new);
 }

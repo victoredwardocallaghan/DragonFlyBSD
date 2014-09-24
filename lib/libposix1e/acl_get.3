@@ -1,6 +1,8 @@
 .\"-
-.\" Copyright (c) 2000 Robert N. M. Watson
+.\" Copyright (c) 2000, 2002 Robert N. M. Watson
 .\" All rights reserved.
+.\"
+.\" This software was developed by Robert Watson for the TrustedBSD Project.
 .\"
 .\" Redistribution and use in source and binary forms, with or without
 .\" modification, are permitted provided that the following conditions
@@ -23,48 +25,61 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\" $FreeBSD: src/lib/libposix1e/acl_get.3,v 1.3.2.5 2001/12/20 16:27:06 ru Exp $
-.\" $DragonFly: src/lib/libposix1e/acl_get.3,v 1.3 2004/03/11 12:28:52 hmp Exp $
+.\" $FreeBSD$
 .\"
-.Dd January 28, 2000
+.Dd June 25, 2009
 .Dt ACL_GET 3
 .Os
 .Sh NAME
 .Nm acl_get_fd ,
 .Nm acl_get_fd_np ,
-.Nm acl_get_file
+.Nm acl_get_file ,
+.Nm acl_get_link_np
 .Nd get an ACL for a file
 .Sh LIBRARY
-.Lb libposix1e
+.Lb libc
 .Sh SYNOPSIS
 .In sys/types.h
 .In sys/acl.h
 .Ft acl_t
-.Fn acl_get_file "const char *path_p" "acl_type_t type"
-.Ft acl_t
 .Fn acl_get_fd "int fd"
 .Ft acl_t
 .Fn acl_get_fd_np "int fd" "acl_type_t type"
+.Ft acl_t
+.Fn acl_get_file "const char *path_p" "acl_type_t type"
+.Ft acl_t
+.Fn acl_get_link_np "const char *path_p" "acl_type_t type"
 .Sh DESCRIPTION
 The
-.Fn acl_get_file ,
 .Fn acl_get_fd ,
+.Fn acl_get_file ,
+.Fn acl_get_link_np ,
 and
 .Fn acl_get_fd_np
 each allow the retrieval of an ACL from a file.
-.Fn acl_get_file
-is a POSIX.1e call that allows the retrieval of a
-specified type of ACL from a file by name;
+The
 .Fn acl_get_fd
 is a POSIX.1e call that allows the retrieval of an ACL of type
 ACL_TYPE_ACCESS
 from a file descriptor.
+The
 .Fn acl_get_fd_np
+function
 is a non-portable form of
 .Fn acl_get_fd
 that allows the retrieval of any type of ACL from a file descriptor.
+The
+.Fn acl_get_file
+function is a POSIX.1e call that allows the retrieval of a
+specified type of ACL from a file by name;
+.Fn acl_get_link_np
+is a non-portable variation on
+.Fn acl_get_file
+which does not follow a symlink if the target of the call is a
+symlink.
 .Pp
-This function may cause memory to be allocated.  The caller should free
+These functions may cause memory to be allocated.
+The caller should free
 any releasable memory, when the new ACL is no longer required, by calling
 .Xr acl_free 3
 with the
@@ -76,13 +91,25 @@ with the object referred to by
 .Va fd .
 The ACL in the working storage shall not participate in any access control
 decisions.
+.Pp
+Valid values for the
+.Va type
+argument are:
+.Bl -column -offset 3n "ACL_TYPE_DEFAULT"
+.It ACL_TYPE_ACCESS	POSIX.1e access ACL
+.It ACL_TYPE_DEFAULT	POSIX.1e default ACL
+.It ACL_TYPE_NFS4	NFSv4 ACL
+.El
+.Pp
+The ACL returned will be branded accordingly.
 .Sh IMPLEMENTATION NOTES
-.Dx Ns 's
+.Fx Ns 's
 support for POSIX.1e interfaces and features is still under
 development at this time.
 .Sh RETURN VALUES
 Upon successful completion, the function shall return a pointer to the ACL
-that was retrieved.  Otherwise, a value of
+that was retrieved.
+Otherwise, a value of
 .Va (acl_t)NULL
 shall be returned, and
 .Va errno
@@ -121,12 +148,15 @@ The file system does not support ACL retrieval.
 .Xr acl 3 ,
 .Xr acl_free 3 ,
 .Xr acl_get 3 ,
+.Xr acl_get_brand_np 3 ,
 .Xr acl_set 3 ,
 .Xr posix1e 3
 .Sh STANDARDS
-POSIX.1e is described in IEEE POSIX.1e draft 17.  Discussion
+POSIX.1e is described in IEEE POSIX.1e draft 17.
+Discussion
 of the draft continues on the cross-platform POSIX.1e implementation
-mailing list.  To join this list, see the
+mailing list.
+To join this list, see the
 .Fx
 POSIX.1e implementation
 page for more information.
@@ -136,7 +166,3 @@ POSIX.1e support was introduced in
 and development continues.
 .Sh AUTHORS
 .An Robert N M Watson
-.Sh BUGS
-These features are not yet fully implemented.  In particular, the shipped
-version of UFS/FFS does not support storage of additional security labels,
-and so is unable to (easily) provide support for most of these features.
