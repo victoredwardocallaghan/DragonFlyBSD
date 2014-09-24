@@ -979,6 +979,8 @@ kern/kern_wdog.c	standard
 kern/kern_xio.c		standard
 kern/kern_xxx.c		standard
 kern/md5c.c		standard
+#kern/subr_acl_nfs4.c		optional ufs_acl | zfs
+kern/subr_acl_posix1e.c		optional ufs_acl
 kern/subr_autoconf.c	standard
 kern/subr_bus.c		standard
 kern/subr_csprng.c	standard
@@ -1040,6 +1042,7 @@ kern/uipc_socket.c	standard
 kern/uipc_socket2.c	standard
 kern/uipc_syscalls.c	standard
 kern/uipc_usrreq.c	standard
+kern/vfs_acl.c		standard
 kern/vfs_bio.c		standard
 kern/vfs_cache.c	standard
 kern/vfs_cluster.c	standard
