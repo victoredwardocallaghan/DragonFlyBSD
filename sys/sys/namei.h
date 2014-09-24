@@ -91,6 +91,7 @@ struct componentname {
 #define	CNP_WANTPARENT	    0x00000010	/* return parent vnode unlocked */
 	/* (NOCACHE)	    0x00000020	*/
 #define	CNP_FOLLOW	    0x00000040	/* follow symbolic links */
+#define	CNP_NOFOLLOW	  0x00000000	/* do not follow symbolic links (pseudo) */
 	/* (NOOBJ)	    0x00000080	*/
 #define	CNP_MODMASK	    0x00c000fc	/* mask of operational modifiers */
 /*

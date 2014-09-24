@@ -39,7 +39,7 @@ typedef	struct vattr	vattr_t;
 typedef enum vtype vtype_t;
 
 #include <sys/namei.h>
-enum symfollow { NO_FOLLOW = NOFOLLOW };
+enum symfollow { NO_FOLLOW = CNP_NOFOLLOW };
 
 #include <sys/proc.h>
 #include_next <sys/vnode.h>
