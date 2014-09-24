@@ -49,6 +49,10 @@
  * in libc_r/libpthread.
  */
 #define		accept				_accept
+#define		__acl_aclcheck_fd		___acl_aclcheck_fd
+#define		__acl_delete_fd			___acl_delete_fd
+#define		__acl_get_fd			___acl_get_fd
+#define		__acl_set_fd			___acl_set_fd
 #define		bind				_bind
 #define		close				_close
 #define		connect				_connect
