@@ -33,6 +33,7 @@
  * This is a bag of dirty hacks to keep things compiling.
  */
 
+#include <stdint.h> // XXX ZFS
 #include <sys/stdint.h>
 
 #ifdef _KERNEL

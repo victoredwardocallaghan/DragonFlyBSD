@@ -30,6 +30,7 @@
 #define	_OPENSOLARIS_SYS_CMN_ERR_H_
 
 #include <sys/systm.h>
+#include <stdarg.h> // XXX ZFS
 #include <machine/stdarg.h>
 
 #ifdef	__cplusplus
