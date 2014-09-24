@@ -15,6 +15,7 @@ SUBDIR= cat \
 	echo \
 	ed \
 	expr \
+	getfacl \
 	hostname \
 	kill \
 	ln \
@@ -30,6 +31,7 @@ SUBDIR= cat \
 	realpath \
 	rm \
 	rmdir \
+	setfacl \
 	sh \
 	sleep \
 	stty \
