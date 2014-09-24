@@ -165,6 +165,15 @@
 #define	_PC_MIN_HOLE_SIZE	21
 
 #if __BSD_VISIBLE
+#define	_PC_ACL_EXTENDED	59
+#define	_PC_ACL_PATH_MAX	60
+#define	_PC_CAP_PRESENT		61
+#define	_PC_INF_PRESENT		62
+#define	_PC_MAC_PRESENT		63
+#define	_PC_ACL_NFS4		64
+#endif
+
+#if __BSD_VISIBLE
 /*
  * rfork() options.
  *
