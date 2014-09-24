@@ -2,7 +2,7 @@
 
 SHLIBDIR?= /lib
 
-.include <src.opts.mk>
+#.include <src.opts.mk>
 
 LIB=	nv
 SHLIB_MAJOR= 0
@@ -161,8 +161,8 @@ MLINKS+=nv.3 nvlist_existsv.3 \
 
 WARNS?=	6
 
-.if ${MK_TESTS} != "no"
-SUBDIR+=	tests
-.endif
+#.if ${MK_TESTS} != "no"
+#SUBDIR+=	tests
+#.endif
 
 .include <bsd.lib.mk>
