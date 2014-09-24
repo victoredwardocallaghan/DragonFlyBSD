@@ -44,7 +44,8 @@ extern "C" {
 
 #if defined(DEBUG) || !defined(_KERNEL)
 #if !defined(ZFS_DEBUG)
-#define	ZFS_DEBUG
+// XXX ZFS
+//#define	ZFS_DEBUG
 #endif
 #endif
 
