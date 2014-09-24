@@ -82,6 +82,8 @@
 #include <machine/lock.h>
 #endif
 
+#include <sys/acl.h>
+
 /*
  * The vnode is the focus of all file activity in UNIX.  There is a
  * unique vnode allocated for each active file, each current directory,
@@ -427,6 +429,12 @@ int	getspecialvnode (enum vtagtype tag, struct mount *mp,
 		    int lkflags);
 void	speedup_syncer (struct mount *mp);
 int	vaccess(enum vtype, mode_t, uid_t, gid_t, mode_t, struct ucred *);
+#if 0
+int	vaccess_acl_nfs4(enum vtype, uid_t, gid_t,struct acl *,
+	    accmode_t, struct ucred *, int *);
+#endif
+int	vaccess_acl_posix1e(enum vtype, uid_t, gid_t, struct acl *,
+	    accmode_t, struct ucred *, int *);
 void	vattr_null (struct vattr *vap);
 int	vcount (struct vnode *vp);
 int	vfinddev (cdev_t dev, enum vtype type, struct vnode **vpp);
