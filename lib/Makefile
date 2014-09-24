@@ -66,6 +66,7 @@ SUBDIR=	${SUBDIR_ORDERED} \
 	libmandoc \
 	${_libmilter} \
 	${_libnetgraph} \
+	libnv \
 	libopie \
 	libpam \
 	libpcap \
