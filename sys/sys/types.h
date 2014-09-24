@@ -206,6 +206,12 @@ typedef __time_t	time_t;
 typedef __timer_t	timer_t;
 #endif
 
+#ifndef _ACCMODE_T_DECLARED
+#define _ACCMODE_T_DECLARED
+typedef int	__accmode_t; /* access permission */
+typedef __accmode_t	accmode_t; /* access permission */
+#endif
+
 #ifdef __BSD_VISIBLE
 
 #include <sys/fd_set.h>
