@@ -625,7 +625,11 @@ ktrsyscall(struct ktr_syscall *ktr)
 				   ktr->ktr_code == SYS___acl_delete_file ||
 				   ktr->ktr_code == SYS___acl_delete_fd ||
 				   ktr->ktr_code == SYS___acl_aclcheck_file ||
-				   ktr->ktr_code == SYS___acl_aclcheck_fd) {
+				   ktr->ktr_code == SYS___acl_aclcheck_fd ||
+				   ktr->ktr_code == SYS___acl_get_link ||
+				   ktr->ktr_code == SYS___acl_set_link ||
+				   ktr->ktr_code == SYS___acl_delete_link ||
+				   ktr->ktr_code == SYS___acl_aclcheck_link) {
 				print_number(ip,narg,c);
 				acltypename((int)*ip);
 				ip++;
