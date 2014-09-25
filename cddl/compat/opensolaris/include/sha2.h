@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2010 Pawel Jakub Dawidek <pjd@FreeBSD.org>
  * All rights reserved.
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,12 +26,13 @@
  * SUCH DAMAGE.
  *
  * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SHA2_H_
 #define _OPENSOLARIS_SHA2_H_
 
-#include_next <sha256.h>
+#include_next <crypto/sha2/sha2.h>
 
 #define	SHA256Init(c)		SHA256_Init(c)
 #define	SHA256Update(c, d, s)	SHA256_Update((c), (d), (s))
