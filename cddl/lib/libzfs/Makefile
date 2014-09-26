@@ -59,4 +59,7 @@ CFLAGS+= -I${.CURDIR}/../../../cddl/contrib/opensolaris/lib/libuutil/common
 CFLAGS+= -I${.CURDIR}/../../../cddl/contrib/opensolaris/lib/libzfs/common
 CFLAGS+= -I${.CURDIR}/../../../cddl/contrib/opensolaris/lib/libzfs_core/common
 
+# needed for crypto/sha2/sha2.h
+CFLAGS+= -I${.CURDIR}/../../../sys
+
 .include <bsd.lib.mk>
