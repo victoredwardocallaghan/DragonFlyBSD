@@ -3294,7 +3294,7 @@ zfs_ioc_create(const char *fsname, nvlist_t *innvl, nvlist_t *outnvl)
 		if (error != 0)
 			(void) dsl_destroy_head(fsname);
 	}
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 	if (error == 0 && type == DMU_OST_ZVOL)
 		zvol_create_minors(fsname);
 #endif
@@ -3339,7 +3339,7 @@ zfs_ioc_clone(const char *fsname, nvlist_t *innvl, nvlist_t *outnvl)
 		if (error != 0)
 			(void) dsl_destroy_head(fsname);
 	}
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 	if (error == 0)
 		zvol_create_minors(fsname);
 #endif
@@ -3732,7 +3732,7 @@ static int
 zfs_ioc_rename(zfs_cmd_t *zc)
 {
 	boolean_t recursive = zc->zc_cookie & 1;
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 	boolean_t allow_mounted = zc->zc_cookie & 2;
 #endif
 	char *at;
@@ -4260,7 +4260,7 @@ zfs_ioc_recv(zfs_cmd_t *zc)
 	}
 #endif
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 	if (error == 0)
 		zvol_create_minors(tofs);
 #endif
@@ -5737,7 +5737,7 @@ zfs_ioctl_init(void)
 	    zfs_ioc_tmp_snapshot, zfs_secpolicy_tmp_snapshot,
 	    POOL_CHECK_SUSPENDED | POOL_CHECK_READONLY);
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 	zfs_ioctl_register_dataset_nolog(ZFS_IOC_JAIL, zfs_ioc_jail,
 	    zfs_secpolicy_config, POOL_CHECK_NONE);
 	zfs_ioctl_register_dataset_nolog(ZFS_IOC_UNJAIL, zfs_ioc_unjail,

@@ -46,10 +46,10 @@
 #include <sys/zil_impl.h>
 #include <sys/dsl_userhold.h>
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #include <sys/sysctl.h>
 #include <sys/types.h>
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 
 /*
  * ZFS Write Throttle
@@ -130,7 +130,7 @@ int zfs_delay_min_dirty_percent = 60;
 uint64_t zfs_delay_scale = 1000 * 1000 * 1000 / 2000;
 
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 
 extern int zfs_vdev_async_write_active_max_dirty_percent;
 

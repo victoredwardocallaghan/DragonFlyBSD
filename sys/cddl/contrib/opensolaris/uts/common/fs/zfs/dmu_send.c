@@ -53,7 +53,7 @@
 #include <sys/dsl_bookmark.h>
 #include <sys/zfeature.h>
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #undef dump_write
 #define dump_write dmu_dump_write
 #endif

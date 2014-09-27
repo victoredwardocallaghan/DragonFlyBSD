@@ -806,7 +806,7 @@ dsl_dataset_create_sync(dsl_dir_t *pdd, const char *lastname,
 	return (dsobj);
 }
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 /* FreeBSD ioctl compat begin */
 struct destroyarg {
 	nvlist_t *nvl;
@@ -844,7 +844,7 @@ dmu_get_recursive_snaps_nvl(char *fsname, const char *snapname,
 	return (err);
 }
 /* FreeBSD ioctl compat end */
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || __DragonFly__ */
 
 /*
  * The unique space in the head dataset can be calculated by subtracting
@@ -1416,7 +1416,7 @@ dsl_dataset_snapshot(nvlist_t *snaps, nvlist_t *props, nvlist_t *errors)
 		fnvlist_free(suspended);
 	}
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #ifdef _KERNEL
 	if (error == 0) {
 		for (pair = nvlist_next_nvpair(snaps, NULL); pair != NULL;
@@ -1426,7 +1426,7 @@ dsl_dataset_snapshot(nvlist_t *snaps, nvlist_t *props, nvlist_t *errors)
 		}
 	}
 #endif
-#endif
+#endif /* __FreeBSD || __DragonFly__ */
 	return (error);
 }
 
@@ -1806,11 +1806,11 @@ static int
 dsl_dataset_rename_snapshot_sync_impl(dsl_pool_t *dp,
     dsl_dataset_t *hds, void *arg)
 {
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #ifdef _KERNEL
 	char *oldname, *newname;
 #endif
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 	dsl_dataset_rename_snapshot_arg_t *ddrsa = arg;
 	dsl_dataset_t *ds;
 	uint64_t val;
@@ -1838,7 +1838,7 @@ dsl_dataset_rename_snapshot_sync_impl(dsl_pool_t *dp,
 	VERIFY0(zap_add(dp->dp_meta_objset, hds->ds_phys->ds_snapnames_zapobj,
 	    ds->ds_snapname, 8, 1, &ds->ds_object, tx));
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #ifdef _KERNEL
 	oldname = kmem_alloc(MAXPATHLEN, KM_SLEEP);
 	newname = kmem_alloc(MAXPATHLEN, KM_SLEEP);
@@ -1851,7 +1851,7 @@ dsl_dataset_rename_snapshot_sync_impl(dsl_pool_t *dp,
 	kmem_free(newname, MAXPATHLEN);
 	kmem_free(oldname, MAXPATHLEN);
 #endif
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 	dsl_dataset_rele(ds, FTAG);
 
 	return (0);

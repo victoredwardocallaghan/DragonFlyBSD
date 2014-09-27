@@ -751,11 +751,11 @@ zfs_read(vnode_t *vp, uio_t *uio, int ioflag, cred_t *cr, caller_context_t *ct)
 		nbytes = MIN(n, zfs_read_chunk_size -
 		    P2PHASE(uio->uio_loffset, zfs_read_chunk_size));
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 		if (uio->uio_segflg == UIO_NOCOPY)
 			error = mappedread_sf(vp, nbytes, uio);
 		else
-#endif /* __FreeBSD__ */
+#endif /* __FreeBSD__ || defined(__DragonFly__) */
 		if (vn_has_cached_data(vp))
 			error = mappedread(vp, nbytes, uio);
 		else
@@ -2008,7 +2008,7 @@ top:
 	}
 
 	if (delete_now) {
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 		panic("zfs_remove: delete_now branch taken");
 #endif
 		if (xattr_obj_unlinked) {
@@ -2040,7 +2040,7 @@ top:
 	} else if (unlinked) {
 		mutex_exit(&zp->z_lock);
 		zfs_unlinked_add(zp, tx);
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ || defined(__DragonFly__)
 		vp->v_vflag |= VV_NOSYNC;
 #endif
 	}

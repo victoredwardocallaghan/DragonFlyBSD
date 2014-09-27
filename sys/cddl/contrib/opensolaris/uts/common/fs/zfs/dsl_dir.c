@@ -684,11 +684,11 @@ dsl_enforce_ds_ss_limits(dsl_dir_t *dd, zfs_prop_t prop, cred_t *cr)
 	    prop == ZFS_PROP_SNAPSHOT_LIMIT);
 
 #ifdef _KERNEL
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 	if (jailed(cr))
 #else
 	if (crgetzoneid(cr) != GLOBAL_ZONEID)
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 		return (ENFORCE_ALWAYS);
 
 	if (secpolicy_zfs(cr) == 0)
@@ -1877,12 +1877,12 @@ dsl_dir_rename_sync(void *arg, dmu_tx_t *tx)
 	VERIFY0(zap_add(mos, newparent->dd_phys->dd_child_dir_zapobj,
 	    dd->dd_myname, 8, 1, &dd->dd_object, tx));
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #ifdef _KERNEL
 	zfsvfs_update_fromname(ddra->ddra_oldname, ddra->ddra_newname);
 	zvol_rename_minors(ddra->ddra_oldname, ddra->ddra_newname);
 #endif
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 
 	dsl_prop_notify_all(dd);
 

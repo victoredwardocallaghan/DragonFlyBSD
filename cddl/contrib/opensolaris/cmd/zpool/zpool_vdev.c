@@ -479,13 +479,13 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		}
 	}
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 	if (S_ISCHR(statbuf.st_mode)) {
 		statbuf.st_mode &= ~S_IFCHR;
 		statbuf.st_mode |= S_IFBLK;
 		wholedisk = B_FALSE;
 	}
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 
 	/*
 	 * Determine whether this is a device or a file.

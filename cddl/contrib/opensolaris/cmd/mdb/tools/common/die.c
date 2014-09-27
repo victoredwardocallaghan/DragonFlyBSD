@@ -54,7 +54,7 @@ die(char *format, ...)
 	if (format[strlen(format) - 1] != '\n')
 		(void) fprintf(stderr, ": %s\n", strerror(err));
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 	exit(0);
 #else
 	exit(1);
@@ -79,7 +79,7 @@ elfdie(char *format, ...)
 	if (format[strlen(format) - 1] != '\n')
 		(void) fprintf(stderr, ": %s\n", elf_errmsg(elf_errno()));
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 	exit(0);
 #else
 	exit(1);

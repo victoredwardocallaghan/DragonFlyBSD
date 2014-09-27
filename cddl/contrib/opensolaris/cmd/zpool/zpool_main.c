@@ -4497,7 +4497,7 @@ typedef struct upgrade_cbdata {
 	char	**cb_argv;
 } upgrade_cbdata_t;
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 static int
 is_root_pool(zpool_handle_t *zhp)
 {
@@ -4529,7 +4529,7 @@ root_pool_upgrade_check(zpool_handle_t *zhp, char *poolname, int size) {
 	if (poolname[0] == '\0' && is_root_pool(zhp))
 		(void) strlcpy(poolname, zpool_get_name(zhp), size);
 }
-#endif	/* FreeBSD */
+#endif	/* __FreeBSD__ || __DragonFly__ */
 
 static int
 upgrade_version(zpool_handle_t *zhp, uint64_t version)
@@ -4620,10 +4620,10 @@ upgrade_cb(zpool_handle_t *zhp, void *arg)
 		ret = upgrade_version(zhp, cbp->cb_version);
 		if (ret != 0)
 			return (ret);
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 		root_pool_upgrade_check(zhp, cbp->cb_poolname,
 		    sizeof(cbp->cb_poolname));
-#endif	/* ___FreeBSD__ */
+#endif	/* __FreeBSD__ || __DragonFly__ */
 		printnl = B_TRUE;
 
 #ifdef illumos
@@ -4785,10 +4785,10 @@ upgrade_one(zpool_handle_t *zhp, void *data)
 		ret = upgrade_version(zhp, cbp->cb_version);
 		if (ret != 0)
 			return (ret);
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 		root_pool_upgrade_check(zhp, cbp->cb_poolname,
 		    sizeof(cbp->cb_poolname));
-#endif	/* ___FreeBSD__ */
+#endif	/* __FreeBSD__ || __DragonFly__ */
 	}
 
 	if (cbp->cb_version >= SPA_VERSION_FEATURES) {
@@ -4799,10 +4799,10 @@ upgrade_one(zpool_handle_t *zhp, void *data)
 
 		if (count != 0) {
 			printnl = B_TRUE;
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 			root_pool_upgrade_check(zhp, cbp->cb_poolname,
 			    sizeof(cbp->cb_poolname));
-#endif	/* __FreeBSD __*/
+#endif	/* __FreeBSD__ || __DragonFly__ */
 		} else if (cur_version == SPA_VERSION) {
 			(void) printf(gettext("Pool '%s' already has all "
 			    "supported features enabled.\n"),

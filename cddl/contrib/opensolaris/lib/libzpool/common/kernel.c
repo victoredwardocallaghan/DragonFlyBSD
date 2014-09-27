@@ -1143,14 +1143,14 @@ zfs_onexit_cb_data(minor_t minor, uint64_t action_handle, void **data)
 	return (0);
 }
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 /* ARGSUSED */
 int
 zvol_create_minors(const char *name)
 {
 	return (0);
 }
-#endif
+#endif /* __FreeBSD__ || __DragonFly__ */
 
 #ifdef illumos
 void
