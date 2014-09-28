@@ -41,6 +41,8 @@
 #include <sys/utsname.h>
 #include <sys/systeminfo.h>
 
+#include <sys/thread.h> // XXX ZFS
+
 /*
  * Emulation of kernel services in userland.
  */

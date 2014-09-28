@@ -28,6 +28,8 @@
 
 #include <sys/zfs_context.h>
 
+#include <sys/thread.h> // XXX ZFS
+
 int taskq_now;
 taskq_t *system_taskq;
 
