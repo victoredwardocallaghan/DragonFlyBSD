@@ -395,7 +395,7 @@ spa_prop_get(spa_t *spa, nvlist_t **nvp)
 	}
 	zap_cursor_fini(&zc);
 	mutex_exit(&spa->spa_props_lock);
-out:
+//out:
 	if (err && err != ENOENT) {
 		nvlist_free(*nvp);
 		*nvp = NULL;
