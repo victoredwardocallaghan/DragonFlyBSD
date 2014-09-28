@@ -1224,7 +1224,9 @@ dnode_rele(dnode_t *dn, void *tag)
 	 * other direct or indirect hold on the dnode must first drop the dnode
 	 * handle.
 	 */
+#ifdef ZFS_DEBUG
 	ASSERT(refs > 0 || dnh->dnh_zrlock.zr_owner != curthread);
+#endif
 
 	/* NOTE: the DNODE_DNODE does not have a dn_dbuf */
 	if (refs == 0 && db != NULL) {
