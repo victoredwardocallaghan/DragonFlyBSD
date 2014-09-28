@@ -36,7 +36,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/taskqueue.h>
 #include <sys/taskq.h>
 
-#include <vm/uma.h>
+//#include <vm/uma.h>
 
 static uma_zone_t taskq_zone;
 

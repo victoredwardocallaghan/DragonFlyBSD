@@ -35,8 +35,8 @@
 #include <sys/vdev_impl.h>
 #include <sys/fs/zfs.h>
 #include <sys/zio.h>
-#include <geom/geom.h>
-#include <geom/geom_int.h>
+//#include <geom/geom.h>
+//#include <geom/geom_int.h>
 
 /*
  * Virtual device vector for GEOM.

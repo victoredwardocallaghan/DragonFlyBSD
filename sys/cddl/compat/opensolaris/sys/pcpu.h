@@ -30,7 +30,7 @@
 #ifndef _COMPAT_OPENSOLARIS_SYS_PCPU_H_
 #define _COMPAT_OPENSOLARIS_SYS_PCPU_H_
 
-#include_next <sys/pcpu.h>
+//#include_next <sys/pcpu.h>
 
 typedef struct pcpu	pcpu_t;
 
