@@ -29,6 +29,7 @@ CFLAGS+= -I${.CURDIR}/../../../cddl/contrib/opensolaris/cmd/stat/common
 
 DPADD=	${LIBAVL} ${LIBGEOM} ${LIBNVPAIR} \
 	${LIBUMEM} ${LIBUTIL} ${LIBUUTIL} ${LIBZFS_CORE} ${LIBZFS}
-LDADD=	-lavl -lgeom -lnvpair -lumem -lutil -luutil -lzfs_core -lzfs
+#LDADD=	-lavl -lgeom -lnvpair -lumem -lutil -luutil -lzfs_core -lzfs
+LDADD=	-lavl -lnvpair -lumem -lutil -luutil -lzfs_core -lzfs
 
 .include <bsd.prog.mk>
