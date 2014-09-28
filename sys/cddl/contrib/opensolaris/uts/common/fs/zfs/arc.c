@@ -122,8 +122,6 @@
 
 #define	CACHE_LINE_SIZE 64 // XXX ZFS - ???
 
-#include <sys/kmem.h> // XXX ZFS
-#include <sys/sysctl.h> // XXX ZFS
 #include <sys/spa.h>
 #include <sys/zio.h>
 #include <sys/zio_compress.h>
@@ -134,6 +132,8 @@
 #include <sys/vdev_impl.h>
 #include <sys/dsl_pool.h>
 #ifdef _KERNEL
+#include <sys/kmem.h>
+#include <sys/sysctl.h>
 #include <sys/dnlc.h>
 #endif
 #include <sys/callb.h>
@@ -208,9 +208,9 @@ int zfs_disable_dup_eviction = 0;
 uint64_t zfs_arc_average_blocksize = 8 * 1024; /* 8KB */
 u_int zfs_arc_free_target = (1 << 19); /* default before pagedaemon init only */
 
+#ifdef _KERNEL
 static int sysctl_vfs_zfs_arc_free_target(SYSCTL_HANDLER_ARGS);
 
-#ifdef _KERNEL
 static void
 arc_free_target_init(void *unused __unused)
 {
@@ -219,7 +219,6 @@ arc_free_target_init(void *unused __unused)
 }
 SYSINIT(arc_free_target_init, SI_SUB_KTHREAD_PAGE, SI_ORDER_ANY,
     arc_free_target_init, NULL);
-#endif
 
 TUNABLE_QUAD("vfs.zfs.arc_meta_limit", &zfs_arc_meta_limit);
 SYSCTL_DECL(_vfs_zfs);
@@ -259,6 +258,8 @@ sysctl_vfs_zfs_arc_free_target(SYSCTL_HANDLER_ARGS)
 
 	return (0);
 }
+
+#endif
 
 /*
  * Note that buffers can be in one of 6 states:

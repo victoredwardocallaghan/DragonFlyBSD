@@ -84,7 +84,6 @@ extern "C" {
 #include <sys/sdt.h>
 #include <sys/kstat.h>
 #include <sys/u8_textprep.h>
-#include <sys/kernel.h>
 #include <sys/disk.h>
 #include <sys/sysevent.h>
 #include <sys/sysevent/eventdefs.h>

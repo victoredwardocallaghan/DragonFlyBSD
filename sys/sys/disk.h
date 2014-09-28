@@ -45,16 +45,15 @@
 #ifndef _SYS_DISK_H_
 #define	_SYS_DISK_H_
 
-#if !defined(_KERNEL) && !defined(_KERNEL_STRUCTURES)
-#error "This file should not be included by userland programs."
-#endif
-
 #ifndef _SYS_DISKSLICE_H_
 #include <sys/diskslice.h>
 #endif
 #ifndef _SYS_QUEUE_H_
 #include <sys/queue.h>
 #endif
+
+#if defined(_KERNEL) || defined(_KERNEL_STRUCTURES)
+
 #ifndef _SYS_MSGPORT_H_
 #include <sys/msgport.h>
 #endif
@@ -127,8 +126,6 @@ struct disk_info {
 #define DSO_MBRQUIET		0x0040
 #define DSO_DEVICEMAPPER	0x0080
 #define DSO_RAWPSIZE		0x0100
-
-#if defined(_KERNEL) || defined(_KERNEL_STRUCTURES)
 
 /*
  * Disk management structure - automated disklabel support.
