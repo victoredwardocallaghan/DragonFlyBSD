@@ -2,7 +2,7 @@
 
 #.include <src.opts.mk>
 
-SUBDIR=	lib sbin usr.bin usr.sbin
+SUBDIR=	lib sbin usr.bin # usr.sbin
 
 #.if ${NO_TESTS} != "no"
 #SUBDIR+=tests
