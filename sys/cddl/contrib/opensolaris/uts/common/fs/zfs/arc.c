@@ -3960,7 +3960,7 @@ arc_memory_throttle(uint64_t reserve, uint64_t txg)
 	 * the arc is already going to be evicting, so we just want to
 	 * continue to let page writes occur as quickly as possible.
 	 */
-	if (curproc == pageproc) {
+	if (curthread == pagethread) {
 		if (page_load > available_memory / 4)
 			return (SET_ERROR(ERESTART));
 		/* Note: reserve is inflated, so we deflate */
@@ -4051,7 +4051,7 @@ arc_lowmem(void *arg __unused, int howto __unused)
 	 * here from ARC itself and may hold ARC locks and thus risk a deadlock
 	 * with ARC reclaim thread.
 	 */
-	if (curproc == pageproc) {
+	if (curthread == pagethread) {
 		while (needfree)
 			msleep(&needfree, &arc_reclaim_thr_lock, 0, "zfs:lowmem", 0);
 	}
