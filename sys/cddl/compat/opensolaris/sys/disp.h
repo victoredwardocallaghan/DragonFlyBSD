@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2013 Andriy Gapon
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SYS_DISP_H_
@@ -33,7 +33,7 @@
 
 #include <sys/proc.h>
 
-#define	kpreempt(x)	kern_yield(PRI_USER)
+#define	kpreempt(x)	do {} while(0);
 
 #endif	/* _KERNEL */
 
