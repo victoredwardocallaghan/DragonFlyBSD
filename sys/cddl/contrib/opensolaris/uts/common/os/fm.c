@@ -1194,7 +1194,7 @@ fm_ena_generate_cpu(uint64_t timestamp, processorid_t cpuid, uchar_t format)
 uint64_t
 fm_ena_generate(uint64_t timestamp, uchar_t format)
 {
-	return (fm_ena_generate_cpu(timestamp, PCPU_GET(cpuid), format));
+	return (fm_ena_generate_cpu(timestamp, mycpuid, format));
 }
 
 uint64_t
