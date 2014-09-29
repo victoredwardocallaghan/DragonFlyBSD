@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2007 Pawel Jakub Dawidek <pjd@FreeBSD.org>
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,16 +23,12 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SYS_VARARGS_H_
 #define	_OPENSOLARIS_SYS_VARARGS_H_
 
-#ifdef	_KERNEL
-#include <machine/stdarg.h>
-#else
 #include <stdarg.h>
-#endif
 
 #endif	/* !_OPENSOLARIS_SYS_VARARGS_H_ */
