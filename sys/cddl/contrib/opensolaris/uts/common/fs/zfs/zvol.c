@@ -92,7 +92,7 @@
 #include <sys/zfeature.h>
 #include <sys/zio_checksum.h>
 
-#include <geom/geom.h>
+//#include <geom/geom.h>
 
 #include "zfs_namecheck.h"
 

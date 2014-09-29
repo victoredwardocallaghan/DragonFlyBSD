@@ -43,7 +43,7 @@
 #include <sys/policy.h>
 #include <sys/kcondvar.h>
 #include <sys/callb.h>
-#include <sys/smp.h>
+//#include <sys/smp.h>
 #include <sys/zfs_dir.h>
 #include <sys/zfs_acl.h>
 #include <sys/fs/zfs.h>
