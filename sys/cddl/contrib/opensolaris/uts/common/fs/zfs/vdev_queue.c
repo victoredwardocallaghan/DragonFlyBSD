@@ -179,14 +179,14 @@ SYSCTL_DECL(_vfs_zfs_vdev);
 
 static int sysctl_zfs_async_write_active_min_dirty_percent(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_vfs_zfs_vdev, OID_AUTO, async_write_active_min_dirty_percent,
-    CTLTYPE_UINT | CTLFLAG_MPSAFE | CTLFLAG_RWTUN, 0, sizeof(int),
+    CTLTYPE_UINT | CTLFLAG_RWTUN, 0, sizeof(int),
     sysctl_zfs_async_write_active_min_dirty_percent, "I",
     "Percentage of async write dirty data below which "
     "async_write_min_active is used.");
 
 static int sysctl_zfs_async_write_active_max_dirty_percent(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_vfs_zfs_vdev, OID_AUTO, async_write_active_max_dirty_percent,
-    CTLTYPE_UINT | CTLFLAG_MPSAFE | CTLFLAG_RWTUN, 0, sizeof(int),
+    CTLTYPE_UINT | CTLFLAG_RWTUN, 0, sizeof(int),
     sysctl_zfs_async_write_active_max_dirty_percent, "I",
     "Percentage of async write dirty data above which "
     "async_write_max_active is used.");

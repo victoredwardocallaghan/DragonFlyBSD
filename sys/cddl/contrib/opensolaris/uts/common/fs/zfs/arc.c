@@ -234,7 +234,7 @@ SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_average_blocksize, CTLFLAG_RDTUN,
  * pagedaemon initialisation.
  */
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, arc_free_target,
-    CTLTYPE_UINT | CTLFLAG_MPSAFE | CTLFLAG_RW, 0, sizeof(u_int),
+    CTLTYPE_UINT | CTLFLAG_RW, 0, sizeof(u_int),
     sysctl_vfs_zfs_arc_free_target, "IU",
     "Desired number of free pages below which ARC triggers reclaim");
 

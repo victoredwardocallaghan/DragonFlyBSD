@@ -283,7 +283,7 @@ sysctl_vfs_zfs_debug_flags(SYSCTL_HANDLER_ARGS)
 }
 TUNABLE_INT("vfs.zfs.debug_flags", &zfs_flags);
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, debug_flags,
-    CTLTYPE_UINT | CTLFLAG_MPSAFE | CTLFLAG_RW, 0, sizeof(int),
+    CTLTYPE_UINT | CTLFLAG_RW, 0, sizeof(int),
     sysctl_vfs_zfs_debug_flags, "IU", "Debug flags for ZFS testing.");
 
 /*

@@ -147,7 +147,7 @@ SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, dirty_data_max_max, CTLFLAG_RDTUN,
 
 static int sysctl_zfs_dirty_data_max_percent(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, dirty_data_max_percent,
-    CTLTYPE_INT | CTLFLAG_MPSAFE | CTLFLAG_RWTUN, 0, sizeof(int),
+    CTLTYPE_INT | CTLFLAG_RWTUN, 0, sizeof(int),
     sysctl_zfs_dirty_data_max_percent, "I",
     "The percent of physical memory used to auto calculate dirty_data_max");
 
@@ -158,14 +158,14 @@ SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, dirty_data_sync, CTLFLAG_RWTUN,
 static int sysctl_zfs_delay_min_dirty_percent(SYSCTL_HANDLER_ARGS);
 /* No zfs_delay_min_dirty_percent tunable due to limit requirements */
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, delay_min_dirty_percent,
-    CTLTYPE_INT | CTLFLAG_MPSAFE | CTLFLAG_RW, 0, sizeof(int),
+    CTLTYPE_INT | CTLFLAG_RW, 0, sizeof(int),
     sysctl_zfs_delay_min_dirty_percent, "I",
     "The limit of outstanding dirty data before transations are delayed");
 
 static int sysctl_zfs_delay_scale(SYSCTL_HANDLER_ARGS);
 /* No zfs_delay_scale tunable due to limit requirements */
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, delay_scale,
-    CTLTYPE_U64 | CTLFLAG_MPSAFE | CTLFLAG_RW, 0, sizeof(uint64_t),
+    CTLTYPE_U64 | CTLFLAG_RW, 0, sizeof(uint64_t),
     sysctl_zfs_delay_scale, "QU",
     "Controls how quickly the delay approaches infinity");
 
