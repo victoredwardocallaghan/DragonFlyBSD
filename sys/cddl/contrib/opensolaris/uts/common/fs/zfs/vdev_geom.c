@@ -54,11 +54,11 @@ DECLARE_GEOM_CLASS(zfs_vdev_class, zfs_vdev);
 SYSCTL_DECL(_vfs_zfs_vdev);
 /* Don't send BIO_FLUSH. */
 static int vdev_geom_bio_flush_disable;
-SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, bio_flush_disable, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, bio_flush_disable, CTLFLAG_RW,
     &vdev_geom_bio_flush_disable, 0, "Disable BIO_FLUSH");
 /* Don't send BIO_DELETE. */
 static int vdev_geom_bio_delete_disable;
-SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, bio_delete_disable, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, bio_delete_disable, CTLFLAG_RW,
     &vdev_geom_bio_delete_disable, 0, "Disable BIO_DELETE");
 
 static void

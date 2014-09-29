@@ -179,30 +179,30 @@ SYSCTL_DECL(_vfs_zfs_vdev);
 
 static int sysctl_zfs_async_write_active_min_dirty_percent(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_vfs_zfs_vdev, OID_AUTO, async_write_active_min_dirty_percent,
-    CTLTYPE_UINT | CTLFLAG_RWTUN, 0, sizeof(int),
+    CTLTYPE_UINT | CTLFLAG_RW, 0, sizeof(int),
     sysctl_zfs_async_write_active_min_dirty_percent, "I",
     "Percentage of async write dirty data below which "
     "async_write_min_active is used.");
 
 static int sysctl_zfs_async_write_active_max_dirty_percent(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_vfs_zfs_vdev, OID_AUTO, async_write_active_max_dirty_percent,
-    CTLTYPE_UINT | CTLFLAG_RWTUN, 0, sizeof(int),
+    CTLTYPE_UINT | CTLFLAG_RW, 0, sizeof(int),
     sysctl_zfs_async_write_active_max_dirty_percent, "I",
     "Percentage of async write dirty data above which "
     "async_write_max_active is used.");
 
-SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, max_active, CTLFLAG_RWTUN,
+SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, max_active, CTLFLAG_RW,
     &zfs_vdev_max_active, 0,
     "The maximum number of I/Os of all types active for each device.");
 
 #define ZFS_VDEV_QUEUE_KNOB_MIN(name)					\
-SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, name ## _min_active, CTLFLAG_RWTUN,\
+SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, name ## _min_active, CTLFLAG_RW,\
     &zfs_vdev_ ## name ## _min_active, 0,				\
     "Initial number of I/O requests of type " #name			\
     " active for each device");
 
 #define ZFS_VDEV_QUEUE_KNOB_MAX(name)					\
-SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, name ## _max_active, CTLFLAG_RWTUN,\
+SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, name ## _max_active, CTLFLAG_RW,\
     &zfs_vdev_ ## name ## _max_active, 0,				\
     "Maximum number of I/O requests of type " #name			\
     " active for each device");
@@ -222,13 +222,13 @@ ZFS_VDEV_QUEUE_KNOB_MAX(trim);
 
 #undef ZFS_VDEV_QUEUE_KNOB
 
-SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, aggregation_limit, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, aggregation_limit, CTLFLAG_RW,
     &zfs_vdev_aggregation_limit, 0,
     "I/O requests are aggregated up to this size");
-SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, read_gap_limit, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, read_gap_limit, CTLFLAG_RW,
     &zfs_vdev_read_gap_limit, 0,
     "Acceptable gap between two reads being aggregated");
-SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, write_gap_limit, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_vdev, OID_AUTO, write_gap_limit, CTLFLAG_RW,
     &zfs_vdev_write_gap_limit, 0,
     "Acceptable gap between two writes being aggregated");
 

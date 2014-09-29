@@ -90,7 +90,7 @@ static int check_hostid = 1;
 static int zfs_ccw_retry_interval = 300;
 
 SYSCTL_DECL(_vfs_zfs);
-SYSCTL_INT(_vfs_zfs, OID_AUTO, check_hostid, CTLFLAG_RWTUN, &check_hostid, 0,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, check_hostid, CTLFLAG_RW, &check_hostid, 0,
     "Check hostid on import?");
 TUNABLE_INT("vfs.zfs.ccw_retry_interval", &zfs_ccw_retry_interval);
 SYSCTL_INT(_vfs_zfs, OID_AUTO, ccw_retry_interval, CTLFLAG_RW,
@@ -1896,16 +1896,16 @@ int spa_load_verify_maxinflight = 10000;
 boolean_t spa_load_verify_metadata = B_TRUE;
 boolean_t spa_load_verify_data = B_TRUE;
 
-SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_maxinflight, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_maxinflight, CTLFLAG_RW,
     &spa_load_verify_maxinflight, 0,
     "Maximum number of concurrent scrub I/Os to create while verifying a "
     "pool while importing it");
 
-SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_metadata, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_metadata, CTLFLAG_RW,
     &spa_load_verify_metadata, 0,
     "Check metadata on import?");
  
-SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_data, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_load_verify_data, CTLFLAG_RW,
     &spa_load_verify_data, 0,
     "Check user data on import?");
  

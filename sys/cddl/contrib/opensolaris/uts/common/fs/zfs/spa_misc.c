@@ -244,7 +244,7 @@ int zfs_flags = ~(ZFS_DEBUG_DPRINTF | ZFS_DEBUG_SPA);
 int zfs_flags = 0;
 #endif
 SYSCTL_DECL(_debug);
-SYSCTL_INT(_debug, OID_AUTO, zfs_flags, CTLFLAG_RWTUN, &zfs_flags, 0,
+SYSCTL_INT(_debug, OID_AUTO, zfs_flags, CTLFLAG_RW, &zfs_flags, 0,
     "ZFS debug flags.");
 
 /*
@@ -256,7 +256,7 @@ SYSCTL_INT(_debug, OID_AUTO, zfs_flags, CTLFLAG_RWTUN, &zfs_flags, 0,
  */
 boolean_t zfs_recover = B_FALSE;
 SYSCTL_DECL(_vfs_zfs);
-SYSCTL_INT(_vfs_zfs, OID_AUTO, recover, CTLFLAG_RDTUN, &zfs_recover, 0,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, recover, CTLFLAG_RW, &zfs_recover, 0,
     "Try to recover from otherwise-fatal errors.");
 
 static int
@@ -326,7 +326,7 @@ boolean_t zfs_free_leak_on_eio = B_FALSE;
  * in a system panic.
  */
 uint64_t zfs_deadman_synctime_ms = 1000000ULL;
-SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_synctime_ms, CTLFLAG_RDTUN,
+SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_synctime_ms, CTLFLAG_RW,
     &zfs_deadman_synctime_ms, 0,
     "Stalled ZFS I/O expiration time in milliseconds");
 
@@ -335,7 +335,7 @@ SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_synctime_ms, CTLFLAG_RDTUN,
  * for hung I/O.
  */
 uint64_t zfs_deadman_checktime_ms = 5000ULL;
-SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_checktime_ms, CTLFLAG_RDTUN,
+SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_checktime_ms, CTLFLAG_RW,
     &zfs_deadman_checktime_ms, 0,
     "Period of checks for stalled ZFS I/O in milliseconds");
 
@@ -344,7 +344,7 @@ SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, deadman_checktime_ms, CTLFLAG_RDTUN,
  * zfs_deadman_init()
  */
 int zfs_deadman_enabled = -1;
-SYSCTL_INT(_vfs_zfs, OID_AUTO, deadman_enabled, CTLFLAG_RDTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, deadman_enabled, CTLFLAG_RW,
     &zfs_deadman_enabled, 0, "Kernel panic on stalled ZFS I/O");
 
 /*
@@ -357,7 +357,7 @@ SYSCTL_INT(_vfs_zfs, OID_AUTO, deadman_enabled, CTLFLAG_RDTUN,
  *     (VDEV_RAIDZ_MAXPARITY + 1) * SPA_DVAS_PER_BP * 2 == 24
  */
 int spa_asize_inflation = 24;
-SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_asize_inflation, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, spa_asize_inflation, CTLFLAG_RW,
     &spa_asize_inflation, 0, "Worst case inflation factor for single sector writes");
 
 #ifndef illumos

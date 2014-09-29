@@ -56,7 +56,7 @@ SYSCTL_NODE(_vfs_zfs, OID_AUTO, metaslab, CTLFLAG_RW, 0, "ZFS metaslab");
 
 uint64_t metaslab_aliquot = 512ULL << 10;
 uint64_t metaslab_gang_bang = SPA_MAXBLOCKSIZE + 1;	/* force gang blocks */
-SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, gang_bang, CTLFLAG_RWTUN,
+SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, gang_bang, CTLFLAG_RW,
     &metaslab_gang_bang, 0,
     "Force gang block allocation for blocks larger than or equal to this value");
 
@@ -67,7 +67,7 @@ SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, gang_bang, CTLFLAG_RWTUN,
  * Values should be greater than or equal to 100.
  */
 int zfs_condense_pct = 200;
-SYSCTL_INT(_vfs_zfs, OID_AUTO, condense_pct, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, condense_pct, CTLFLAG_RW,
     &zfs_condense_pct, 0,
     "Condense on-disk spacemap when it is more than this many percents"
     " of in-memory counterpart");
@@ -101,7 +101,7 @@ int zfs_metaslab_condense_block_threshold = 4;
  * no metaslab group will be excluded based on this criterion.
  */
 int zfs_mg_noalloc_threshold = 0;
-SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_noalloc_threshold, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_noalloc_threshold, CTLFLAG_RW,
     &zfs_mg_noalloc_threshold, 0,
     "Percentage of metaslab group size that should be free"
     " to make it eligible for allocation");
@@ -114,7 +114,7 @@ SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_noalloc_threshold, CTLFLAG_RWTUN,
  * class have also crossed this threshold.
  */
 int zfs_mg_fragmentation_threshold = 85;
-SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_fragmentation_threshold, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_fragmentation_threshold, CTLFLAG_RW,
     &zfs_mg_fragmentation_threshold, 0,
     "Percentage of metaslab group size that should be considered "
     "eligible for allocations unless all metaslab groups within the metaslab class "
@@ -127,7 +127,7 @@ SYSCTL_INT(_vfs_zfs, OID_AUTO, mg_fragmentation_threshold, CTLFLAG_RWTUN,
  * status allowing better metaslabs to be selected.
  */
 int zfs_metaslab_fragmentation_threshold = 70;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_threshold, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_threshold, CTLFLAG_RW,
     &zfs_metaslab_fragmentation_threshold, 0,
     "Maximum percentage of metaslab fragmentation level to keep their active state");
 
@@ -135,7 +135,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_threshold, CTLFLAG_RWTUN,
  * When set will load all metaslabs when pool is first opened.
  */
 int metaslab_debug_load = 0;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_load, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_load, CTLFLAG_RW,
     &metaslab_debug_load, 0,
     "Load all metaslabs when pool is first opened");
 
@@ -143,7 +143,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_load, CTLFLAG_RWTUN,
  * When set will prevent metaslabs from being unloaded.
  */
 int metaslab_debug_unload = 0;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_unload, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_unload, CTLFLAG_RW,
     &metaslab_debug_unload, 0,
     "Prevent metaslabs from being unloaded");
 
@@ -154,7 +154,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, debug_unload, CTLFLAG_RWTUN,
  * aggressive strategy (i.e search by size rather than offset).
  */
 uint64_t metaslab_df_alloc_threshold = SPA_MAXBLOCKSIZE;
-SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, df_alloc_threshold, CTLFLAG_RWTUN,
+SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, df_alloc_threshold, CTLFLAG_RW,
     &metaslab_df_alloc_threshold, 0,
     "Minimum size which forces the dynamic allocator to change it's allocation strategy");
 
@@ -165,7 +165,7 @@ SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, df_alloc_threshold, CTLFLAG_RWTUN,
  * switch to using best-fit allocations.
  */
 int metaslab_df_free_pct = 4;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, df_free_pct, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, df_free_pct, CTLFLAG_RW,
     &metaslab_df_free_pct, 0,
     "The minimum free space, in percent, which must be available in a "
     "space map to continue allocations in a first-fit fashion");
@@ -175,7 +175,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, df_free_pct, CTLFLAG_RWTUN,
  * segment which is greater than metaslab_min_alloc_size.
  */
 uint64_t metaslab_min_alloc_size = DMU_MAX_ACCESS;
-SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, min_alloc_size, CTLFLAG_RWTUN,
+SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, min_alloc_size, CTLFLAG_RW,
     &metaslab_min_alloc_size, 0,
     "A metaslab is considered \"free\" if it contains a contiguous "
     "segment which is greater than vfs.zfs.metaslab.min_alloc_size");
@@ -184,7 +184,7 @@ SYSCTL_QUAD(_vfs_zfs_metaslab, OID_AUTO, min_alloc_size, CTLFLAG_RWTUN,
  * Percentage of all cpus that can be used by the metaslab taskq.
  */
 int metaslab_load_pct = 50;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, load_pct, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, load_pct, CTLFLAG_RW,
     &metaslab_load_pct, 0,
     "Percentage of cpus that can be used by the metaslab taskq");
 
@@ -194,7 +194,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, load_pct, CTLFLAG_RWTUN,
  * keep it loaded.
  */
 int metaslab_unload_delay = TXG_SIZE * 2;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, unload_delay, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, unload_delay, CTLFLAG_RW,
     &metaslab_unload_delay, 0,
     "Number of TXGs that an unused metaslab can be kept in memory");
 
@@ -202,7 +202,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, unload_delay, CTLFLAG_RWTUN,
  * Max number of metaslabs per group to preload.
  */
 int metaslab_preload_limit = SPA_DVAS_PER_BP;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_limit, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_limit, CTLFLAG_RW,
     &metaslab_preload_limit, 0,
     "Max number of metaslabs per group to preload");
 
@@ -210,7 +210,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_limit, CTLFLAG_RWTUN,
  * Enable/disable preloading of metaslab.
  */
 boolean_t metaslab_preload_enabled = B_TRUE;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_enabled, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_enabled, CTLFLAG_RW,
     &metaslab_preload_enabled, 0,
     "Max number of metaslabs per group to preload");
 
@@ -218,7 +218,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, preload_enabled, CTLFLAG_RWTUN,
  * Enable/disable fragmentation weighting on metaslabs.
  */
 boolean_t metaslab_fragmentation_factor_enabled = B_TRUE;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_factor_enabled, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_factor_enabled, CTLFLAG_RW,
     &metaslab_fragmentation_factor_enabled, 0,
     "Enable fragmentation weighting on metaslabs");
 
@@ -226,7 +226,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, fragmentation_factor_enabled, CTLFLAG_RW
  * Enable/disable lba weighting (i.e. outer tracks are given preference).
  */
 boolean_t metaslab_lba_weighting_enabled = B_TRUE;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, lba_weighting_enabled, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, lba_weighting_enabled, CTLFLAG_RW,
     &metaslab_lba_weighting_enabled, 0,
     "Enable LBA weighting (i.e. outer tracks are given preference)");
 
@@ -234,7 +234,7 @@ SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, lba_weighting_enabled, CTLFLAG_RWTUN,
  * Enable/disable metaslab group biasing.
  */
 boolean_t metaslab_bias_enabled = B_TRUE;
-SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, bias_enabled, CTLFLAG_RWTUN,
+SYSCTL_INT(_vfs_zfs_metaslab, OID_AUTO, bias_enabled, CTLFLAG_RW,
     &metaslab_bias_enabled, 0,
     "Enable metaslab group biasing");
 

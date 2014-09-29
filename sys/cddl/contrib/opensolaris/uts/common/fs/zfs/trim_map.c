@@ -85,19 +85,19 @@ static u_int trim_vdev_max_pending = 64;
 SYSCTL_DECL(_vfs_zfs);
 SYSCTL_NODE(_vfs_zfs, OID_AUTO, trim, CTLFLAG_RD, 0, "ZFS TRIM");
 
-SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, txg_delay, CTLFLAG_RWTUN, &trim_txg_delay,
+SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, txg_delay, CTLFLAG_RW, &trim_txg_delay,
     0, "Delay TRIMs by up to this many TXGs");
-SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, timeout, CTLFLAG_RWTUN, &trim_timeout, 0,
+SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, timeout, CTLFLAG_RW, &trim_timeout, 0,
     "Delay TRIMs by up to this many seconds");
-SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, max_interval, CTLFLAG_RWTUN,
+SYSCTL_UINT(_vfs_zfs_trim, OID_AUTO, max_interval, CTLFLAG_RW,
     &trim_max_interval, 0,
     "Maximum interval between TRIM queue processing (seconds)");
 
 SYSCTL_DECL(_vfs_zfs_vdev);
-SYSCTL_QUAD(_vfs_zfs_vdev, OID_AUTO, trim_max_bytes, CTLFLAG_RWTUN,
+SYSCTL_QUAD(_vfs_zfs_vdev, OID_AUTO, trim_max_bytes, CTLFLAG_RW,
     &trim_vdev_max_bytes, 0,
     "Maximum pending TRIM bytes for a vdev");
-SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, trim_max_pending, CTLFLAG_RWTUN,
+SYSCTL_UINT(_vfs_zfs_vdev, OID_AUTO, trim_max_pending, CTLFLAG_RW,
     &trim_vdev_max_pending, 0,
     "Maximum pending TRIM segments for a vdev");
 

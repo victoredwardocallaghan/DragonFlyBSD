@@ -222,11 +222,11 @@ SYSINIT(arc_free_target_init, SI_SUB_KTHREAD_PAGE, SI_ORDER_ANY,
 
 TUNABLE_QUAD("vfs.zfs.arc_meta_limit", &zfs_arc_meta_limit);
 SYSCTL_DECL(_vfs_zfs);
-SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_max, CTLFLAG_RDTUN, &zfs_arc_max, 0,
+SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_max, CTLFLAG_RW, &zfs_arc_max, 0,
     "Maximum ARC size");
-SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_min, CTLFLAG_RDTUN, &zfs_arc_min, 0,
+SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_min, CTLFLAG_RW, &zfs_arc_min, 0,
     "Minimum ARC size");
-SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_average_blocksize, CTLFLAG_RDTUN,
+SYSCTL_UQUAD(_vfs_zfs, OID_AUTO, arc_average_blocksize, CTLFLAG_RW,
     &zfs_arc_average_blocksize, 0,
     "ARC average blocksize");
 /*
