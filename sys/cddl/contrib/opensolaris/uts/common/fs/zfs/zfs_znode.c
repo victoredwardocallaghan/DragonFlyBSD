@@ -54,14 +54,14 @@
 #endif /* _KERNEL */
 
 #include <sys/dmu.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/stat.h>
 #include <sys/zap.h>
 #include <sys/zfs_znode.h>
 #include <sys/sa.h>
 #include <sys/zfs_sa.h>
 #include <sys/zfs_stat.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 
 #include "zfs_prop.h"
 #include "zfs_comutil.h"

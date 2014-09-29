@@ -36,7 +36,7 @@
 #include <sys/dsl_synctask.h>
 #include <sys/zfs_context.h>
 #include <sys/dsl_deadlist.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 
 #ifdef	__cplusplus
 extern "C" {

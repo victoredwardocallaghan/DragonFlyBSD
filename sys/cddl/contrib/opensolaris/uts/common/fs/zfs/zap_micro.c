@@ -28,7 +28,7 @@
 #include <sys/dmu.h>
 #include <sys/zfs_context.h>
 #include <sys/zap.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/zap_impl.h>
 #include <sys/zap_leaf.h>
 #include <sys/avl.h>

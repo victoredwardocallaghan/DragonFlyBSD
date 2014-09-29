@@ -31,7 +31,7 @@
 #include <sys/spa.h>
 #include <sys/txg.h>
 #include <sys/zio.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/dmu_zfetch.h>
 #include <sys/zrlock.h>
 

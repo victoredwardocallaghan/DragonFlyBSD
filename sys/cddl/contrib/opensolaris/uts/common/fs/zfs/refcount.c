@@ -24,7 +24,7 @@
  */
 
 #include <sys/zfs_context.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 
 #ifdef	ZFS_DEBUG
 

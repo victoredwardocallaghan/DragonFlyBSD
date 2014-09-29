@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 #include <sys/zfs_context.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 
 /*
  * A reader-writer lock implementation that allows re-entrant reads, but

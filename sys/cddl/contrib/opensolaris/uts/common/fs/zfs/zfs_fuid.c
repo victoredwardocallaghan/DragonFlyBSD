@@ -26,7 +26,7 @@
 #include <sys/dmu.h>
 #include <sys/avl.h>
 #include <sys/zap.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/nvpair.h>
 #ifdef _KERNEL
 #include <sys/kidmap.h>

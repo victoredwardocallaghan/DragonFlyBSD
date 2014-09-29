@@ -23,8 +23,8 @@
  * Copyright (c) 2012 by Delphix. All rights reserved.
  */
 
-#ifndef	_SYS_REFCOUNT_H
-#define	_SYS_REFCOUNT_H
+#ifndef	_SYS_ZFS_REFCOUNT_H
+#define	_SYS_ZFS_REFCOUNT_H
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
@@ -111,4 +111,4 @@ typedef struct refcount {
 }
 #endif
 
-#endif /* _SYS_REFCOUNT_H */
+#endif /* _SYS_ZFS_REFCOUNT_H */

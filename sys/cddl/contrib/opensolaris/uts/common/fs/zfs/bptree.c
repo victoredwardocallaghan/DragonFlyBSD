@@ -33,7 +33,7 @@
 #include <sys/dsl_dir.h>
 #include <sys/dsl_pool.h>
 #include <sys/dnode.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/spa.h>
 
 /*

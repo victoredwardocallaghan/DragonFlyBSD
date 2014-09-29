@@ -26,7 +26,7 @@
  * Copyright (c) 2012 by Delphix. All rights reserved.
  */
 
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 #include <sys/rrwlock.h>
 
 /*

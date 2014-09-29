@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <sys/spa.h>
 #include <sys/fs/zfs.h>
-#include <sys/refcount.h>
+#include <sys/zfs_refcount.h>
 
 /*
  * Routines needed by more than one client of libzpool.
