@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2007 Pawel Jakub Dawidek <pjd@FreeBSD.org>
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SYS_MUTEX_H_
@@ -31,11 +31,11 @@
 
 #ifdef _KERNEL
 
-#include <sys/param.h>
-#include <sys/lock.h>
 #include_next <sys/mutex.h>
 #include <sys/proc.h>
-#include <sys/sx.h>
+
+#include <sys/globaldata.h>
+#include <sys/mutex2.h>
 
 typedef enum {
 	MUTEX_DEFAULT = 6	/* kernel default mutex */
@@ -44,34 +44,30 @@ typedef enum {
 #define	MUTEX_HELD(x)		(mutex_owned(x))
 #define	MUTEX_NOT_HELD(x)	(!mutex_owned(x) || panicstr)
 
-typedef struct sx	kmutex_t;
-
-#ifndef OPENSOLARIS_WITNESS
-#define	MUTEX_FLAGS	(SX_DUPOK | SX_NOWITNESS)
-#else
-#define	MUTEX_FLAGS	(SX_DUPOK)
-#endif
+typedef struct mtx	kmutex_t;
 
 #define	mutex_init(lock, desc, type, arg)	do {			\
-	const char *_name;						\
 	ASSERT((type) == 0 || (type) == MUTEX_DEFAULT);			\
-	KASSERT(((lock)->lock_object.lo_flags & LO_ALLMASK) !=		\
-	    LO_EXPECTED, ("lock %s already initialized", #lock));	\
-	bzero((lock), sizeof(struct sx));				\
+	bzero((lock), sizeof(struct mtx));				\
+	mtx_init((lock));			\
+} while (0)
+
+#define	mutex_enter(lock)	do {			\
+	const char *_name;						\
 	for (_name = #lock; *_name != '\0'; _name++) {			\
 		if (*_name >= 'a' && *_name <= 'z')			\
 			break;						\
 	}								\
 	if (*_name == '\0')						\
 		_name = #lock;						\
-	sx_init_flags((lock), _name, MUTEX_FLAGS);			\
+	mtx_lock_ex_quick((lock), _name);			\
 } while (0)
-#define	mutex_destroy(lock)	sx_destroy(lock)
-#define	mutex_enter(lock)	sx_xlock(lock)
-#define	mutex_tryenter(lock)	sx_try_xlock(lock)
-#define	mutex_exit(lock)	sx_xunlock(lock)
-#define	mutex_owned(lock)	sx_xlocked(lock)
-#define	mutex_owner(lock)	sx_xholder(lock)
+
+#define	mutex_destroy(lock)	mtx_uninit(lock)
+#define	mutex_tryenter(lock)	mtx_lock_ex_try(lock)
+#define	mutex_exit(lock)	mtx_unlock_ex(lock)
+#define	mutex_owned(lock)	mtx_owned(lock)
+#define	mutex_owner(lock)	(lock)->mtx_owner
 
 #endif	/* _KERNEL */
 

@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2007 Pawel Jakub Dawidek <pjd@FreeBSD.org>
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,15 +24,15 @@
  * SUCH DAMAGE.
  *
  * $FreeBSD$
+ * $DragonflyBSD$
  */
 
 #ifndef _OPENSOLARIS_SYS_RWLOCK_H_
 #define	_OPENSOLARIS_SYS_RWLOCK_H_
 
-#include <sys/param.h>
 #include <sys/proc.h>
-#include <sys/lock.h>
-#include <sys/sx.h>
+#include <sys/globaldata.h>
+#include <sys/mutex2.h>
 
 #ifdef _KERNEL
 
@@ -45,13 +45,7 @@ typedef enum {
 	RW_READER
 } krw_t;
 
-typedef	struct sx	krwlock_t;
-
-#ifndef OPENSOLARIS_WITNESS
-#define	RW_FLAGS	(SX_DUPOK | SX_NOWITNESS)
-#else
-#define	RW_FLAGS	(SX_DUPOK)
-#endif
+typedef	struct mtx	krwlock_t;
 
 #define	RW_READ_HELD(x)		(rw_read_held((x)))
 #define	RW_WRITE_HELD(x)	(rw_write_held((x)))
@@ -59,36 +53,36 @@ typedef	struct sx	krwlock_t;
 #define	RW_ISWRITER(x)		(rw_iswriter(x))
 
 #define	rw_init(lock, desc, type, arg)	do {				\
-	const char *_name;						\
 	ASSERT((type) == 0 || (type) == RW_DEFAULT);			\
-	KASSERT(((lock)->lock_object.lo_flags & LO_ALLMASK) !=		\
-	    LO_EXPECTED, ("lock %s already initialized", #lock));	\
-	bzero((lock), sizeof(struct sx));				\
+	bzero((lock), sizeof(struct mtx));				\
+	mtx_init((lock));				\
+} while (0)
+#define	rw_destroy(lock)	mtx_uninit(lock)
+#define	rw_enter(lock, how)	do {					\
+	const char *_name;						\
 	for (_name = #lock; *_name != '\0'; _name++) {			\
 		if (*_name >= 'a' && *_name <= 'z')			\
 			break;						\
 	}								\
 	if (*_name == '\0')						\
 		_name = #lock;						\
-	sx_init_flags((lock), _name, RW_FLAGS);				\
-} while (0)
-#define	rw_destroy(lock)	sx_destroy(lock)
-#define	rw_enter(lock, how)	do {					\
 	if ((how) == RW_READER)						\
-		sx_slock(lock);						\
+		mtx_lock_sh_quick(lock, _name);						\
 	else /* if ((how) == RW_WRITER) */				\
-		sx_xlock(lock);						\
+		mtx_lock_ex_quick(lock, _name);						\
 } while (0)
-#define	rw_tryenter(lock, how)	((how) == RW_READER ? sx_try_slock(lock) : sx_try_xlock(lock))
-#define	rw_exit(lock)		sx_unlock(lock)
-#define	rw_downgrade(lock)	sx_downgrade(lock)
-#define	rw_tryupgrade(lock)	sx_try_upgrade(lock)
-#define	rw_read_held(lock)	((lock)->sx_lock != SX_LOCK_UNLOCKED && ((lock)->sx_lock & SX_LOCK_SHARED))
-#define	rw_write_held(lock)	sx_xlocked(lock)
+
+#define	rw_tryenter(lock, how)	((how) == RW_READER ? mtx_lock_sh_try(lock) : mtx_lock_ex_try(lock))
+#define	rw_exit(lock)		mtx_unlock(lock)
+#define	rw_downgrade(lock)	mtx_downgrade(lock)
+#define	rw_tryupgrade(lock)	mtx_upgrade_try(lock)
+
+#define	rw_read_held(lock)	mtx_islocked(lock)
+
+#define	rw_write_held(lock)	mtx_owned(lock)
 #define	rw_lock_held(lock)	(rw_read_held(lock) || rw_write_held(lock))
-#define	rw_iswriter(lock)	sx_xlocked(lock)
-/* TODO: Change to sx_xholder() once it is moved from kern_sx.c to sx.h. */
-#define	rw_owner(lock)		((lock)->sx_lock & SX_LOCK_SHARED ? NULL : (struct thread *)SX_OWNER((lock)->sx_lock))
+#define	rw_iswriter(lock)	mtx_owned(lock)
+#define	rw_owner(lock)	(lock)->mtx_owner
 
 #endif	/* defined(_KERNEL) */
 
