@@ -47,7 +47,7 @@ system_taskq_init(void *arg)
 {
 	taskq_zone = uma_zcreate("taskq_zone", sizeof(taskq_ent_t),
 	    NULL, NULL, NULL, NULL, 0, 0);
-	system_taskq = taskq_create("system_taskq", mp_ncpus, 0, 0, 0, 0);
+	system_taskq = taskq_create("system_taskq", ncpus, 0, 0, 0, 0);
 }
 SYSINIT(system_taskq_init, SI_SUB_CONFIGURE, SI_ORDER_ANY, system_taskq_init, NULL);
 
@@ -67,7 +67,7 @@ taskq_create(const char *name, int nthreads, pri_t pri, int minalloc __unused,
 	taskq_t *tq;
 
 	if ((flags & TASKQ_THREADS_CPU_PCT) != 0)
-		nthreads = MAX((mp_ncpus * nthreads) / 100, 1);
+		nthreads = MAX((ncpus * nthreads) / 100, 1);
 
 	tq = kmem_alloc(sizeof(*tq), KM_SLEEP);
 	tq->tq_queue = taskqueue_create(name, M_WAITOK, taskqueue_thread_enqueue,
