@@ -45,6 +45,7 @@
 #include <sys/cred.h>
 #include <sys/time.h>
 #include <sys/fs/zfs.h>
+#include <vm/vm_page.h>
 
 #ifdef	__cplusplus
 extern "C" {
