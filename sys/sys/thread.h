@@ -284,7 +284,7 @@ struct thread {
     int		td_unused03[4];	/* for future fields */
     struct iosched_data td_iosdata;	/* Dynamic I/O scheduling data */
     struct timeval td_start;	/* start time for a thread/process */
-    char	td_comm[MAXCOMLEN+1]; /* typ 16+1 bytes */
+    char	td_comm[MAXCOMLEN+1]; /* Thread name - typ 16+1 bytes */
     struct thread *td_preempted; /* we preempted this thread */
     struct ucred *td_ucred;		/* synchronized from p_ucred */
     void	 *td_vmm;	/* vmm private data */
