@@ -67,8 +67,6 @@ typedef	struct mount	vfs_t;
 
 #define	fs_vscan(vp, cr, async)	(0)
 
-#define	VROOT		VV_ROOT
-
 /*
  * Structure defining a mount option for a filesystem.
  * option names are found in mntent.h
