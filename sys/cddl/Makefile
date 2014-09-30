@@ -95,6 +95,9 @@ CFLAGS+=-DBUILDING_ZFS
 
 CFLAGS+=-save-temps
 
+# avoid enum conflict
+CFLAGS+=-D_PROPLIB_ZFS_CONFLICT
+
 .include <bsd.kmod.mk>
 
 CFLAGS+=	-include ${SYSDIR}/cddl/compat/opensolaris/sys/debug_compat.h
