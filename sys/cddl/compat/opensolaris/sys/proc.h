@@ -46,7 +46,7 @@
 #define	PRIBIO	0
 #define	PVM	1
 
-#define	CPU		curcpu
+#define	CPU		mycpuid
 #define	minclsyspri	PRIBIO
 #define	maxclsyspri	PVM
 #define	max_ncpus	ncpus

@@ -116,7 +116,7 @@ extern "C" {
 #include <vm/vm_extern.h>
 #include <vm/vnode_pager.h>
 
-#define	CPU_SEQID	(curcpu)
+#define	CPU_SEQID	(mycpuid)
 
 #define	tsd_create(keyp, destructor)	do {				\
 	*(keyp) = osd_thread_register((destructor));			\
