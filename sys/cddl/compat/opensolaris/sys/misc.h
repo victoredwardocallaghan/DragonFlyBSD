@@ -46,16 +46,9 @@
 #define	_FIO_SEEK_HOLE	FIOSEEKHOLE
 
 #ifdef _KERNEL
-struct opensolaris_utsname {
-	char	*sysname;
-	char	*nodename;
-	char	*release;
-	char	version[32];
-	char	*machine;
-};
+#include <sys/utsname.h>
 
 extern char hw_serial[11];
-extern struct opensolaris_utsname utsname;
 #endif
 
 #endif	/* _OPENSOLARIS_SYS_MISC_H_ */

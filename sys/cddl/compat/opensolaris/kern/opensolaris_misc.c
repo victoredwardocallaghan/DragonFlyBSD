@@ -34,10 +34,11 @@ __FBSDID("$FreeBSD$");
 #include <sys/limits.h>
 #include <sys/misc.h>
 #include <sys/sysctl.h>
+#include <sys/utsname.h>
 
 char hw_serial[11] = "0";
 
-struct opensolaris_utsname utsname = {
+struct utsname utsname = {
 	.machine = MACHINE
 };
 
