@@ -559,7 +559,7 @@ trim_thread(void *arg)
 	zio_t *zio;
 
 #ifdef _KERNEL
-	(void) snprintf(curthread->td_name, sizeof(curthread->td_name),
+	(void) snprintf(curthread->td_comm, sizeof(curthread->td_comm),
 	    "trim %s", spa_name(spa));
 #endif
 
