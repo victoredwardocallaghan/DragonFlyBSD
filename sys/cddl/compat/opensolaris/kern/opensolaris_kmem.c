@@ -120,7 +120,11 @@ static void
 kmem_size_init(void *unused __unused)
 {
 
+#if defined(__DragonFly__)
+	kmem_size_val = (uint64_t)vmstats.v_page_count * PAGE_SIZE;
+#else
 	kmem_size_val = (uint64_t)vm_cnt.v_page_count * PAGE_SIZE;
+#endif
 	if (kmem_size_val > vm_kmem_size)
 		kmem_size_val = vm_kmem_size;
 }
@@ -137,29 +141,41 @@ SYSINIT(kmem_size_init, SI_SUB_KMEM, SI_ORDER_ANY, kmem_size_init, NULL);
 u_int
 kmem_free_target(void)
 {
-
+#if defined(__DragonFly__)
+	return (vm_stats.v_free_target);
+#else
 	return (vm_cnt.v_free_target);
+#endif
 }
 
 u_int
 kmem_free_min(void)
 {
-
+#if defined(__DragonFly__)
+	return (vm_stats.v_free_min);
+#else
 	return (vm_cnt.v_free_min);
+#endif
 }
 
 u_int
 kmem_free_count(void)
 {
-
+#if defined(__DragonFly__)
+	return (vm_stats.v_free_count + vm_stats.v_cache_count);
+#else
 	return (vm_cnt.v_free_count + vm_cnt.v_cache_count);
+#endif
 }
 
 u_int
 kmem_page_count(void)
 {
-
+#if defined(__DragonFly__)
+	return (vm_stats.v_page_count);
+#else
 	return (vm_cnt.v_page_count);
+#endif
 }
 
 uint64_t
