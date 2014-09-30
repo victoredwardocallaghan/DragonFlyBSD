@@ -214,8 +214,7 @@ kobj_read_file(struct _buf *file, char *buf, unsigned size, unsigned off)
 void
 kobj_close_file(struct _buf *file)
 {
-
 	if (file->mounted)
-		vn_close(file->ptr, FREAD, curthread->td_ucred, curthread);
+		vn_close(file->ptr, FREAD, NULL);
 	kmem_free(file, sizeof(*file));
 }
