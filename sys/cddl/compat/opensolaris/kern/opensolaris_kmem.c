@@ -39,6 +39,7 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_object.h>
 #include <vm/vm_kern.h>
 #include <vm/vm_map.h>
+#include <sys/objcache.h>
 
 #ifdef KMEM_DEBUG
 #include <sys/queue.h>
@@ -195,7 +196,7 @@ kmem_used(void)
 static int
 kmem_std_constructor(void *mem, int size __unused, void *private, int flags)
 {
-	struct kmem_cache *cache = private;
+	kmem_cache_t * cache = private;
 
 	return (cache->kc_constructor(mem, cache->kc_private, flags));
 }
@@ -203,7 +204,7 @@ kmem_std_constructor(void *mem, int size __unused, void *private, int flags)
 static void
 kmem_std_destructor(void *mem, int size __unused, void *private)
 {
-	struct kmem_cache *cache = private;
+	kmem_cache_t * cache = private;
 
 	cache->kc_destructor(mem, cache->kc_private);
 }
@@ -223,10 +224,11 @@ kmem_cache_create(char *name, size_t bufsize, size_t align,
 	cache->kc_destructor = destructor;
 	cache->kc_private = private;
 #if defined(_KERNEL) && !defined(KMEM_DEBUG)
-	cache->kc_zone = uma_zcreate(cache->kc_name, bufsize,
+	struct objcache_malloc_args kmem_malloc_args = { bufsize, cflags };
+	cache->kc_zone = objcache_create(cache->kc_name, 0, 0,
 	    constructor != NULL ? kmem_std_constructor : NULL,
 	    destructor != NULL ? kmem_std_destructor : NULL,
-	    NULL, NULL, align > 0 ? align - 1 : 0, cflags);
+	    NULL, NULL, &kmem_malloc_args);
 #else
 	cache->kc_size = bufsize;
 #endif
@@ -238,7 +240,7 @@ void
 kmem_cache_destroy(kmem_cache_t *cache)
 {
 #if defined(_KERNEL) && !defined(KMEM_DEBUG)
-	uma_zdestroy(cache->kc_zone);
+	objcache_destroy(cache->kc_zone);
 #endif
 	kmem_free(cache, sizeof(*cache));
 }
@@ -247,7 +249,7 @@ void *
 kmem_cache_alloc(kmem_cache_t *cache, int flags)
 {
 #if defined(_KERNEL) && !defined(KMEM_DEBUG)
-	return (uma_zalloc_arg(cache->kc_zone, cache, flags));
+	return (objcache_get(cache->kc_zone, flags));
 #else
 	void *p;
 
@@ -262,7 +264,7 @@ void
 kmem_cache_free(kmem_cache_t *cache, void *buf)
 {
 #if defined(_KERNEL) && !defined(KMEM_DEBUG)
-	uma_zfree_arg(cache->kc_zone, buf, cache);
+	objcache_put(cache->kc_zone, buf);
 #else
 	if (cache->kc_destructor != NULL)
 		kmem_std_destructor(buf, cache->kc_size, cache);

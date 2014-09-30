@@ -32,9 +32,7 @@
 #include <sys/param.h>
 #include <sys/proc.h>
 #include <sys/malloc.h>
-//#include <sys/vmem.h>
-
-//#include <vm/uma.h>
+#include <sys/objcache.h>
 #include <vm/vm.h>
 #include <vm/vm_extern.h>
 
@@ -54,7 +52,7 @@ MALLOC_DECLARE(M_SOLARIS);
 typedef struct kmem_cache {
 	char		kc_name[32];
 #if defined(_KERNEL) && !defined(KMEM_DEBUG)
-	uma_zone_t	kc_zone;
+	struct objcache *	kc_zone;
 #else
 	size_t		kc_size;
 #endif
