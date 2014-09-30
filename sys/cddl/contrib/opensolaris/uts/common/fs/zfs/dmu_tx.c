@@ -1088,8 +1088,14 @@ dmu_tx_delay(dmu_tx_t *tx, uint64_t dirty)
 		continue;
 	mutex_exit(&curthread->t_delay_lock);
 #else
+  // XXX ZFS - REVIST?
+  // See SLEEP(9) in FreeBSD, also note:
+  // sys/cddl/compat/opensolaris/sys/kcondvar.h
+  // for cv_timedwait_hires()
+#if 0
 	pause_sbt("dmu_tx_delay", wakeup * SBT_1NS,
 	    zfs_delay_resolution_ns * SBT_1NS, C_ABSOLUTE);
+#endif
 #endif
 #else
 	hrtime_t delta = wakeup - gethrtime();
