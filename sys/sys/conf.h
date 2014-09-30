@@ -239,6 +239,7 @@ int	dev_is_good(cdev_t dev);
 #define		UID_ROOT	0
 #define		UID_BIN		3
 #define		UID_UUCP	66
+#define		UID_NOBODY	65534
 
 #define		GID_WHEEL	0
 #define		GID_KMEM	2
@@ -247,6 +248,7 @@ int	dev_is_good(cdev_t dev);
 #define		GID_BIN		7
 #define		GID_GAMES	13
 #define		GID_DIALER	68
+#define		GID_NOBODY	65534
 
 #endif /* _KERNEL */
 #endif /* _KERNEL || _KERNEL_STRUCTURES */
