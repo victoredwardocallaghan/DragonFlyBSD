@@ -235,7 +235,7 @@ mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
 	TAILQ_INSERT_TAIL(&mountlist, mp, mnt_list);
 	mtx_unlock(&mountlist_mtx);
 	vfs_event_signal(NULL, VQ_MOUNT, 0);
-	if (VFS_ROOT(mp, LK_EXCLUSIVE, &mvp))
+	if (VFS_ROOT(mp, &mvp))
 		panic("mount: lost mount");
 	vput(vp);
 	vfs_unbusy(mp);

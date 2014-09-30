@@ -108,7 +108,8 @@ traverse(vnode_t **cvpp, int lktype)
 		 * The read lock must be held across the call to VFS_ROOT() to
 		 * prevent a concurrent unmount from destroying the vfs.
 		 */
-		error = VFS_ROOT(vfsp, lktype, &tvp);
+		// error = VFS_ROOT(vfsp, lktype, &tvp);
+		error = VFS_ROOT(vfsp, &tvp);
 		vfs_unbusy(vfsp);
 		if (error != 0)
 			return (error);

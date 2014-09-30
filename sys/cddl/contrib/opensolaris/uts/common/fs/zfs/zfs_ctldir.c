@@ -251,7 +251,7 @@ zfsctl_create(zfsvfs_t *zfsvfs)
 	zcp = vp->v_data;
 	zcp->zc_id = ZFSCTL_INO_ROOT;
 
-	VERIFY(VFS_ROOT(zfsvfs->z_vfs, LK_EXCLUSIVE, &rvp) == 0);
+	VERIFY(VFS_ROOT(zfsvfs->z_vfs, &rvp) == 0);
 	VERIFY(0 == sa_lookup(VTOZ(rvp)->z_sa_hdl, SA_ZPL_CRTIME(zfsvfs),
 	    &crtime, sizeof (crtime)));
 	ZFS_TIME_DECODE(&zcp->zc_cmtime, crtime);
@@ -536,7 +536,7 @@ zfsctl_root_lookup(vnode_t *dvp, char *nm, vnode_t **vpp, pathname_t *pnp,
 	ZFS_ENTER(zfsvfs);
 
 	if (strcmp(nm, "..") == 0) {
-		err = VFS_ROOT(dvp->v_vfsp, LK_EXCLUSIVE, vpp);
+		err = VFS_ROOT(dvp->v_vfsp, vpp);
 		if (err == 0)
 			VOP_UNLOCK(*vpp, 0);
 	} else {

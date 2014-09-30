@@ -1223,7 +1223,7 @@ zfs_domount(vfs_t *vfsp, char *osname)
 
 	vfs_mountedfrom(vfsp, osname);
 	/* Grab extra reference. */
-	VERIFY(VFS_ROOT(vfsp, LK_EXCLUSIVE, &vp) == 0);
+	VERIFY(VFS_ROOT(vfsp, &vp) == 0);
 	VOP_UNLOCK(vp, 0);
 
 	if (!zfsvfs->z_issnap)
