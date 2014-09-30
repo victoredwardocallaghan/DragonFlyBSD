@@ -109,7 +109,7 @@ sysctl_vfs_zfs_max_auto_ashift(SYSCTL_HANDLER_ARGS)
 	return (0);
 }
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, max_auto_ashift,
-    CTLTYPE_U64 | CTLFLAG_RW, 0, sizeof(uint64_t),
+    CTLTYPE_UQUAD | CTLFLAG_RW, 0, sizeof(uint64_t),
     sysctl_vfs_zfs_max_auto_ashift, "QU",
     "Max ashift used when optimising for logical -> physical sectors size on "
     "new top-level vdevs.");
@@ -133,7 +133,7 @@ sysctl_vfs_zfs_min_auto_ashift(SYSCTL_HANDLER_ARGS)
 	return (0);
 }
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, min_auto_ashift,
-    CTLTYPE_U64 | CTLFLAG_RW, 0, sizeof(uint64_t),
+    CTLTYPE_UQUAD | CTLFLAG_RW, 0, sizeof(uint64_t),
     sysctl_vfs_zfs_min_auto_ashift, "QU",
     "Min ashift used when creating new top-level vdevs.");
 

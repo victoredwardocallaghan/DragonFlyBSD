@@ -165,7 +165,7 @@ SYSCTL_PROC(_vfs_zfs, OID_AUTO, delay_min_dirty_percent,
 static int sysctl_zfs_delay_scale(SYSCTL_HANDLER_ARGS);
 /* No zfs_delay_scale tunable due to limit requirements */
 SYSCTL_PROC(_vfs_zfs, OID_AUTO, delay_scale,
-    CTLTYPE_U64 | CTLFLAG_RW, 0, sizeof(uint64_t),
+    CTLTYPE_UQUAD | CTLFLAG_RW, 0, sizeof(uint64_t),
     sysctl_zfs_delay_scale, "QU",
     "Controls how quickly the delay approaches infinity");
 
