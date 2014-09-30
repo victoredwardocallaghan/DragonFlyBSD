@@ -3406,7 +3406,12 @@ top:
 		    demand, prefetch, hdr->b_type != ARC_BUFC_METADATA,
 		    data, metadata, misses);
 #ifdef _KERNEL
+#if defined(__DragonFly__)
+		if (curthread->td_lwp != NULL)
+			curthread->td_lwp->lwp_ru.ru_inblock++;
+#else
 		curthread->td_ru.ru_inblock++;
+#endif
 #endif
 
 		if (vd != NULL && l2arc_ndev != 0 && !(l2arc_norw && devw)) {
@@ -3935,8 +3940,13 @@ static int
 arc_memory_throttle(uint64_t reserve, uint64_t txg)
 {
 #ifdef _KERNEL
+#if defined(__DragonFly__)
+	uint64_t available_memory =
+	    ptoa((uintmax_t)vmstats.v_free_count + vmstats.v_cache_count);
+#else
 	uint64_t available_memory =
 	    ptoa((uintmax_t)vm_cnt.v_free_count + vm_cnt.v_cache_count);
+#endif
 	static uint64_t page_load = 0;
 	static uint64_t last_txg = 0;
 
@@ -3947,9 +3957,15 @@ arc_memory_throttle(uint64_t reserve, uint64_t txg)
 #endif
 #endif	/* sun */
 
+#if defined(__DragonFly__)
+	if (vmstats.v_free_count + vmstats.v_cache_count >
+	    (uint64_t)physmem * arc_lotsfree_percent / 100)
+		return (0);
+#else
 	if (vm_cnt.v_free_count + vm_cnt.v_cache_count >
 	    (uint64_t)physmem * arc_lotsfree_percent / 100)
 		return (0);
+#endif
 
 	if (txg > last_txg) {
 		last_txg = txg;
