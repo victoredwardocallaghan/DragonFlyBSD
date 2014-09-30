@@ -173,7 +173,7 @@ gfs_get_parent_ino(vnode_t *dvp, cred_t *cr, caller_context_t *ct,
 		vattr_t va;
 
 		va.va_mask = AT_NODEID;
-		error = VOP_GETATTR(parent, &va, 0, cr, ct);
+		error = __VOP_GETATTR(parent, &va, 0, cr, ct);
 		if (error)
 			return (error);
 		*pino = va.va_nodeid;
@@ -982,7 +982,7 @@ out:
  * supply two callbacks in order to get full compatibility.
  *
  * If the directory contains static entries, an inode callback must be
- * specified.  This avoids having to create every vnode and call VOP_GETATTR()
+ * specified.  This avoids having to create every vnode and call __VOP_GETATTR()
  * when reading the directory.  This function has the following arguments:
  *
  *	ino_t gfs_inode_cb(vnode_t *vp, int index);

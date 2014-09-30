@@ -406,7 +406,7 @@ xoptattr_t	*xva_getxoptattr(xvattr_t *);	/* Get ptr to xoptattr_t */
 #endif	/* _KERNEL */
 
 /*
- * Flags to VOP_SETATTR/VOP_GETATTR.
+ * Flags to VOP_SETATTR/__VOP_GETATTR.
  */
 #define	ATTR_UTIME	0x01	/* non-default utime(2) request */
 #define	ATTR_EXEC	0x02	/* invocation from exec(2) */

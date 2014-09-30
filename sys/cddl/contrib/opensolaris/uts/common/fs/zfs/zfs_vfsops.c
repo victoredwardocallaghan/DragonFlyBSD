@@ -1664,7 +1664,7 @@ zfs_mount(vfs_t *vfsp)
 			vattr.va_mask = AT_UID;
 
 			vn_lock(mvp, LK_SHARED | LK_RETRY);
-			if (VOP_GETATTR(mvp, &vattr, cr)) {
+			if (__VOP_GETATTR(mvp, &vattr, cr)) {
 				VOP_UNLOCK(mvp, 0);
 				goto out;
 			}

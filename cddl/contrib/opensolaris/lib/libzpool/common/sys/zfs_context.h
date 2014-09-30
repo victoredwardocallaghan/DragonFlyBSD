@@ -497,7 +497,7 @@ extern int fop_getattr(vnode_t *vp, vattr_t *vap);
 
 #define	VOP_CLOSE(vp, f, c, o, cr, ct)	0
 #define	VOP_PUTPAGE(vp, of, sz, fl, cr, ct)	0
-#define	VOP_GETATTR(vp, vap, cr)  fop_getattr((vp), (vap));
+#define	__VOP_GETATTR(vp, vap, cr)  fop_getattr((vp), (vap));
 
 #define	VOP_FSYNC(vp, f, cr, ct)	fsync((vp)->v_fd)
 

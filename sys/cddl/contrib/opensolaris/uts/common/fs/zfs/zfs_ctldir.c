@@ -1299,7 +1299,7 @@ zfsctl_shares_getattr(ap)
 	}
 	if ((error = zfs_zget(zfsvfs, zfsvfs->z_shares_dir, &dzp)) == 0) {
 		vn_lock(ZTOV(dzp), LK_SHARED | LK_RETRY);
-		error = VOP_GETATTR(ZTOV(dzp), vap, cr);
+		error = __VOP_GETATTR(ZTOV(dzp), vap, cr);
 		VN_URELE(ZTOV(dzp));
 	}
 	ZFS_EXIT(zfsvfs);
@@ -1540,7 +1540,7 @@ zfsctl_snapshot_getattr(ap)
 
 	err = zfsctl_traverse_begin(&vp, LK_SHARED | LK_RETRY);
 	if (err == 0)
-		err = VOP_GETATTR(vp, ap->a_vap, ap->a_cred);
+		err = __VOP_GETATTR(vp, ap->a_vap, ap->a_cred);
 	zfsctl_traverse_end(vp, err);
 	return (err);
 }

@@ -6745,7 +6745,7 @@ vop_getextattr {
 	}
 
 	if (ap->a_size != NULL) {
-		error = VOP_GETATTR(vp, &va, ap->a_cred);
+		error = __VOP_GETATTR(vp, &va, ap->a_cred);
 		if (error == 0)
 			*ap->a_size = (size_t)va.va_size;
 	} else if (ap->a_uio != NULL)

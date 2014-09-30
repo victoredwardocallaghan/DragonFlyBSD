@@ -119,7 +119,7 @@ skip_open:
 	 */
 	vattr.va_mask = AT_SIZE;
 	vn_lock(vp, LK_SHARED | LK_RETRY);
-	error = VOP_GETATTR(vp, &vattr, kcred);
+	error = __VOP_GETATTR(vp, &vattr, kcred);
 	VOP_UNLOCK(vp, 0);
 	if (error) {
 		(void) VOP_CLOSE(vp, spa_mode(vd->vdev_spa), 1, 0, kcred, NULL);

@@ -435,7 +435,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 	 * see the changes occurring under the segmap cache.
 	 * On the other hand, the stupid character device returns zero
 	 * for its size.  So -- gag -- we open the block device to get
-	 * its size, and remember it for subsequent VOP_GETATTR().
+	 * its size, and remember it for subsequent __VOP_GETATTR().
 	 */
 	if (strncmp(path, "/dev/", 5) == 0) {
 		char *dsk;
