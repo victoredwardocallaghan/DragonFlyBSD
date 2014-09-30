@@ -65,7 +65,7 @@ write_bytes(struct diffarg *da)
 	auio.uio_td = da->da_td;
 #ifdef _KERNEL
 	if (da->da_fp->f_type == DTYPE_VNODE)
-		bwillwrite();
+		bwillwrite(aiov.iov_len); // XXX ZFS - how many bytes do we intend to write???
 	return (fo_write(da->da_fp, &auio, da->da_td->td_ucred, 0, da->da_td));
 #else
 	fprintf(stderr, "%s: returning EOPNOTSUPP\n", __func__);

@@ -84,7 +84,7 @@ dump_bytes(dmu_sendarg_t *dsp, void *buf, int len)
 	auio.uio_td = dsp->dsa_td;
 #ifdef _KERNEL
 	if (dsp->dsa_fp->f_type == DTYPE_VNODE)
-		bwillwrite();
+		bwillwrite(len); // XXX ZFS - how many bytes do we intend to write??
 	dsp->dsa_err = fo_write(dsp->dsa_fp, &auio, dsp->dsa_td->td_ucred, 0,
 	    dsp->dsa_td);
 #else
