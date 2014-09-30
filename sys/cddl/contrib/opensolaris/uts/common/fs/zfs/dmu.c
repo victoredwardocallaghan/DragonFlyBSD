@@ -438,7 +438,12 @@ dmu_buf_hold_array_by_dnode(dnode_t *dn, uint64_t offset, uint64_t length,
 			(void) dbuf_read(db, zio, dbuf_flags);
 #ifdef _KERNEL
 		else
+#if defined(__DragonFly__)
+			if (curthread->td_lwp != NULL)
+				curthread->td_lwp->lwp_ru.ru_oublock++;
+#else
 			curthread->td_ru.ru_oublock++;
+#endif
 #endif
 		dbp[i] = &db->db;
 	}
