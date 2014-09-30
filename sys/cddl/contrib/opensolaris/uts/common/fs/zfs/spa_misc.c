@@ -371,7 +371,7 @@ zfs_deadman_init()
 	 */
 	if (zfs_deadman_enabled == -1) {
 #if defined(__amd64__) || defined(__i386__)
-		zfs_deadman_enabled = (vm_guest == VM_GUEST_NO) ? 1 : 0;
+		zfs_deadman_enabled = (vmm_guest == VMM_GUEST_NONE) ? 1 : 0;
 #else
 		zfs_deadman_enabled = 0;
 #endif
