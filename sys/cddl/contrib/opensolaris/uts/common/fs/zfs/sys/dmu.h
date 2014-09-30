@@ -626,7 +626,7 @@ int dmu_write_pages(objset_t *os, uint64_t object, uint64_t offset,
     uint64_t size, struct page *pp, dmu_tx_t *tx);
 #else
 int dmu_write_pages(objset_t *os, uint64_t object, uint64_t offset,
-    uint64_t size, struct vm_page **ppa, dmu_tx_t *tx);
+    uint64_t size, vm_page_t *ppa, dmu_tx_t *tx);
 #endif
 #endif
 struct arc_buf *dmu_request_arcbuf(dmu_buf_t *handle, int size);
