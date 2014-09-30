@@ -42,6 +42,10 @@
 
 #ifdef _KERNEL
 
+// XXX ZFS - make things build hack..
+#define	PRIBIO	0
+#define	PVM	1
+
 #define	CPU		curcpu
 #define	minclsyspri	PRIBIO
 #define	maxclsyspri	PVM
