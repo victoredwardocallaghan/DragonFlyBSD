@@ -672,7 +672,7 @@ spa_add(const char *name, nvlist_t *config, const char *altroot)
 	mutex_exit(&cpu_lock);
 #else	/* !illumos */
 #ifdef _KERNEL
-	callout_init(&spa->spa_deadman_cycid, CALLOUT_MPSAFE);
+	callout_init(&spa->spa_deadman_cycid);
 #endif
 #endif
 	refcount_create(&spa->spa_refcount);
