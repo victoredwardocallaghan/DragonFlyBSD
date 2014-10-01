@@ -4165,7 +4165,7 @@ zfs_ioc_recv(zfs_cmd_t *zc)
 		return (error);
 
 	fd = zc->zc_cookie;
-	fp = getf(fd));
+	fp = getf(fd);
 	if (fp == NULL) {
 		nvlist_free(props);
 		return (SET_ERROR(EBADF));
@@ -4408,7 +4408,7 @@ zfs_ioc_send(zfs_cmd_t *zc)
 	} else {
 		file_t *fp;
 
-		fp = getf(zc->zc_cookie));
+		fp = getf(zc->zc_cookie);
 		if (fp == NULL)
 			return (SET_ERROR(EBADF));
 
@@ -5002,7 +5002,7 @@ zfs_ioc_diff(zfs_cmd_t *zc)
 	offset_t off;
 	int error;
 
-	fp = getf(zc->zc_cookie));
+	fp = getf(zc->zc_cookie);
 	if (fp == NULL)
 		return (SET_ERROR(EBADF));
 
@@ -5382,7 +5382,7 @@ zfs_ioc_send_new(const char *snapname, nvlist_t *innvl, nvlist_t *outnvl)
 
 	embedok = nvlist_exists(innvl, "embedok");
 
-	file_t *fp = getf(fd));
+	file_t *fp = getf(fd);
 	if (fp == NULL)
 		return (SET_ERROR(EBADF));
 
@@ -6312,11 +6312,17 @@ static struct modlinkage modlinkage = {
 };
 #endif	/* sun */
 
-static struct cdevsw zfs_cdevsw = {
-	.d_version =	D_VERSION,
+// ZFS XXX - D_VERSION = D_VERSION_03
+#define CDEV_MAJOR 0x17122009
+
+static struct dev_ops zfs_devops = {
+	.head = {
+		.name = ZFS_DEV_NAME,
+		.maj = CDEV_MAJOR,
+		.flags = D_DISK
+	},
 	.d_open =	zfsdev_open,
-	.d_ioctl =	zfsdev_ioctl,
-	.d_name =	ZFS_DEV_NAME
+	.d_ioctl =	zfsdev_ioctl
 };
 
 static void
@@ -6329,7 +6335,7 @@ zfs_allow_log_destroy(void *arg)
 static void
 zfsdev_init(void)
 {
-	zfsdev = make_dev(&zfs_cdevsw, 0x0, UID_ROOT, GID_OPERATOR, 0666,
+	zfsdev = make_dev(&zfs_devops, 0x0, UID_ROOT, GID_OPERATOR, 0666,
 	    ZFS_DEV_NAME);
 }
 
