@@ -52,6 +52,7 @@
 #include <sys/blkptr.h>
 #include <sys/dsl_bookmark.h>
 #include <sys/zfeature.h>
+#include <sys/uio.h>
 
 #if defined(__FreeBSD__) || defined(__DragonFly__)
 #undef dump_write
@@ -1263,7 +1264,7 @@ restore_bytes(struct restorearg *ra, void *buf, int len, off_t off, ssize_t *res
 	auio.uio_offset = off;
 	auio.uio_td = ra->td;
 #ifdef _KERNEL
-	error = fo_read(ra->fp, &auio, ra->td->td_ucred, FOF_OFFSET, ra->td);
+	error = fo_read(ra->fp, &auio, ra->td->td_ucred, FOF_OFFSET);
 #else
 	fprintf(stderr, "%s: returning EOPNOTSUPP\n", __func__);
 	error = EOPNOTSUPP;

@@ -32,8 +32,9 @@
 #include_next <sys/uio.h>
 #include <sys/debug.h>
 
-#ifndef _KERNEL
 #define	FOF_OFFSET	1	/* Use the offset in uio argument */
+
+#ifndef _KERNEL
 
 struct uio {
 	struct	iovec *uio_iov;
