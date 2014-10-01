@@ -51,7 +51,7 @@ enum symfollow { NO_FOLLOW = CNP_NOFOLLOW };
 //#include <sys/syscallsubr.h>
 #include <sys/kern_syscall.h>
 
-typedef	struct vop_vector	vnodeops_t;
+typedef	struct vop_ops	vnodeops_t;
 #define	VOP_FID		VOP_VPTOFH
 #define	vop_fid		vop_vptofh
 #define	vop_fid_args	vop_vptofh_args

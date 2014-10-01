@@ -109,9 +109,9 @@ znode_evict_error(dmu_buf_t *dbuf, void *user_ptr)
 	panic("evicting znode %p\n", user_ptr);
 }
 
-extern struct vop_vector zfs_vnodeops;
-extern struct vop_vector zfs_fifoops;
-extern struct vop_vector zfs_shareops;
+extern struct vop_ops zfs_vnodeops;
+extern struct vop_ops zfs_fifoops;
+extern struct vop_ops zfs_shareops;
 
 static int
 zfs_znode_cache_constructor(void *buf, void *arg, int kmflags)

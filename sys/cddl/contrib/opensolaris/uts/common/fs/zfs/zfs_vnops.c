@@ -7103,11 +7103,11 @@ zfs_freebsd_aclcheck(ap)
 	return (EOPNOTSUPP);
 }
 
-struct vop_vector zfs_vnodeops;
-struct vop_vector zfs_fifoops;
-struct vop_vector zfs_shareops;
+struct vop_ops zfs_vnodeops;
+struct vop_ops zfs_fifoops;
+struct vop_ops zfs_shareops;
 
-struct vop_vector zfs_vnodeops = {
+struct vop_ops zfs_vnodeops = {
 	.vop_default =		&default_vnodeops,
 	.vop_inactive =		zfs_freebsd_inactive,
 	.vop_reclaim =		zfs_freebsd_reclaim,
@@ -7150,7 +7150,7 @@ struct vop_vector zfs_vnodeops = {
 	.vop_putpages =		zfs_freebsd_putpages,
 };
 
-struct vop_vector zfs_fifoops = {
+struct vop_ops zfs_fifoops = {
 	.vop_default =		&fifo_specops,
 	.vop_fsync =		zfs_freebsd_fsync,
 	.vop_access =		zfs_freebsd_access,
@@ -7170,7 +7170,7 @@ struct vop_vector zfs_fifoops = {
 /*
  * special share hidden files vnode operations template
  */
-struct vop_vector zfs_shareops = {
+struct vop_ops zfs_shareops = {
 	.vop_default =		&default_vnodeops,
 	.vop_access =		zfs_freebsd_access,
 	.vop_inactive =		zfs_freebsd_inactive,

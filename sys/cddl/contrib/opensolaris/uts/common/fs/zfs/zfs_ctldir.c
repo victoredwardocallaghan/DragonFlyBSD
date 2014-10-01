@@ -124,11 +124,11 @@ static const fs_operation_def_t zfsctl_tops_snapdir[];
 static const fs_operation_def_t zfsctl_tops_snapshot[];
 static const fs_operation_def_t zfsctl_tops_shares[];
 #else	/* !sun */
-static struct vop_vector zfsctl_ops_root;
-static struct vop_vector zfsctl_ops_snapdir;
-static struct vop_vector zfsctl_ops_snapshot;
-static struct vop_vector zfsctl_ops_shares;
-static struct vop_vector zfsctl_ops_shares_dir;
+static struct vop_ops zfsctl_ops_root;
+static struct vop_ops zfsctl_ops_snapdir;
+static struct vop_ops zfsctl_ops_snapshot;
+static struct vop_ops zfsctl_ops_shares;
+static struct vop_ops zfsctl_ops_shares_dir;
 #endif	/* !sun */
 
 static vnode_t *zfsctl_mknode_snapdir(vnode_t *);
@@ -616,7 +616,7 @@ zfsctl_freebsd_root_lookup(ap)
 	return (err);
 }
 
-static struct vop_vector zfsctl_ops_root = {
+static struct vop_ops zfsctl_ops_root = {
 	.vop_default =	&default_vnodeops,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
@@ -1396,7 +1396,7 @@ static const fs_operation_def_t zfsctl_tops_shares[] = {
 	{ NULL }
 };
 #else	/* !sun */
-static struct vop_vector zfsctl_ops_snapdir = {
+static struct vop_ops zfsctl_ops_snapdir = {
 	.vop_default =	&default_vnodeops,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
@@ -1411,7 +1411,7 @@ static struct vop_vector zfsctl_ops_snapdir = {
 	.vop_fid =	zfsctl_common_fid,
 };
 
-static struct vop_vector zfsctl_ops_shares = {
+static struct vop_ops zfsctl_ops_shares = {
 	.vop_default =	&default_vnodeops,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
@@ -1638,7 +1638,7 @@ zfsctl_snapshot_vptocnp(struct vop_vptocnp_args *ap)
  * These VP's should never see the light of day.  They should always
  * be covered.
  */
-static struct vop_vector zfsctl_ops_snapshot = {
+static struct vop_ops zfsctl_ops_snapshot = {
 	.vop_default =	&default_vnodeops,
 	.vop_inactive =	zfsctl_snapshot_inactive,
 	.vop_lookup =	zfsctl_snapshot_lookup,
