@@ -41,6 +41,10 @@ MALLOC_DECLARE(M_SOLARIS);
 #define	POINTER_IS_VALID(p)	(!((uintptr_t)(p) & 0x3))
 #define	POINTER_INVALIDATE(pp)	(*(pp) = (void *)((uintptr_t)(*(pp)) | 0x1))
 
+// XXX ZFS - stub out values??
+#define M_NODUMP 0
+#define UMA_ZONE_NODUMP 0
+
 #define	KM_SLEEP		M_WAITOK
 #define	KM_PUSHPAGE		M_WAITOK
 #define	KM_NOSLEEP		M_NOWAIT
