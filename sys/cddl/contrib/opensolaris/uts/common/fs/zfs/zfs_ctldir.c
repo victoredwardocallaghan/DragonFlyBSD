@@ -262,7 +262,7 @@ zfsctl_create(zfsvfs_t *zfsvfs)
 	 * the sake of the GFS interfaces.  Undo the flag manipulation it did
 	 * for us.
 	 */
-	vp->v_vflag &= ~VV_ROOT;
+	vp->v_flag &= ~VROOT;
 
 	zfsvfs->z_ctldir = vp;
 

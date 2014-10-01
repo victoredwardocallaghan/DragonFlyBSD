@@ -1815,7 +1815,7 @@ zfs_root(vfs_t *vfsp, int flags, vnode_t **vpp)
 	if (error == 0) {
 		error = vn_lock(*vpp, flags);
 		if (error == 0)
-			(*vpp)->v_vflag |= VV_ROOT;
+			(*vpp)->v_flag |= VROOT;
 	}
 	if (error != 0)
 		*vpp = NULL;
