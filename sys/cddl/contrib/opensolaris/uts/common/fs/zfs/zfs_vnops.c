@@ -2041,7 +2041,7 @@ top:
 		mutex_exit(&zp->z_lock);
 		zfs_unlinked_add(zp, tx);
 #ifdef __FreeBSD__ || defined(__DragonFly__)
-		vp->v_vflag |= VV_NOSYNC;
+//		vp->v_vflag |= VV_NOSYNC;
 #endif
 	}
 

@@ -1011,10 +1011,12 @@ zfs_mknode(znode_t *dzp, vattr_t *vap, dmu_tx_t *tx, cred_t *cr,
 		vnode_t *vp;
 
 		vp = ZTOV(*zpp);
+#if 0
 		vp->v_vflag |= VV_FORCEINSMQ;
 		err = insmntque(vp, zfsvfs->z_vfs);
 		vp->v_vflag &= ~VV_FORCEINSMQ;
 		KASSERT(err == 0, ("insmntque() failed: error %d", err));
+#endif
 	}
 	ZFS_OBJ_HOLD_EXIT(zfsvfs, obj);
 }
