@@ -66,6 +66,7 @@ kobj_zalloc(size_t size, int flag)
 static void *
 kobj_open_file_vnode(const char *file)
 {
+#if 0
 	struct thread *td = curthread;
 	struct filedesc *fd;
 	struct nameidata nd;
@@ -92,6 +93,8 @@ kobj_open_file_vnode(const char *file)
 	/* We just unlock so we hold a reference. */
 	VOP_UNLOCK(nd.ni_vp, 0);
 	return (nd.ni_vp);
+#endif
+	KASSERT(0, ("no implmentation in %s", __func__));
 }
 
 static void *
