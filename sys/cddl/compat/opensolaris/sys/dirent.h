@@ -38,7 +38,7 @@ typedef ino_t		ino64_t;
 
 #define	dirent64	dirent
 
-#define	d_ino	d_fileno
+//#define	d_ino	d_fileno
 
 #define	DIRENT64_RECLEN(len)	((sizeof(struct dirent) -		\
 				 sizeof(((struct dirent *)NULL)->d_name) + \
