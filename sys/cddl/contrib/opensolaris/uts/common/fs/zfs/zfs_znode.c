@@ -623,9 +623,12 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
 
 	zp = kmem_cache_alloc(znode_cache, KM_SLEEP);
 
+#if 0
 	KASSERT(curthread->td_vp_reserv > 0,
 	    ("zfs_znode_alloc: getnewvnode without any vnodes reserved"));
 	error = getnewvnode("zfs", zfsvfs->z_parent->z_vfs, &zfs_vnodeops, &vp);
+#endif
+	error = 0; // REMOVE
 	if (error != 0) {
 		kmem_cache_free(znode_cache, zp);
 		return (NULL);
@@ -863,9 +866,12 @@ zfs_mknode(znode_t *dzp, vattr_t *vap, dmu_tx_t *tx, cred_t *cr,
 		size = links = 0;
 	}
 
+// XXX ZFS
+#if 0
 	if (vap->va_type == VBLK || vap->va_type == VCHR) {
 		rdev = zfs_expldev(vap->va_rdev);
 	}
+#endif
 
 	parent = dzp->z_id;
 	mode = acl_ids->z_mode;
@@ -1230,7 +1236,8 @@ again:
 
 		err = insmntque(vp, zfsvfs->z_vfs);
 		if (err == 0) {
-			vp->v_hash = obj_num;
+      // XXX ZFS
+			//vp->v_hash = obj_num;
 			VOP_UNLOCK(vp, 0);
 		} else {
 			zp->z_vnode = NULL;
