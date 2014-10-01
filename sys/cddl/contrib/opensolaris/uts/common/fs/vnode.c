@@ -93,12 +93,12 @@ vn_rele_async(vnode_t *vp, taskq_t *taskq)
 {
 	VERIFY(vp->v_count > 0);
 	VI_LOCK(vp);
-	if (vp->v_count == 1 && !(vp->v_iflag & VI_DOINGINACT)) {
+	if (vp->v_count == 1 && !(vp->v_flag & VINACTIVE)) {
 		VI_UNLOCK(vp);
 		VERIFY(taskq_dispatch((taskq_t *)taskq,
 		    (task_func_t *)vn_rele_inactive, vp, TQ_SLEEP) != 0);
 		return;
 	}
-	vp->v_usecount--;
+	vp->v_opencount--;
 	vdropl(vp);
 }

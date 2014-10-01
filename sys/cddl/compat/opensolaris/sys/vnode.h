@@ -59,7 +59,7 @@ typedef	struct vop_vector	vnodeops_t;
 
 #define	IS_XATTRDIR(dvp)	(0)
 
-#define	v_count	v_usecount
+#define	v_count	v_opencount
 
 #define	V_APPEND	VAPPEND
 
@@ -92,6 +92,9 @@ vn_is_readonly(vnode_t *vp)
 #define	VN_HOLD(v)	vref(v)
 #define	VN_RELE(v)	vrele(v)
 #define	VN_URELE(v)	vput(v)
+
+#define	VI_LOCK(v)	vget(v, LK_EXCLUSIVE)
+#define	VI_UNLOCK(v)	vput(v)
 
 #define	VOP_REALVP(vp, vpp, ct)	(*(vpp) = (vp), 0)
 

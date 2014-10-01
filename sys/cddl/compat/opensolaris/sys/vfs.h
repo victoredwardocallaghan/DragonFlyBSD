@@ -47,7 +47,7 @@ typedef	struct mount	vfs_t;
 #define	vfs_bsize	mnt_stat.f_bsize
 #define	vfs_resource	mnt_stat.f_mntfromname
 
-#define	v_flag		v_vflag
+//#define	v_flag		v_vflag
 #define	v_vfsp		v_mount
 
 #define	VFS_RDONLY	MNT_RDONLY

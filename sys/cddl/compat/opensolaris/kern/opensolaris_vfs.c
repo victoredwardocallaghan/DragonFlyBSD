@@ -147,16 +147,16 @@ mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
 		return (ENOTDIR);
 	/*
 	 * We need vnode lock to protect v_mountedhere and vnode interlock
-	 * to protect v_iflag.
+	 * to protect v_flag.
 	 */
 	vn_lock(vp, LK_SHARED | LK_RETRY);
 	VI_LOCK(vp);
-	if ((vp->v_iflag & VI_MOUNT) != 0 || vp->v_mountedhere != NULL) {
+	if ((vp->v_flag & VI_MOUNT) != 0 || vp->v_mountedhere != NULL) {
 		VI_UNLOCK(vp);
 		VOP_UNLOCK(vp, 0);
 		return (EBUSY);
 	}
-	vp->v_iflag |= VI_MOUNT;
+	vp->v_flag |= VI_MOUNT;
 	VI_UNLOCK(vp);
 	VOP_UNLOCK(vp, 0);
 
@@ -201,7 +201,7 @@ mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
 
 	if (error != 0) {
 		VI_LOCK(vp);
-		vp->v_iflag &= ~VI_MOUNT;
+		vp->v_flag &= ~VI_MOUNT;
 		VI_UNLOCK(vp);
 		vrele(vp);
 		vfs_unbusy(mp);
@@ -226,7 +226,7 @@ mount_snapshot(kthread_t *td, vnode_t **vpp, const char *fstype, char *fspath,
 	cache_purge(vp);
 #endif
 	VI_LOCK(vp);
-	vp->v_iflag &= ~VI_MOUNT;
+	vp->v_flag &= ~VI_MOUNT;
 	VI_UNLOCK(vp);
 
 	vp->v_mountedhere = mp;

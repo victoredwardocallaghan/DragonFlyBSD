@@ -1186,7 +1186,7 @@ again:
 		if (err == 0) {
 			locked = VOP_ISLOCKED(vp);
 			VI_LOCK(vp);
-			if ((vp->v_iflag & VI_DOOMED) != 0 &&
+			if ((vp->v_flag & VAGE1) != 0 &&
 			    locked != LK_EXCLUSIVE) {
 				/*
 				 * The vnode is doomed and this thread doesn't
