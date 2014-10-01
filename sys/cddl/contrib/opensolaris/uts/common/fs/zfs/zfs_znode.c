@@ -598,7 +598,7 @@ zfs_vnode_forget(vnode_t *vp)
 
 	/* copied from insmntque_stddtr */
 	vp->v_data = NULL;
-	vp->v_op = &dead_vnodeops;
+	vp->v_ops = &dead_vnodeops;
 	vgone(vp);
 	vput(vp);
 }
@@ -705,12 +705,12 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
 	case VSOCK:
 	case VDOOR:
 #endif	/* sun */
-		vp->v_op = &zfs_fifoops;
+		vp->v_ops = &zfs_fifoops;
 		break;
 	case VREG:
 		if (parent == zfsvfs->z_shares_dir) {
 			ASSERT(zp->z_uid == 0 && zp->z_gid == 0);
-			vp->v_op = &zfs_shareops;
+			vp->v_ops = &zfs_shareops;
 		}
 		break;
 #ifdef sun
