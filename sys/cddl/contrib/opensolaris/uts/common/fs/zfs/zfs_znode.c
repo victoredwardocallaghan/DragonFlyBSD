@@ -595,10 +595,9 @@ zfs_znode_dmu_fini(znode_t *zp)
 static void
 zfs_vnode_forget(vnode_t *vp)
 {
-
 	/* copied from insmntque_stddtr */
 	vp->v_data = NULL;
-	vp->v_ops = &dead_vnodeops;
+	vp->v_ops = &dead_vnode_vops;
 	vgone(vp);
 	vput(vp);
 }
