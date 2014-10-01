@@ -67,10 +67,11 @@ struct dirent {
 #else
 	ino_t		d_fileno;	/* file number of entry */
 #endif
+	uint16_t	d_reclen;	/* length of this record */
 	uint16_t	d_namlen;	/* strlen(d_name) */
 	uint8_t		d_type;		/* file type, see blow */
 	uint8_t		d_unused1;	/* padding, reserved */
-	uint32_t	d_unused2;	/* reserved */
+	uint16_t	d_unused2;	/* reserved */
 	char		d_name[255 + 1];
 					/* name, NUL-terminated */
 };
