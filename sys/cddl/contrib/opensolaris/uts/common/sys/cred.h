@@ -45,7 +45,7 @@ extern "C" {
  * <sys/cred_impl.h>.
  */
 
-typedef struct cred cred_t;
+typedef struct ucred cred_t;
 
 #ifdef _KERNEL
 
