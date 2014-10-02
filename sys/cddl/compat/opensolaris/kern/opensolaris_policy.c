@@ -75,13 +75,15 @@ secpolicy_fs_unmount(cred_t *cr, struct mount *vfsp __unused)
 int
 secpolicy_fs_owner(struct mount *mp, cred_t *cr)
 {
-
+// XXX ZFS - struct mount does not carry 'struct ucred' as a member..
+#if 0
 	if (zfs_super_owner) {
 		if (cr->cr_uid == mp->mnt_cred->cr_uid &&
 		    cr->cr_prison == mp->mnt_cred->cr_prison) {
 			return (0);
 		}
 	}
+#endif
 	return (EPERM);
 }
 
@@ -398,7 +400,8 @@ secpolicy_vnode_chown(vnode_t *vp, cred_t *cr, uid_t owner)
 void
 secpolicy_fs_mount_clearopts(cred_t *cr, struct mount *vfsp)
 {
-
+  // XXX ZFS - stubout
+#if 0
 	if (priv_check_cred(cr, PRIV_VFS_MOUNT_NONUSER, 0) != 0) {
 		MNT_ILOCK(vfsp);
 		vfsp->vfs_flag |= VFS_NOSETUID | MNT_USER;
@@ -406,6 +409,7 @@ secpolicy_fs_mount_clearopts(cred_t *cr, struct mount *vfsp)
 		vfs_setmntopt(vfsp, MNTOPT_NOSETUID, NULL, 0);
 		MNT_IUNLOCK(vfsp);
 	}
+#endif
 }
 
 /*
