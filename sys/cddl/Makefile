@@ -75,7 +75,7 @@ SRCS+=	sha2.c # sha256c.c
 .PATH:	${SUNW}/uts/common/fs/zfs
 ZFS_SRCS=	${ZFS_OBJS:C/.o$/.c/}
 SRCS+=	${ZFS_SRCS}
-SRCS+=	vdev_geom.c
+#SRCS+=	vdev_geom.c
 SRCS+=	trim_map.c
 
 # Use FreeBSD's namecache.
