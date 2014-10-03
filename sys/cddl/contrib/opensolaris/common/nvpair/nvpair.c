@@ -3254,9 +3254,12 @@ nvs_xdr_nvpair(nvstream_t *nvs, nvpair_t *nvp, size_t *size)
 		if (*size == 0)
 			return (0);
 
+// XXX ZFS - stub out until build fixed???
+#if 0
 		/* sanity check the size parameter */
 		if (!xdr_control(xdr, XDR_GET_BYTES_AVAIL, &bytesrec))
 			return (EFAULT);
+#endif
 
 		if (*size > NVS_XDR_MAX_LEN(bytesrec.xc_num_avail))
 			return (EFAULT);
