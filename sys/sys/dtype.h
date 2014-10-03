@@ -107,7 +107,7 @@ static const char *dktypenames[] = {
 #define FS_HAMMER2	23
 #define FS_UDF		24
 #define FS_EFS		26
-#define FS_ZFS		27
+#define FS_ZFS		27		/* Sun's ZFS */
 
 #ifdef	DKTYPENAMES
 
@@ -171,7 +171,7 @@ static const char *fstype_to_vfsname[] = {
 	"udf",			/* 24	*/
 	NULL,			/* 25	*/
 	NULL,			/* 26	*/
-	NULL,			/* 27	*/
+	"zfs",			/* 27	*/
 	NULL
 };
 
