@@ -129,7 +129,7 @@ kmem_size_init(void *unused __unused)
 	if (kmem_size_val > vm_kmem_size)
 		kmem_size_val = vm_kmem_size;
 }
-SYSINIT(kmem_size_init, SI_SUB_KMEM, SI_ORDER_ANY, kmem_size_init, NULL);
+SYSINIT(kmem_size_init, SI_BOOT1_KMALLOC, SI_ORDER_ANY, kmem_size_init, NULL);
 
 /*
  * The return values from kmem_free_* are only valid once the pagedaemon
@@ -331,5 +331,5 @@ kmem_show(void *dummy __unused)
 	mtx_unlock(&kmem_items_mtx);
 }
 
-SYSUNINIT(sol_kmem, SI_SUB_CPU, SI_ORDER_FIRST, kmem_show, NULL);
+SYSUNINIT(sol_kmem, SI_BOOT2_FINISH_CPU, SI_ORDER_FIRST, kmem_show, NULL);
 #endif	/* KMEM_DEBUG */
