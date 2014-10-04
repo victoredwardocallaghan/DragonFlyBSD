@@ -617,7 +617,7 @@ zfsctl_freebsd_root_lookup(ap)
 }
 
 static struct vop_ops zfsctl_ops_root = {
-	.vop_default =	&default_vnodeops,
+	.vop_default =	&vop_defaultop,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
 	.vop_ioctl =	VOP_EINVAL,
@@ -1397,7 +1397,7 @@ static const fs_operation_def_t zfsctl_tops_shares[] = {
 };
 #else	/* !sun */
 static struct vop_ops zfsctl_ops_snapdir = {
-	.vop_default =	&default_vnodeops,
+	.vop_default =	&vop_defaultop,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
 	.vop_ioctl =	VOP_EINVAL,
@@ -1412,7 +1412,7 @@ static struct vop_ops zfsctl_ops_snapdir = {
 };
 
 static struct vop_ops zfsctl_ops_shares = {
-	.vop_default =	&default_vnodeops,
+	.vop_default =	&vop_defaultop,
 	.vop_open =	zfsctl_common_open,
 	.vop_close =	zfsctl_common_close,
 	.vop_ioctl =	VOP_EINVAL,
@@ -1639,7 +1639,7 @@ zfsctl_snapshot_vptocnp(struct vop_vptocnp_args *ap)
  * be covered.
  */
 static struct vop_ops zfsctl_ops_snapshot = {
-	.vop_default =	&default_vnodeops,
+	.vop_default =	&vop_defaultop,
 	.vop_inactive =	zfsctl_snapshot_inactive,
 	.vop_lookup =	zfsctl_snapshot_lookup,
 	.vop_reclaim =	zfsctl_common_reclaim,
