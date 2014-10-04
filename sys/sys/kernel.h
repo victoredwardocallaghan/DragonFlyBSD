@@ -196,6 +196,11 @@ enum sysinit_sub_id {
 	SI_SUB_KICK_SCHEDULER	= 0xa000000,	/* start the timeout events*/
 	SI_SUB_INT_CONFIG_HOOKS	= 0xa800000,	/* Interrupts enabled config */
 
+	SI_SUB_OPENSOLARIS	= 0x2490000,	/* OpenSolaris compatibility */
+	SI_SUB_DTRACE		= 0x3020000,	/* DTrace subsystem */
+	SI_SUB_DTRACE_PROVIDER	= 0x3048000,	/* DTrace providers */
+	SI_SUB_DTRACE_ANON	= 0x308C000,	/* DTrace anon enabling */
+
 	/*
 	 * Root filesystem setup, finish up with the major system
 	 * demons.
