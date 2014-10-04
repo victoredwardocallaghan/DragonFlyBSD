@@ -6629,7 +6629,7 @@ zfs_freebsd_fifo_pathconf(ap)
 	case _PC_MAC_PRESENT:
 		return (zfs_freebsd_pathconf(ap));
 	default:
-		return (fifo_specops.vop_pathconf(ap));
+		return (fifo_vnoperate.vop_pathconf(ap));
 	}
 }
 
@@ -7107,8 +7107,10 @@ struct vop_ops zfs_vnodeops;
 struct vop_ops zfs_fifoops;
 struct vop_ops zfs_shareops;
 
+// XXX ZFS - stub out VOPs for the moment..
+#if 0
 struct vop_ops zfs_vnodeops = {
-	.vop_default =		&default_vnodeops,
+	.vop_default =		&vop_defaultop,
 	.vop_inactive =		zfs_freebsd_inactive,
 	.vop_reclaim =		zfs_freebsd_reclaim,
 	.vop_access =		zfs_freebsd_access,
@@ -7151,7 +7153,7 @@ struct vop_ops zfs_vnodeops = {
 };
 
 struct vop_ops zfs_fifoops = {
-	.vop_default =		&fifo_specops,
+	.vop_default =		&fifo_vnoperate,
 	.vop_fsync =		zfs_freebsd_fsync,
 	.vop_access =		zfs_freebsd_access,
 	.vop_getattr =		zfs_freebsd_getattr,
@@ -7171,10 +7173,87 @@ struct vop_ops zfs_fifoops = {
  * special share hidden files vnode operations template
  */
 struct vop_ops zfs_shareops = {
-	.vop_default =		&default_vnodeops,
+	.vop_default =		&vop_defaultop,
 	.vop_access =		zfs_freebsd_access,
 	.vop_inactive =		zfs_freebsd_inactive,
 	.vop_reclaim =		zfs_freebsd_reclaim,
 	.vop_fid =		zfs_freebsd_fid,
 	.vop_pathconf =		zfs_freebsd_pathconf,
+};
+#endif
+
+
+// XXX ZFS - stub in 'special' VOPs for the moment..
+#define VOP_STUB		((void*)(uintptr_t)zfs_dragonflybsd_stub)
+int zfs_dragonflybsd_stub(struct vop_generic_args *ap)
+{
+	panic("filesystem tripped a bad VOP: vop_panic[%s]", ap->a_desc->sd_name);
+}
+
+struct vop_ops zfs_vnodeops = {
+	.vop_default =		&vop_defaultop,
+	.vop_inactive =		VOP_STUB,
+	.vop_reclaim =		VOP_STUB,
+	.vop_access =		VOP_STUB,
+	.vop_lookup =		VOP_STUB,
+	.vop_cachedlookup =	VOP_STUB,
+	.vop_getattr =		VOP_STUB,
+	.vop_setattr =		VOP_STUB,
+	.vop_create =		VOP_STUB,
+	.vop_mknod =		VOP_STUB,
+	.vop_mkdir =		VOP_STUB,
+	.vop_readdir =		VOP_STUB,
+	.vop_fsync =		VOP_STUB,
+	.vop_open =		VOP_STUB,
+	.vop_close =		VOP_STUB,
+	.vop_rmdir =		VOP_STUB,
+	.vop_ioctl =		VOP_STUB,
+	.vop_link =		VOP_STUB,
+	.vop_symlink =		VOP_STUB,
+	.vop_readlink =		VOP_STUB,
+	.vop_read =		VOP_STUB,
+	.vop_write =		VOP_STUB,
+	.vop_remove =		VOP_STUB,
+	.vop_rename =		VOP_STUB,
+	.vop_pathconf =		VOP_STUB,
+	.vop_bmap =		VOP_STUB,
+	.vop_fid =		VOP_STUB,
+	.vop_getextattr =	VOP_STUB,
+	.vop_deleteextattr =	VOP_STUB,
+	.vop_setextattr =	VOP_STUB,
+	.vop_listextattr =	VOP_STUB,
+	.vop_getacl =		VOP_STUB,
+	.vop_setacl =		VOP_STUB,
+	.vop_aclcheck =		VOP_STUB,
+	.vop_getpages =		VOP_STUB,
+	.vop_putpages =		VOP_STUB,
+};
+
+struct vop_ops zfs_fifoops = {
+	.vop_default =		&fifo_vnoperate,
+	.vop_fsync =		VOP_STUB,
+	.vop_access =		VOP_STUB,
+	.vop_getattr =		VOP_STUB,
+	.vop_inactive =		VOP_STUB,
+	.vop_read =		VOP_STUB,
+	.vop_reclaim =		VOP_STUB,
+	.vop_setattr =		VOP_STUB,
+	.vop_write =		VOP_STUB,
+	.vop_pathconf = 	VOP_STUB,
+	.vop_fid =		VOP_STUB,
+	.vop_getacl =		VOP_STUB,
+	.vop_setacl =		VOP_STUB,
+	.vop_aclcheck =		VOP_STUB,
+};
+
+/*
+ * special share hidden files vnode operations template
+ */
+struct vop_ops zfs_shareops = {
+	.vop_default =		&vop_defaultop,
+	.vop_access =		VOP_STUB,
+	.vop_inactive =		VOP_STUB,
+	.vop_reclaim =		VOP_STUB,
+	.vop_fid =		VOP_STUB,
+	.vop_pathconf =		VOP_STUB,
 };
