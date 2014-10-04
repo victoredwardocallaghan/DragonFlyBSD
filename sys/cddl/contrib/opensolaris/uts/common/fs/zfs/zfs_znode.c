@@ -623,18 +623,20 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
 
 	zp = kmem_cache_alloc(znode_cache, KM_SLEEP);
 
-#if 0
 	KASSERT(curthread->td_vp_reserv > 0,
 	    ("zfs_znode_alloc: getnewvnode without any vnodes reserved"));
-	error = getnewvnode("zfs", zfsvfs->z_parent->z_vfs, &zfs_vnodeops, &vp);
-#endif
-	error = 0; // REMOVE
+	error = getnewvnode(VT_ZFS, zfsvfs->z_parent->z_vfs, &vp, 0, 0);
 	if (error != 0) {
 		kmem_cache_free(znode_cache, zp);
 		return (NULL);
 	}
 	zp->z_vnode = vp;
 	vp->v_data = zp;
+
+	vfs_getnewfsid(mp);
+	vfs_add_vnodeops(mp, &zfs_vnodeops, &mp->mnt_vn_norm_ops);
+	vfs_add_vnodeops(mp, &zfs_shareops, &mp->mnt_vn_spec_ops);
+	vfs_add_vnodeops(mp, &zfs_fifoops, &mp->mnt_vn_fifo_ops);
 
 	ASSERT(zp->z_dirlocks == NULL);
 	ASSERT(!POINTER_IS_VALID(zp->z_zfsvfs));
