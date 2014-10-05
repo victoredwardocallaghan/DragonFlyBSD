@@ -588,6 +588,30 @@ mountlist_exists(struct mount *mp)
 }
 
 /*
+ * mountlist_find_resource (MP SAFE)
+ *
+ * Search the vfs list for a specified resource.  Returns a pointer to it
+ * or NULL if no suitable entry is found. The caller of this routine
+ * is responsible for releasing the returned vfs pointer.
+ */
+struct mount *
+mountlist_find_resource(const char *resource)
+{
+	struct mount *vfsp;
+
+	lwkt_gettoken(&mountlist_token);
+	TAILQ_FOREACH(vfsp, &mountlist, mnt_list) {
+		if (strcmp(refstr_value(vfsp->mnt_stat.f_mntfromname), resource) == 0) {
+			VFS_HOLD(vfsp);
+			break;
+		}
+	}
+	lwkt_reltoken(&mountlist_token);
+
+	return (vfsp);
+}
+
+/*
  * mountlist_scan (MP SAFE)
  *
  * Safely scan the mount points on the mount list.  Unless otherwise 
