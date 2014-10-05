@@ -6752,7 +6752,7 @@ vop_getextattr {
 		error = VOP_READ(vp, ap->a_uio, IO_UNIT, ap->a_cred);
 
 	VOP_UNLOCK(vp, 0);
-	vn_close(vp, flags, ap->a_cred, td);
+	vn_close(vp, flags, ap->a_cred);
 	ZFS_EXIT(zfsvfs);
 
 	return (error);
@@ -6886,7 +6886,7 @@ vop_setextattr {
 		VOP_WRITE(vp, ap->a_uio, IO_UNIT, ap->a_cred);
 
 	VOP_UNLOCK(vp, 0);
-	vn_close(vp, flags, ap->a_cred, td);
+	vn_close(vp, flags, ap->a_cred);
 	ZFS_EXIT(zfsvfs);
 
 	return (error);

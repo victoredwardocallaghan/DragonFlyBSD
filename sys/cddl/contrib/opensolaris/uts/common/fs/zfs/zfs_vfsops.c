@@ -146,6 +146,8 @@ zfs_sync(vfs_t *vfsp, int waitfor)
 		ZFS_ENTER(zfsvfs);
 		dp = dmu_objset_pool(zfsvfs->z_os);
 
+    // XXX ZFS - stub out for now..
+#if 0
 		/*
 		 * If the system is shutting down, then skip any
 		 * filesystems which may exist on a suspended pool.
@@ -154,6 +156,7 @@ zfs_sync(vfs_t *vfsp, int waitfor)
 			ZFS_EXIT(zfsvfs);
 			return (0);
 		}
+#endif
 
 		if (zfsvfs->z_log != NULL)
 			zil_commit(zfsvfs->z_log, 0);
@@ -1170,9 +1173,7 @@ zfs_domount(vfs_t *vfsp, char *osname)
 
 	vfsp->vfs_data = zfsvfs;
 	vfsp->mnt_flag |= MNT_LOCAL;
-	vfsp->mnt_kern_flag |= MNTK_LOOKUP_SHARED;
-	vfsp->mnt_kern_flag |= MNTK_SHARED_WRITES;
-	vfsp->mnt_kern_flag |= MNTK_EXTENDED_SHARED;
+	vfsp->mnt_kern_flag |= MNTK_ALL_MPSAFE;
 
 	/*
 	 * The fsid is 64 bits, composed of an 8-bit fs type, which
@@ -1625,11 +1626,14 @@ zfs_mount(vfs_t *vfsp)
 	 */
 	if ((uap->flags & MS_DATA) && uap->datalen > 0)
 #else
+    // XXX ZFS - stub out for now..
+#if 0
 	if (!prison_allow(td->td_ucred, PR_ALLOW_MOUNT_ZFS))
 		return (SET_ERROR(EPERM));
 
 	if (vfs_getopt(vfsp->mnt_optnew, "from", (void **)&osname, NULL))
 		return (SET_ERROR(EINVAL));
+#endif
 #endif	/* ! illumos */
 
 	/*
@@ -1669,7 +1673,7 @@ zfs_mount(vfs_t *vfsp)
 			}
 
 			if (secpolicy_vnode_owner(mvp, cr, vattr.va_uid) != 0 &&
-			    VOP_ACCESS(mvp, VWRITE, cr, td) != 0) {
+			    VOP_ACCESS(mvp, VWRITE, cr) != 0) {
 				VOP_UNLOCK(mvp, 0);
 				goto out;
 			}
@@ -1697,7 +1701,10 @@ zfs_mount(vfs_t *vfsp)
 		goto out;
 #endif
 
+  // XXX ZFS - stub out for now, missing flag in sys/mount.h
+#if 0
 	vfsp->vfs_flag |= MNT_NFS4ACLS;
+#endif
 
 	/*
 	 * When doing a remount, we simply refresh our temporary properties
@@ -1744,7 +1751,10 @@ zfs_statfs(vfs_t *vfsp, struct statfs *statp)
 	zfsvfs_t *zfsvfs = vfsp->vfs_data;
 	uint64_t refdbytes, availbytes, usedobjs, availobjs;
 
+  // XXX ZFS - missing STATFS_VERSION in sys/mount.h header
+#if 0
 	statp->f_version = STATFS_VERSION;
+#endif
 
 	ZFS_ENTER(zfsvfs);
 
@@ -1953,7 +1963,7 @@ zfs_umount(vfs_t *vfsp, int fflag)
 	if (zfsvfs->z_ctldir != NULL) {
 		if ((ret = zfsctl_umount_snapshots(vfsp, fflag, cr)) != 0)
 			return (ret);
-		ret = vflush(vfsp, 0, 0, td);
+		ret = vflush(vfsp, 0, 0);
 		ASSERT(ret == EBUSY);
 		if (!(fflag & MS_FORCE)) {
 			if (zfsvfs->z_ctldir->v_count > 1)
@@ -1978,7 +1988,7 @@ zfs_umount(vfs_t *vfsp, int fflag)
 	/*
 	 * Flush all the files.
 	 */
-	ret = vflush(vfsp, 1, (fflag & MS_FORCE) ? FORCECLOSE : 0, td);
+	ret = vflush(vfsp, 1, (fflag & MS_FORCE) ? FORCECLOSE : 0);
 	if (ret != 0) {
 		if (!zfsvfs->z_issnap) {
 			zfsctl_create(zfsvfs);
@@ -2092,8 +2102,12 @@ zfs_checkexp(vfs_t *vfsp, struct sockaddr *nam, int *extflagsp,
 	 * which we have to use here, because only this file system
 	 * has mnt_export configured.
 	 */
+  // XXX ZFS - vfs_stdcheckexp() not supported???
+#if 0
 	return (vfs_stdcheckexp(zfsvfs->z_parent->z_vfs, nam, extflagsp,
 	    credanonp, numsecflavors, secflavors));
+#endif
+  return 0;
 }
 
 CTASSERT(SHORT_FID_LEN <= sizeof(struct fid));
@@ -2302,7 +2316,7 @@ bail:
 		 * unmount this file system.
 		 */
 		if (vn_vfswlock(zfsvfs->z_vfs->vfs_vnodecovered) == 0)
-			(void) dounmount(zfsvfs->z_vfs, MS_FORCE, curthread);
+			(void) dounmount(zfsvfs->z_vfs, MS_FORCE);
 	}
 	return (err);
 }
