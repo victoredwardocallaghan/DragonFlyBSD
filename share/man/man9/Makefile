@@ -1045,11 +1045,5 @@ MLINKS+=vref.9 VREF.9
 MLINKS+=vslock.9 vsunlock.9
 MLINKS+=wdog.9 wdog_register.9 \
 	wdog.9 wdog_unregister.9
-MLINKS+=zone.9 zalloc.9 \
-	zone.9 zbootinit.9 \
-	zone.9 zdestroy.9 \
-	zone.9 zfree.9 \
-	zone.9 zinit.9 \
-	zone.9 zinitna.9
 
 .include <bsd.prog.mk>
