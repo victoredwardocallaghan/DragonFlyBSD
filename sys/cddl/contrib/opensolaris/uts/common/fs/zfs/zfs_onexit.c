@@ -120,7 +120,7 @@ zfs_onexit_minor_to_state(minor_t minor, zfs_onexit_t **zo)
 int
 zfs_onexit_fd_hold(int fd, minor_t *minorp)
 {
-	file_t *fp, *tmpfp;
+	file_t *fp;
 	zfs_onexit_t *zo;
 	void *data;
 	int error;
@@ -129,12 +129,10 @@ zfs_onexit_fd_hold(int fd, minor_t *minorp)
 	if (fp == NULL)
 		return (SET_ERROR(EBADF));
 
-	tmpfp = curthread->td_fpop;
-	curthread->td_fpop = fp;
-	error = devfs_get_cdevpriv(&data);
+	error = devfs_get_cdevpriv(fp, &data);
 	if (error == 0)
 		*minorp = (minor_t)(uintptr_t)data;
-	curthread->td_fpop = tmpfp;
+
 	if (error != 0)
 		return (error);
 	return (zfs_onexit_minor_to_state(*minorp, &zo));
