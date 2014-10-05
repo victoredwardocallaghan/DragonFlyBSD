@@ -183,8 +183,11 @@ spa_history_zone(void)
 {
 #ifdef _KERNEL
 	/* XXX: pr_hostname can be changed by default from within a jail! */
+  // XXX ZFS - stub out for now..
+#if 0
 	if (jailed(curthread->td_ucred))
 		return (curthread->td_ucred->cr_prison->pr_hostname);
+#endif
 #endif
 	return (NULL);
 }
