@@ -52,10 +52,13 @@ int
 ddi_strtoul(const char *str, char **nptr, int base, unsigned long *result)
 {
 
+  // XXX ZFS - prison0 now in dfly
+#if 0
 	if (str == hw_serial) {
 		*result = prison0.pr_hostid;
 		return (0);
 	}
+#endif
 
 	*result = strtoul(str, nptr, base);
 	if (*result == 0)
