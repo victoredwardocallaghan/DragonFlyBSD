@@ -42,14 +42,18 @@ struct utsname utsname = {
 	.machine = MACHINE
 };
 
+// XXX Same as utsname.h header
+#define MAX_UTSNAME 32
+
 static void
 opensolaris_utsname_init(void *arg)
 {
-
-	utsname.sysname = ostype;
-	utsname.nodename = prison0.pr_hostname;
-	utsname.release = osrelease;
+	strncpy(utsname.sysname, ostype, (MAX_UTSNAME - 1));
+	// struct jail_v0 jv0 -> jv0.hostname perhaps??
+	// utsname.nodename = prison0.pr_hostname;
+	// strncpy(utsname.nodename, jv0.hostname, (MAX_UTSNAME - 1));
+	strncpy(utsname.release, osrelease, (MAX_UTSNAME - 1));
 	snprintf(utsname.version, sizeof(utsname.version), "%d", osreldate);
 }
-SYSINIT(opensolaris_utsname_init, SI_SUB_TUNABLES, SI_ORDER_ANY,
+SYSINIT(opensolaris_utsname_init, SI_BOOT1_TUNABLES, SI_ORDER_ANY,
     opensolaris_utsname_init, NULL);

@@ -65,8 +65,6 @@ static struct mtx kmem_items_mtx;
 MTX_SYSINIT(kmem_items_mtx, &kmem_items_mtx, "kmem_items", MTX_DEF);
 #endif	/* KMEM_DEBUG */
 
-#include <sys/vmem.h>
-
 void *
 zfs_kmem_alloc(size_t size, int kmflags)
 {
@@ -232,7 +230,7 @@ kmem_cache_create(char *name, size_t bufsize, size_t align,
 	cache->kc_zone = objcache_create(cache->kc_name, 0, 0,
 	    constructor != NULL ? kmem_std_constructor : NULL,
 	    destructor != NULL ? kmem_std_destructor : NULL,
-	    NULL, NULL, &kmem_malloc_args);
+	    NULL, NULL, NULL, &kmem_malloc_args);
 #else
 	cache->kc_size = bufsize;
 #endif
