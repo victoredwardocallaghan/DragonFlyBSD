@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2006-2007 Pawel Jakub Dawidek <pjd@FreeBSD.org>
  * All rights reserved.
+ * Copyright (c) 2014 Edward O'Callaghan <eocallaghan@alterapraxis.com>
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -143,7 +145,7 @@ u_int
 kmem_free_target(void)
 {
 #if defined(__DragonFly__)
-	return (vm_stats.v_free_target);
+	return 0; // (vm_stats.v_free_target);
 #else
 	return (vm_cnt.v_free_target);
 #endif
@@ -153,7 +155,7 @@ u_int
 kmem_free_min(void)
 {
 #if defined(__DragonFly__)
-	return (vm_stats.v_free_min);
+	return 0; // (vm_stats.v_free_min);
 #else
 	return (vm_cnt.v_free_min);
 #endif
@@ -163,7 +165,7 @@ u_int
 kmem_free_count(void)
 {
 #if defined(__DragonFly__)
-	return (vm_stats.v_free_count + vm_stats.v_cache_count);
+	return 0; // (vm_stats.v_free_count + vm_stats.v_cache_count);
 #else
 	return (vm_cnt.v_free_count + vm_cnt.v_cache_count);
 #endif
@@ -173,7 +175,7 @@ u_int
 kmem_page_count(void)
 {
 #if defined(__DragonFly__)
-	return (vm_stats.v_page_count);
+	return 0; // (vm_stats.v_page_count);
 #else
 	return (vm_cnt.v_page_count);
 #endif
@@ -186,11 +188,13 @@ kmem_size(void)
 	return (kmem_size_val);
 }
 
+// XXX ZFS - look up vmem_size and VMEM_FREE|VMEM_ALLOC
+// see 'sys/sys/vmem.h' and 'sys/kern/subr_vmem.c' and
+// 'sys/kern/kern_malloc.c' in FreeBSD
 uint64_t
 kmem_used(void)
 {
-
-	return (vmem_size(kmem_arena, VMEM_ALLOC));
+	return 0; // (vm_map_size(VMEM_ALLOC));
 }
 
 static int
@@ -212,11 +216,11 @@ kmem_std_destructor(void *mem, int size __unused, void *private)
 kmem_cache_t *
 kmem_cache_create(char *name, size_t bufsize, size_t align,
     int (*constructor)(void *, void *, int), void (*destructor)(void *, void *),
-    void (*reclaim)(void *) __unused, void *private, vmem_t *vmp, int cflags)
+    void (*reclaim)(void *) __unused, void *private, void *vmp, int cflags)
 {
 	kmem_cache_t *cache;
 
-	ASSERT(vmp == NULL);
+//	ASSERT(vmp == NULL);
 
 	cache = kmem_alloc(sizeof(*cache), KM_SLEEP);
 	strlcpy(cache->kc_name, name, sizeof(cache->kc_name));
@@ -284,7 +288,8 @@ kmem_cache_reap_now(kmem_cache_t *cache)
 void
 kmem_reap(void)
 {
-	uma_reclaim();
+  // XXX ZFS ..
+	// uma_reclaim();
 }
 #else
 void
