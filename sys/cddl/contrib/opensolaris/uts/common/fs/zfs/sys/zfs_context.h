@@ -134,6 +134,7 @@ extern int zfs_debug_level;
 extern struct mtx zfs_debug_mtx;
 #define	ZFS_LOG(lvl, ...)	do {					\
 	if (((lvl) & 0xff) <= zfs_debug_level) {			\
+		mtx_init(&zfs_debug_mtx);				\
 		mtx_lock(&zfs_debug_mtx);				\
 		printf("%s:%u[%d]: ", __func__, __LINE__, (lvl));	\
 		printf(__VA_ARGS__);					\
