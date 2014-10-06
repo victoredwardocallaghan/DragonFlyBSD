@@ -107,8 +107,6 @@
 #define PMAP_DIAGNOSTIC
 #endif
 
-#define MINPV 2048
-
 #if !defined(PMAP_DIAGNOSTIC)
 #define PMAP_INLINE __inline
 #else
@@ -154,9 +152,9 @@ extern void *vkernel_stack;
 /*
  * Data for the pv entry allocation mechanism
  */
-static vm_zone_t pvzone;
-static struct vm_zone pvzone_store;
-static struct vm_object pvzone_obj;
+static struct objcache * pvslab;
+MALLOC_DEFINE(M_PMAP, "pmap", "pmap internal data");
+
 static int pv_entry_count=0, pv_entry_max=0, pv_entry_high_water=0;
 static int pmap_pagedaemon_waken = 0;
 static struct pv_entry *pvinit;
@@ -625,7 +623,6 @@ void
 pmap_init(void)
 {
 	int i;
-	int initial_pvs;
 
 	/*
 	 * object for kernel page table pages
@@ -649,14 +646,10 @@ pmap_init(void)
 	/*
 	 * init the pv free list
 	 */
-	initial_pvs = vm_page_array_size;
-	if (initial_pvs < MINPV)
-		initial_pvs = MINPV;
-	pvzone = &pvzone_store;
 	pvinit = (struct pv_entry *) kmem_alloc(&kernel_map,
 		initial_pvs * sizeof (struct pv_entry));
-	zbootinit(pvzone, "PV ENTRY", sizeof (struct pv_entry), pvinit,
-		initial_pvs);
+
+	pvslab = objcache_create_simple(M_PMAP, sizeof (struct pv_entry));
 
 	/*
 	 * Now it is safe to enable pv_table recording.
@@ -678,7 +671,8 @@ pmap_init2(void)
 	pv_entry_max = shpgperproc * maxproc + vm_page_array_size;
 	TUNABLE_INT_FETCH("vm.pmap.pv_entries", &pv_entry_max);
 	pv_entry_high_water = 9 * (pv_entry_max / 10);
-	zinitna(pvzone, &pvzone_obj, NULL, 0, pv_entry_max, ZONE_INTERRUPT, 1);
+  // XXX grow pvslab by size of pv_entry_max ?
+	// zinitna(pvslab, &pvzone_obj, NULL, 0, pv_entry_max, ZONE_INTERRUPT, 1);
 }
 
 
@@ -1773,7 +1767,7 @@ free_pv_entry(pv_entry_t pv)
 {
 	pv_entry_count--;
 	KKASSERT(pv_entry_count >= 0);
-	zfree(pvzone, pv);
+	objcache_put(pvslab, pv);
 }
 
 /*
@@ -1790,7 +1784,7 @@ get_pv_entry(void)
 		pmap_pagedaemon_waken = 1;
 		wakeup(&vm_pages_needed);
 	}
-	return zalloc(pvzone);
+	return objcache_get(pvslab, M_ZERO);
 }
 
 /*

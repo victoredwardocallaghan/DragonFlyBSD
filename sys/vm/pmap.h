@@ -98,6 +98,10 @@ struct vmspace;
 struct vmspace_entry;
 struct vm_map_entry;
 
+#ifdef MALLOC_DECLARE
+MALLOC_DECLARE(M_PMAP);
+#endif
+
 /*
  * Most of these variables represent parameters set up by low level MD kernel
  * boot code to be used by higher level MI initialization code to identify
