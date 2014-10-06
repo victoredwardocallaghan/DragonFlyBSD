@@ -92,11 +92,11 @@ kernel-depend: assym.s ${BEFORE_DEPEND} \
 	    ${CFILES} ${SYSTEM_CFILES} ${GEN_CFILES} ${SFILES} \
 	    ${SYSTEM_SFILES} ${MFILES:T:S/.m$/.h/}
 	rm -f .newdep
-	${MAKE} -V CFILES_NOZFS -V CFILES -V SYSTEM_CFILES -V GEN_CFILES | xargs \
+	${MAKE} -V CFILES_NOZFS -V SYSTEM_CFILES -V GEN_CFILES | xargs \
 		mkdep -a -f .newdep ${CFLAGS}
 	${MAKE} -V CFILES_ZFS | \
 	    MKDEP_CPP="${CC} -E" CC="${CC}" xargs mkdep -a -f .newdep ${ZFS_CFLAGS}
-	${MAKE} -V SFILES_NOZFS -V SFILES -V SYSTEM_SFILES | xargs \
+	${MAKE} -V SFILES_NOZFS -V SYSTEM_SFILES | xargs \
 	    env MKDEP_CPP="${CC} -E" mkdep -a -f .newdep ${ASM_CFLAGS}
 	${MAKE} -V SFILES_ZFS | \
 	    MKDEP_CPP="${CC} -E" xargs mkdep -a -f .newdep ${ZFS_ASM_CFLAGS}
