@@ -3031,17 +3031,7 @@ zfs_ioc_get_fsacl(zfs_cmd_t *zc)
 static vfs_t *
 zfs_get_vfs(const char *resource)
 {
-	vfs_t *vfsp;
-
-	mtx_lock(&mountlist_mtx);
-	TAILQ_FOREACH(vfsp, &mountlist, mnt_list) {
-		if (strcmp(refstr_value(vfsp->vfs_resource), resource) == 0) {
-			VFS_HOLD(vfsp);
-			break;
-		}
-	}
-	mtx_unlock(&mountlist_mtx);
-	return (vfsp);
+	return mountlist_find_resource(resource);
 }
 
 /* ARGSUSED */
