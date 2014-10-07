@@ -66,7 +66,8 @@ zfs_init_vattr(vattr_t *vap, uint64_t mask, uint64_t mode,
 		vap->va_uid = (uid_t)(IS_EPHEMERAL(uid)) ? -1 : uid;
 	if (mask & AT_GID)
 		vap->va_gid = (gid_t)(IS_EPHEMERAL(gid)) ? -1 : gid;
-	vap->va_rdev = zfs_cmpldev(rdev);
+  //	Dragonfly stupidly has va_major, va_minor seperately..
+//	vap->va_rdev = zfs_cmpldev(rdev);
 	vap->va_nodeid = nodeid;
 }
 
@@ -478,8 +479,8 @@ zfs_replay_create(zfsvfs_t *zfsvfs, lr_create_t *lr, boolean_t byteswap)
 	}
 
 	cn.cn_cred = kcred;
-	cn.cn_thread = curthread;
-	cn.cn_flags = SAVENAME;
+	cn.cn_td = curthread;
+//	cn.cn_flags = SAVENAME;
 
 	vn_lock(ZTOV(dzp), LK_EXCLUSIVE | LK_RETRY);
 	switch (txtype) {
@@ -565,11 +566,11 @@ zfs_replay_remove(zfsvfs_t *zfsvfs, lr_remove_t *lr, boolean_t byteswap)
 		vflg |= FIGNORECASE;
 	cn.cn_nameptr = name;
 	cn.cn_namelen = strlen(name);
-	cn.cn_nameiop = DELETE;
-	cn.cn_flags = ISLASTCN | SAVENAME;
-	cn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
+	cn.cn_nameiop = NAMEI_DELETE;
+//	cn.cn_flags = ISLASTCN | SAVENAME;
+//	cn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
 	cn.cn_cred = kcred;
-	cn.cn_thread = curthread;
+	cn.cn_td = curthread;
 	vn_lock(ZTOV(dzp), LK_EXCLUSIVE | LK_RETRY);
 	error = VOP_LOOKUP(ZTOV(dzp), &vp, &cn);
 	if (error != 0) {
@@ -621,8 +622,8 @@ zfs_replay_link(zfsvfs_t *zfsvfs, lr_link_t *lr, boolean_t byteswap)
 
 	cn.cn_nameptr = name;
 	cn.cn_cred = kcred;
-	cn.cn_thread = curthread;
-	cn.cn_flags = SAVENAME;
+	cn.cn_td = curthread;
+//	cn.cn_flags = SAVENAME;
 
 	vn_lock(ZTOV(dzp), LK_EXCLUSIVE | LK_RETRY);
 	vn_lock(ZTOV(zp), LK_EXCLUSIVE | LK_RETRY);
@@ -665,11 +666,11 @@ zfs_replay_rename(zfsvfs_t *zfsvfs, lr_rename_t *lr, boolean_t byteswap)
 
 	scn.cn_nameptr = sname;
 	scn.cn_namelen = strlen(sname);
-	scn.cn_nameiop = DELETE;
-	scn.cn_flags = ISLASTCN | SAVENAME;
-	scn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
+	scn.cn_nameiop = NAMEI_DELETE;
+//	scn.cn_flags = ISLASTCN | SAVENAME;
+//	scn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
 	scn.cn_cred = kcred;
-	scn.cn_thread = td;
+	scn.cn_td = td;
 	vn_lock(ZTOV(sdzp), LK_EXCLUSIVE | LK_RETRY);
 	error = VOP_LOOKUP(ZTOV(sdzp), &svp, &scn);
 	VOP_UNLOCK(ZTOV(sdzp), 0);
@@ -679,11 +680,11 @@ zfs_replay_rename(zfsvfs_t *zfsvfs, lr_rename_t *lr, boolean_t byteswap)
 
 	tcn.cn_nameptr = tname;
 	tcn.cn_namelen = strlen(tname);
-	tcn.cn_nameiop = RENAME;
-	tcn.cn_flags = ISLASTCN | SAVENAME;
-	tcn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
+	tcn.cn_nameiop = NAMEI_RENAME;
+//	tcn.cn_flags = ISLASTCN | SAVENAME;
+//	tcn.cn_lkflags = LK_EXCLUSIVE | LK_RETRY;
 	tcn.cn_cred = kcred;
-	tcn.cn_thread = td;
+	tcn.cn_td = td;
 	vn_lock(ZTOV(tdzp), LK_EXCLUSIVE | LK_RETRY);
 	error = VOP_LOOKUP(ZTOV(tdzp), &tvp, &tcn);
 	if (error == EJUSTRETURN)

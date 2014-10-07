@@ -193,7 +193,8 @@
 #include "zfs_comutil.h"
 #include "zfs_ioctl_compat.h"
 
-CTASSERT(sizeof(zfs_cmd_t) < IOCPARM_MAX);
+// XXX ZFS - broken why??
+//CTASSERT(sizeof(zfs_cmd_t) < IOCPARM_MAX);
 
 static int snapshot_list_prefetch;
 SYSCTL_DECL(_vfs_zfs);

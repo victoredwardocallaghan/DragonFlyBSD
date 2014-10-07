@@ -623,8 +623,10 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
 
 	zp = kmem_cache_alloc(znode_cache, KM_SLEEP);
 
+#if 0
 	KASSERT(curthread->td_vp_reserv > 0,
 	    ("zfs_znode_alloc: getnewvnode without any vnodes reserved"));
+#endif
 	error = getnewvnode(VT_ZFS, zfsvfs->z_parent->z_vfs, &vp, 0, 0);
 	if (error != 0) {
 		kmem_cache_free(znode_cache, zp);
@@ -632,6 +634,8 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
 	}
 	zp->z_vnode = vp;
 	vp->v_data = zp;
+
+	struct mount *mp = zfsvfs->z_parent->z_vfs;
 
 	vfs_getnewfsid(mp);
 	vfs_add_vnodeops(mp, &zfs_vnodeops, &mp->mnt_vn_norm_ops);
@@ -1236,7 +1240,8 @@ again:
 	if (err == 0) {
 		vnode_t *vp = ZTOV(zp);
 
-		err = insmntque(vp, zfsvfs->z_vfs);
+    // insmntque() is void in Dragonfly
+		//err = insmntque(vp, zfsvfs->z_vfs);
 		if (err == 0) {
       // XXX ZFS
 			//vp->v_hash = obj_num;

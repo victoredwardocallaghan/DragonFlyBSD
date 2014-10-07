@@ -1599,7 +1599,8 @@ static int
 zfs_mount(vfs_t *vfsp)
 {
 	kthread_t	*td = curthread;
-	vnode_t		*mvp = vfsp->mnt_vnodecovered;
+  // XXX ZFS
+	vnode_t		*mvp = NULL; // vfsp->mnt_vnodecovered;
 	cred_t		*cr = td->td_ucred;
 	char		*osname;
 	int		error = 0;
@@ -1728,9 +1729,9 @@ zfs_mount(vfs_t *vfsp)
 		if (error)
 			goto out;
 	}
-	DROP_GIANT();
+	//DROP_GIANT();
 	error = zfs_domount(vfsp, osname);
-	PICKUP_GIANT();
+	//PICKUP_GIANT();
 
 #ifdef sun
 	/*
@@ -1800,7 +1801,8 @@ zfs_statfs(vfs_t *vfsp, struct statfs *statp)
 	strlcpy(statp->f_mntonname, vfsp->mnt_stat.f_mntonname,
 	    sizeof(statp->f_mntonname));
 
-	statp->f_namemax = ZFS_MAXNAMELEN;
+  // XXX ZFS - no member f_namemax ????
+	//statp->f_namemax = ZFS_MAXNAMELEN;
 
 	ZFS_EXIT(zfsvfs);
 	return (0);
@@ -2047,7 +2049,8 @@ zfs_umount(vfs_t *vfsp, int fflag)
 	if (zfsvfs->z_ctldir != NULL)
 		zfsctl_destroy(zfsvfs);
 	if (zfsvfs->z_issnap) {
-		vnode_t *svp = vfsp->mnt_vnodecovered;
+    // XXX ZFS
+		//vnode_t *svp = vfsp->mnt_vnodecovered;
 
 		if (svp->v_count >= 2)
 			VN_RELE(svp);
@@ -2541,6 +2544,8 @@ zfsvfs_update_fromname(const char *oldname, const char *newname)
 
 	oldlen = strlen(oldname);
 
+// XXX ZFS - maybe use mountlist_interlock() or something here?
+#if 0
 	mtx_lock(&mountlist_mtx);
 	TAILQ_FOREACH(mp, &mountlist, mnt_list) {
 		fromname = mp->mnt_stat.f_mntfromname;
@@ -2559,5 +2564,6 @@ zfsvfs_update_fromname(const char *oldname, const char *newname)
 		}
 	}
 	mtx_unlock(&mountlist_mtx);
+#endif
 }
 #endif

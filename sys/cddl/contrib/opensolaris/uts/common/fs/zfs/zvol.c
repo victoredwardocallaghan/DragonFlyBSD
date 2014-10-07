@@ -611,7 +611,7 @@ zvol_create_minor(const char *name)
 	if (error != 0 || mode == ZFS_VOLMODE_DEFAULT)
 		mode = volmode;
 
-	DROP_GIANT();
+	//DROP_GIANT();
 	zv->zv_volsize = volsize;
 	zv->zv_volmode = mode;
 	if (zv->zv_volmode == ZFS_VOLMODE_GEOM) {
@@ -677,7 +677,7 @@ zvol_create_minor(const char *name)
 		zvol_geom_run(zv);
 		g_topology_unlock();
 	}
-	PICKUP_GIANT();
+	//PICKUP_GIANT();
 #endif
 
 	ZFS_LOG(1, "ZVOL %s created.", name);
@@ -876,7 +876,7 @@ zvol_remove_minors(const char *name)
 
 	namelen = strlen(name);
 
-	DROP_GIANT();
+	//DROP_GIANT();
 	mutex_enter(&spa_namespace_lock);
 
 	LIST_FOREACH_SAFE(zv, &all_zvols, zv_links, tzv) {
@@ -888,7 +888,7 @@ zvol_remove_minors(const char *name)
 	}
 
 	mutex_exit(&spa_namespace_lock);
-	PICKUP_GIANT();
+	//PICKUP_GIANT();
 }
 
 int
@@ -2677,7 +2677,7 @@ zvol_rename_minors(const char *oldname, const char *newname)
 	oldnamelen = strlen(oldname);
 	newnamelen = strlen(newname);
 
-	DROP_GIANT();
+	//DROP_GIANT();
 	mutex_enter(&spa_namespace_lock);
 
 	LIST_FOREACH(zv, &all_zvols, zv_links) {
@@ -2694,7 +2694,7 @@ zvol_rename_minors(const char *oldname, const char *newname)
 	}
 
 	mutex_exit(&spa_namespace_lock);
-	PICKUP_GIANT();
+	//PICKUP_GIANT();
 }
 
 static int
