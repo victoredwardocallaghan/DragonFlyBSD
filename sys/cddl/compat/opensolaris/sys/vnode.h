@@ -61,7 +61,8 @@ typedef	struct vop_ops	vnodeops_t;
 
 #define	v_count	v_opencount
 
-#define	V_APPEND	VAPPEND
+// XXX ZFS - is this correct?
+#define	V_APPEND	IO_APPEND // VAPPEND
 
 #define	rootvfs		(rootvnode == NULL ? NULL : rootvnode->v_mount)
 
