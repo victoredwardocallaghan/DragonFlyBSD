@@ -358,7 +358,8 @@ zfsctl_common_getattr(vnode_t *vp, vattr_t *vap)
 
 	vap->va_uid = 0;
 	vap->va_gid = 0;
-	vap->va_rdev = 0;
+  // dfly has major/minor seperate
+	//vap->va_rdev = 0;
 	/*
 	 * We are a purely virtual object, so we have no
 	 * blocksize or allocated blocks.
@@ -507,7 +508,8 @@ zfsctl_root_getattr(ap)
 	vap->va_nodeid = ZFSCTL_INO_ROOT;
 	vap->va_nlink = vap->va_size = NROOT_ENTRIES;
 	vap->va_mtime = vap->va_ctime = zcp->zc_cmtime;
-	vap->va_birthtime = vap->va_ctime;
+  // no member va_birthdaytime
+	//vap->va_birthtime = vap->va_ctime;
 
 	zfsctl_common_getattr(vp, vap);
 	ZFS_EXIT(zfsvfs);
@@ -1327,7 +1329,8 @@ zfsctl_snapdir_getattr(ap)
 	vap->va_nodeid = gfs_file_inode(vp);
 	vap->va_nlink = vap->va_size = avl_numnodes(&sdp->sd_snaps) + 2;
 	vap->va_ctime = vap->va_mtime = dmu_objset_snap_cmtime(zfsvfs->z_os);
-	vap->va_birthtime = vap->va_ctime;
+  // ditto
+	//vap->va_birthtime = vap->va_ctime;
 	ZFS_EXIT(zfsvfs);
 
 	return (0);
@@ -1403,7 +1406,7 @@ static struct vop_ops zfsctl_ops_snapdir = {
 	.vop_ioctl =	VOP_EINVAL,
 	.vop_getattr =	zfsctl_snapdir_getattr,
 	.vop_access =	zfsctl_common_access,
-	.vop_mkdir =	zfsctl_freebsd_snapdir_mkdir,
+	.vop_mkdir =	zfsctl_freebsd_snapdir_mkdir, // XXX ZFS - vop_old_mkdir
 	.vop_readdir =	gfs_vop_readdir,
 	.vop_lookup =	zfsctl_snapdir_lookup, // XXX ZFS - vop_old_lookup
 	.vop_inactive =	zfsctl_snapdir_inactive,

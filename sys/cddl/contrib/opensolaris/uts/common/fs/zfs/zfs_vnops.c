@@ -2833,7 +2833,8 @@ zfs_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	vap->va_rdev = vp->v_rdev;
 #else
 	if (vp->v_type == VBLK || vp->v_type == VCHR)
-		vap->va_rdev = zfs_cmpldev(rdev);
+    // va_rdev is seperated in dfly into major/minor
+		//vap->va_rdev = zfs_cmpldev(rdev);
 #endif
 	vap->va_seq = zp->z_seq;
 	vap->va_flags = 0;	/* FreeBSD: Reset chflags(2) flags. */
@@ -2948,7 +2949,8 @@ zfs_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	ZFS_TIME_DECODE(&vap->va_atime, zp->z_atime);
 	ZFS_TIME_DECODE(&vap->va_mtime, mtime);
 	ZFS_TIME_DECODE(&vap->va_ctime, ctime);
-	ZFS_TIME_DECODE(&vap->va_birthtime, crtime);
+  // XXX ZFS - no member va_birthtime
+	//ZFS_TIME_DECODE(&vap->va_birthtime, crtime);
 
 	mutex_exit(&zp->z_lock);
 
