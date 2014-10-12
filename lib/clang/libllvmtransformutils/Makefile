@@ -39,7 +39,7 @@ SRCS=	BasicBlockUtils.cpp \
 	UnifyFunctionExitNodes.cpp \
 	ValueMapper.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no"
+.if !defined(NO_CLANG_EXTRAS)
 SRCS+=	Utils.cpp
 .endif
 

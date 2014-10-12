@@ -10,11 +10,11 @@ CFLAGS+=	-I${LLVM_SRCS}/include -I${CLANG_SRCS}/include \
 		-DLLVM_ON_UNIX -DLLVM_ON_FREEBSD \
 		-D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS #-DNDEBUG
 
-.if ${MK_CLANG_FULL} != "no"
+.if !defined(NO_CLANG_FULL)
 CFLAGS+=	-DCLANG_ENABLE_ARCMT \
 		-DCLANG_ENABLE_REWRITER \
 		-DCLANG_ENABLE_STATIC_ANALYZER
-.endif # MK_CLANG_FULL
+.endif # NO_CLANG_FULL
 
 # LLVM is not strict aliasing safe as of 12/31/2011
 CFLAGS+=	-fno-strict-aliasing

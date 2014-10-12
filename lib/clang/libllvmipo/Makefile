@@ -25,7 +25,7 @@ SRCS=	ArgumentPromotion.cpp \
 	StripDeadPrototypes.cpp \
 	StripSymbols.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no"
+.if !defined(NO_CLANG_EXTRAS)
 SRCS+=	IPO.cpp
 .endif
 

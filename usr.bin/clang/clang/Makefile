@@ -8,7 +8,7 @@ SRCS=	cc1_main.cpp \
 	cc1as_main.cpp \
 	driver.cpp
 
-.if ${MK_SHARED_TOOLCHAIN} == "no"
+.if !defined(NO_SHARED_TOOLCHAIN)
 NO_SHARED?= yes
 .endif
 
@@ -16,7 +16,7 @@ LINKS=	${BINDIR}/clang ${BINDIR}/clang++ \
 	${BINDIR}/clang ${BINDIR}/clang-cpp
 MLINKS=	clang.1 clang++.1 \
 	clang.1 clang-cpp.1
-.if ${MK_CLANG_IS_CC} != "no"
+.if !defined(NO_CLANG_IS_CC)
 LINKS+=	${BINDIR}/clang ${BINDIR}/cc \
 	${BINDIR}/clang ${BINDIR}/c++ \
 	${BINDIR}/clang ${BINDIR}/CC \
@@ -35,7 +35,7 @@ TGHDRS=	CC1AsOptions \
 	DiagnosticSemaKinds \
 	Options
 
-.if ${MK_CLANG_FULL} != "no"
+.if !defined(NO_CLANG_FULL)
 _clangstaticanalyzer= \
 	clangstaticanalyzerfrontend \
 	clangstaticanalyzercheckers \
@@ -45,7 +45,7 @@ _clangarcmigrate= \
 _clangrewriter= \
 	clangrewritefrontend \
 	clangrewritecore
-.endif # MK_CLANG_FULL
+.endif # NO_CLANG_FULL
 
 LIBDEPS=clangfrontendtool \
 	clangfrontend \

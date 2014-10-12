@@ -38,7 +38,7 @@ SRCS=	ADCE.cpp \
 	StructurizeCFG.cpp \
 	TailRecursionElimination.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no"
+.if !defined(NO_CLANG_EXTRAS)
 SRCS+=	LoopInstSimplify.cpp \
 	Scalar.cpp
 .endif

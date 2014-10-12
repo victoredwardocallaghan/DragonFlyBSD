@@ -55,7 +55,7 @@ SRCS=	ELFObjectWriter.cpp \
 	WinCOFFObjectWriter.cpp \
 	WinCOFFStreamer.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no" || ${MK_LLDB} != "no"
+.if !defined(NO_CLANG_EXTRAS) || !defined(NO_LLDB)
 SRCS+=	MCDisassembler.cpp
 .endif
 

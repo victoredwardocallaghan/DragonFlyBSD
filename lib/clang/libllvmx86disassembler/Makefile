@@ -7,7 +7,7 @@ SRCDIR=	lib/Target/X86/Disassembler
 INCDIR=	lib/Target/X86
 SRCS=	X86Disassembler.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no" || ${MK_LLDB} != "no"
+.if !defined(NO_CLANG_EXTRAS) || !defined(NO_LLDB)
 SRCS+=	X86DisassemblerDecoder.c
 .endif
 

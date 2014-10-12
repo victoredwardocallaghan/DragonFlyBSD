@@ -7,10 +7,10 @@ WARNS?=	2
 
 CFLAGS+=${PICFLAG} -fvisibility=hidden -DVISIBILITY_HIDDEN
 
-.if ${MACHINE_CPUARCH} == "amd64"
+.if ${MACHINE_ARCH} == "amd64"
 CRTARCH=x86_64
 .else
-CRTARCH=${MACHINE_CPUARCH}
+CRTARCH=${MACHINE_ARCH}
 .endif
 
 CRTSRC=${.CURDIR}/../../contrib/compiler-rt/lib
@@ -126,7 +126,7 @@ SRCF=	absvdi2 \
 	umodti3
 
 # These are already shipped by libc.a on arm and mips
-.if ${MACHINE_CPUARCH} != "arm" && ${MACHINE_CPUARCH} != "mips"
+.if ${MACHINE_ARCH} != "arm" && ${MACHINE_ARCH} != "mips"
 SRCF+=	adddf3 \
 	addsf3 \
 	divdf3 \
@@ -143,7 +143,7 @@ SRCF+=	adddf3 \
 	truncdfsf2
 .endif
 
-.if ${MACHINE_CPUARCH} != "mips"
+.if ${MACHINE_ARCH} != "mips"
 SRCF+=	divsi3 \
 	modsi3 \
 	udivsi3 \
@@ -151,12 +151,12 @@ SRCF+=	divsi3 \
 .endif
 
 # FreeBSD-specific atomic intrinsics.
-.if ${MACHINE_CPUARCH} == "arm" || ${MACHINE_CPUARCH} == "armv6"
+.if ${MACHINE_ARCH} == "arm" || ${MACHINE_ARCH} == "armv6"
 .PATH: ${.CURDIR}/../../sys/arm/arm
 
 SRCF+=	stdatomic
 CFLAGS+=	-DEMIT_SYNC_ATOMICS
-.elif ${MACHINE_CPUARCH} == "mips"
+.elif ${MACHINE_ARCH} == "mips"
 .PATH: ${.CURDIR}/../../sys/mips/mips
 
 SRCF+=	stdatomic
@@ -165,14 +165,14 @@ SRCF+=	stdatomic
 .for file in ${SRCF}
 . if ${MACHINE_ARCH:Marm*hf*} != "" && exists(${CRTSRC}/${CRTARCH}/${file}vfp.S)
 SRCS+= ${file}vfp.S
-. elif !(${MACHINE_CPUARCH} == "arm" && ${MACHINE_ARCH:Marm*hf*} == "") && exists(${CRTSRC}/${CRTARCH}/${file}.S)
+. elif !(${MACHINE_ARCH} == "arm" && ${MACHINE_ARCH:Marm*hf*} == "") && exists(${CRTSRC}/${CRTARCH}/${file}.S)
 SRCS+=	${file}.S
 . else
 SRCS+=	${file}.c
 . endif
 .endfor
 
-.if ${MACHINE_CPUARCH} == "arm"
+.if ${MACHINE_ARCH} == "arm"
 SRCS+=	aeabi_idivmod.S \
 	aeabi_ldivmod.S \
 	aeabi_memcmp.S \
@@ -183,15 +183,15 @@ SRCS+=	aeabi_idivmod.S \
 	aeabi_uldivmod.S
 .endif
 
-.if ${MK_INSTALLLIB} != "no"
+.if !defined(NO_INSTALLLIB)
 SYMLINKS+=libcompiler_rt.a ${LIBDIR}/libgcc.a
 .endif
-.if ${MK_PROFILE} != "no"
+.if !defined(NO_PROFILE)
 SYMLINKS+=libcompiler_rt_p.a ${LIBDIR}/libgcc_p.a
 .endif
 
-.if ${MACHINE_CPUARCH} == "amd64" || ${MACHINE_CPUARCH} == "i386" || \
-    ${MACHINE_CPUARCH} == "powerpc"
+.if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386" || \
+    ${MACHINE_ARCH} == "powerpc"
 AFLAGS+=--noexecstack
 ACFLAGS+=-Wa,--noexecstack
 .endif

@@ -2,19 +2,19 @@
 
 
 .if !make(install)
-.if ${MK_CLANG_FULL} != "no"
+.if !defined(NO_CLANG_FULL)
 _libclangstaticanalyzer= \
 	libclangstaticanalyzercheckers \
 	libclangstaticanalyzercore \
 	libclangstaticanalyzerfrontend
 _libclangarcmigrate= \
 	libclangarcmigrate
-.endif # MK_CLANG_FULL
-.if ${MK_CLANG_FULL} != "no" || ${MK_LLDB} != "no"
+.endif # NO_CLANG_FULL
+.if !defined(NO_CLANG_FULL) || !defined(NO_LLDB)
 _libclangrewriter= \
 	libclangrewritecore \
 	libclangrewritefrontend
-.endif # (MK_CLANG_FULL || MK_LLDB)
+.endif # (NO_CLANG_FULL || NO_LLDB)
 
 SUBDIR=	libclanganalysis \
 	${_libclangarcmigrate} \
@@ -89,19 +89,19 @@ SUBDIR=	libclanganalysis \
 	libllvmx86instprinter \
 	libllvmx86utils
 
-.if ${MK_CLANG_EXTRAS} != "no"
+.if !defined(NO_CLANG_EXTRAS)
 SUBDIR+=libllvmdebuginfo
-.endif # MK_CLANG_EXTRAS
-.if ${MK_CLANG_EXTRAS} != "no" || ${MK_LLDB} != "no"
+.endif # NO_CLANG_EXTRAS
+.if !defined(NO_CLANG_EXTRAS) || !defined(NO_LLDB)
 SUBDIR+=libllvmexecutionengine \
 	libllvminterpreter \
 	libllvmjit \
 	libllvmmcdisassembler \
 	libllvmmcjit \
 	libllvmruntimedyld
-.endif # MK_CLANG_EXTRAS | LLDB
+.endif # NO_CLANG_EXTRAS | NO_LLDB
 
-.if ${MK_LLDB} != "no"
+.if !defined(NO_LLDB)
 SUBDIR+=liblldb \
 	\
 	liblldbAPI \
@@ -137,7 +137,7 @@ SUBDIR+=liblldb \
 	liblldbPluginSymbolVendorELF \
 	liblldbPluginUnwindAssemblyInstEmulation \
 	liblldbPluginUnwindAssemblyX86
-.endif # MK_LLDB
+.endif # NO_LLDB
 
 .endif # !make(install)
 

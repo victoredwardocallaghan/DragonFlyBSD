@@ -11,7 +11,7 @@ SRCS=	CallGraph.cpp \
 	GlobalsModRef.cpp \
 	InlineCost.cpp
 
-.if ${MK_CLANG_EXTRAS} != "no"
+.if !defined(NO_CLANG_EXTRAS)
 SRCS+=	IPA.cpp
 .endif
 
