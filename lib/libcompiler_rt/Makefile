@@ -1,6 +1,5 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
 
 LIB=	compiler_rt
 NO_PIC=

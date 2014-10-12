@@ -1,6 +1,5 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
 
 PROG_CXX=clang
 

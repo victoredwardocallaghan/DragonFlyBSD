@@ -1,6 +1,5 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
 
 .if !make(install)
 .if ${MK_CLANG_FULL} != "no"

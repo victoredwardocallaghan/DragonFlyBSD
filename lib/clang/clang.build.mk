@@ -1,6 +1,6 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
+#.include <src.opts.mk>
 
 CLANG_SRCS=	${LLVM_SRCS}/tools/clang
 

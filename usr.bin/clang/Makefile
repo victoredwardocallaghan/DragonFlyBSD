@@ -1,6 +1,5 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
 
 SUBDIR=	clang clang-tblgen tblgen
 

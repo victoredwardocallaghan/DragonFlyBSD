@@ -1,6 +1,5 @@
 # $FreeBSD$
 
-.include <src.opts.mk>
 
 LIB=	llvmipa
 
