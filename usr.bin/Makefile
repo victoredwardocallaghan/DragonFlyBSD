@@ -37,6 +37,7 @@ SUBDIR=	alias \
 	chkey \
 	chpass \
 	cksum \
+	${_clang} \
 	cmp \
 	col \
 	colcrt \
@@ -265,6 +266,9 @@ SUBDIR+=bc \
 	dc
 .endif
 
+.if !defined(NO_CLANG)
+_clang=	clang
+.endif
 
 .if !defined(NO_SENDMAIL)
 SUBDIR+=vacation 

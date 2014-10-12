@@ -7,6 +7,11 @@
 # To generate postscript versions of troff documents, use:
 #  make PRINTERDEVICE=ps
 
-SUBDIR=	legal
+SUBDIR=	legal \
+	${_llvm}
+
+.if !defined(NO_CLANG)
+_llvm=	llvm
+.endif
 
 .include <bsd.subdir.mk>

@@ -28,7 +28,10 @@ SUBDIR_ORDERED=	${_libc_r} \
 	libtacplus \
 	libthread_xu \
 	libutil \
+	libcompiler_rt \
+	${_libcxxrt} \
 	libpthread
+
 SUBDIR=	${SUBDIR_ORDERED} \
 	csu \
 	i18n_module \
@@ -91,6 +94,7 @@ SUBDIR=	${SUBDIR_ORDERED} \
 	liby \
 	libypclnt \
 	libz \
+	${_clang} \
 	pam_module
 
 .if exists(${.CURDIR}/compat/${MACHINE_ARCH}/Makefile)
@@ -106,6 +110,14 @@ _libmilter=	libmilter
 _libsm=		libsm
 _libsmdb=	libsmdb
 _libsmutil=	libsmutil
+.endif
+
+.if !defined(NO_CLANG)
+_clang=	clang
+.endif
+
+.if !defined(NO_LIBCPLUSPLUS)
+_libcxxrt=	libcxxrt
 .endif
 
 .if defined(WANT_NETGRAPH7) 

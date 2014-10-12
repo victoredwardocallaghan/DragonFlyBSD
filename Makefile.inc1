@@ -263,6 +263,7 @@ BMAKEENV=	MAKEOBJDIRPREFIX=${BTOOLSDEST} \
 
 BMAKE=		${BMAKEENV} make -f Makefile.inc1 -DBOOTSTRAPPING \
 		-DNOINFO -DNOMAN -DNOPIC -DNOPROFILE -DNOSHARED \
+		-DNO_CLANG_FULL -DNO_LLDB \
 		-DNO_WERROR -DNO_NLS
 
 # build-tool stage
@@ -275,6 +276,7 @@ TMAKEENV=	MAKEOBJDIRPREFIX=${BTOOLSDEST} \
 		INSTALL="sh ${.CURDIR}/tools/install.sh"
 
 TMAKE=		${TMAKEENV} make -f Makefile.inc1 -DBOOTSTRAPPING \
+		-DNO_CLANG_FULL -DNO_LLDB \
 		-DNO_FORTRAN -DNOSHARED
 
 # cross-tool stage
@@ -806,6 +808,16 @@ installmost:
 _strfile=	games/fortune/strfile
 .endif
 
+# We need to build tblgen when we're building clang either as
+# the bootstrap compiler, or as the part of the normal build.
+.if !defined(NO_CLANG_BOOTSTRAP) || !defined(NO_CLANG)
+_clang_tblgen= \
+	lib/clang/libllvmsupport \
+	lib/clang/libllvmtablegen \
+	usr.bin/clang/tblgen \
+	usr.bin/clang/clang-tblgen
+.endif
+
 # BSTRAPDIRS1 - must be built in strict order, no parallelism
 #
 # order is very important. yacc before m4 before flex.  flex exec's m4,
@@ -813,6 +825,7 @@ _strfile=	games/fortune/strfile
 #
 BSTRAPDIRS1= ${_strfile} \
 	usr.bin/patch \
+	${_clang_tblgen} \
 	bin/chmod bin/cp bin/cpdup bin/dd bin/mkdir bin/rm bin/echo \
 	bin/test bin/cat bin/ln bin/mv bin/csh bin/expr bin/sh \
 	bin/hostname bin/kill \
@@ -871,6 +884,13 @@ bstrap-${_tool}!
 _share=	share/syscons/scrnmaps
 .endif
 
+# If an full path to an external cross compiler is given, don't build
+# a cross compiler.
+.if !defined(NO_CLANG_BOOTSTRAP)
+_clang=		usr.bin/clang
+_clang_libs=	lib/clang
+.endif
+
 _gcc_common_cross= gnu/usr.bin/gmp gnu/usr.bin/mpfr
 .if !defined(NO_GCC44)
 _gcc44_cross= gnu/usr.bin/cc44
@@ -911,6 +931,7 @@ _btxld=	usr.sbin/btxld
 CTOOLSDIRS= ${_btxld} ${_binutils} \
 		usr.bin/objformat usr.bin/crunch/crunchide \
 		${_gcc_common_cross} \
+		${_clang_libs} ${_clang} \
 		${_gcc44_cross} ${_gcc47_cross} ${_custom_cross}
 
 cross-tools: cross-tools-targets
@@ -954,10 +975,16 @@ libraries:
 		make -f Makefile.inc1 _startup_libs44;
 .endif
 	cd ${.CURDIR}; \
+	    make -f Makefile.inc1 _prereq_libs; \
 	    make -f Makefile.inc1 _startup_libs; \
 	    make -f Makefile.inc1 _prebuild_libs; \
 	    make -f Makefile.inc1 _generic_libs;
 	touch ${WORLDDEST}/.libraries_done
+
+#
+# static libgcc.a prerequisite for shared libc
+#
+_prereq_libs= lib/libcompiler_rt
 
 # These dependencies are not automatically generated:
 #
@@ -976,6 +1003,10 @@ _startup_libs44=	gnu/usr.bin/cc44/cc_prep \
 			gnu/lib/gcc44/csu \
 			gnu/lib/gcc44/libgcc
 _startup_libs=		lib/csu lib/libc lib/libc_rtld
+_startup_libs+=		lib/libcompiler_rt
+.if !defined(NO_LIBCPLUSPLUS)
+_startup_libs+=		lib/libcxxrt
+.endif
 
 _prebuild_libs=		lib/libbz2 lib/liblzma lib/libz
 _prebuild_libs+=	lib/libutil
@@ -986,6 +1017,11 @@ _prebuild_libs+= lib/libcom_err lib/libcrypt lib/libmd \
 		lib/libncurses/libncurses lib/libopie
 
 lib/libopie__L lib/libradius__L lib/libtacplus__L: lib/libmd__L
+
+.if !defined(NO_LIBCPLUSPLUS)
+lib/libcxxrt__L: lib/libc__L
+lib/libcxxrt__L: lib/libc_noshared__L
+.endif
 
 _generic_libs+=	lib
 
@@ -1006,6 +1042,17 @@ _prebuild_libs+= lib/libradius lib/libsbuf lib/libtacplus lib/libm \
 
 _generic_libs+=	usr.bin/flex/lib
 
+.for _lib in ${_prereq_libs}
+${_lib}__PL: .PHONY
+.if exists(${.CURDIR}/${_lib})
+	${ECHODIR} "===> ${_lib}"; \
+		cd ${.CURDIR}/${_lib}; \
+		make DIRPRFX=${_lib}/ depend; \
+		make -DNO_PIC DIRPRFX=${_lib}/ all; \
+		make -DNO_PIC DIRPRFX=${_lib}/ install
+.endif
+.endfor
+
 .for _lib in ${_startup_libs44} ${_startup_libs47} \
 		${_startup_libs} ${_prebuild_libs} ${_generic_libs}
 ${_lib}__L: .PHONY
@@ -1018,6 +1065,7 @@ ${_lib}__L: .PHONY
 .endif
 .endfor
 
+_prereq_libs: ${_prereq_libs:S/$/__PL/}
 _startup_libs: ${_startup_libs:S/$/__L/}
 _startup_libs47: ${_startup_libs47:S/$/__L/}
 _startup_libs44: ${_startup_libs44:S/$/__L/}
@@ -1030,6 +1078,7 @@ _generic_libs: ${_generic_libs:S/$/__L/}
 .ORDER: ${_startup_libs47:S/$/__L/}
 .ORDER: ${_startup_libs44:S/$/__L/}
 .ORDER: ${_startup_libs:S/$/__L/}
+.ORDER: ${_prereq_libs:S/$/__PL/}
 .ORDER: ${_prebuild_libs:S/$/__L/}
 .ORDER: ${_generic_libs:S/$/__L/}
 
